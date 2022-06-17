@@ -7,5 +7,5 @@ import retrofit2.http.Url
 // Esta interface me permite crear el metodo por el cual vamos a acceder al API
 interface APIService {
     @GET
-    fun getMovies(@Url url: String): Response<MoviesResponse>
+    suspend fun getMovies(@Url url: String): Response<MoviesResponse>
 }

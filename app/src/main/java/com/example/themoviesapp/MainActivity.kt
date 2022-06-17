@@ -25,10 +25,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initRecyclerView()
+        loadRVWithMovies()
     }
 
     private fun initRecyclerView(){
-        adapter = MovieAdapter(moviesList)
+        adapter = MovieAdapter(moviesList, this)
         binding.rvMovies.layoutManager = LinearLayoutManager(this)
         binding.rvMovies.adapter = adapter
     }
