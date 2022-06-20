@@ -5,7 +5,6 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.themoviesapp.databinding.ItemMovieBinding
 import com.squareup.picasso.Picasso
@@ -30,15 +29,7 @@ class MovieAdapter(private var movies: List<Movie>, var activity: Activity): Rec
 
         holder.binding.cvMovieContainer.setOnClickListener {
             var intent = Intent(activity, MovieDescriptionActivity::class.java)
-            // Obtener la info de la pelicula mediante una consulta a la API o pasarle directamente los datos?
-            //intent.putExtra("ID", item.id.toString())
-            intent.putExtra("overView", item.overview)
-            intent.putExtra("title", item.title)
-            intent.putExtra("originalLanguage", item.original_language)
-            intent.putExtra("popularity", item.popularity.toString())
-            intent.putExtra("releaseDate", item.release_date)
-            intent.putExtra("backdrop", item.backdrop_path)
-            intent.putExtra("poster", item.poster_path)
+            intent.putExtra("ID", item.id.toString())
             activity.startActivity(intent)
         }
     }

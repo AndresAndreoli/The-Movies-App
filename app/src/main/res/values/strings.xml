@@ -7,4 +7,7 @@
     <string name="releaseDateMovie">Release Date: </string>
     <string name="languageMovie">Language: </string>
     <string name="popularityMovie">Popularity: </string>
+    <string name="genresMovie">Genres: </string>
+    <string name="adultMovie">Adult: </string>
+    <string name="durationMovie">Duration: </string>
 </resources>

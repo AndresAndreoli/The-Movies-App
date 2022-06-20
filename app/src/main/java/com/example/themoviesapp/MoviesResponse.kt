@@ -8,3 +8,4 @@ data class MoviesResponse(
     var total_results: Int,
     @SerializedName("results") var movies: List<Movie>
 )
+
