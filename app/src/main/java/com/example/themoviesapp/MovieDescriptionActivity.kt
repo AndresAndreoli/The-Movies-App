@@ -3,6 +3,7 @@ package com.example.themoviesapp
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.themoviesapp.MainActivity.Companion.movieDetailsList
 import com.example.themoviesapp.databinding.ActivityMovieDescriptionBinding
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
@@ -19,6 +20,7 @@ class MovieDescriptionActivity : AppCompatActivity() {
     private val urlBackDropMovie: String = "https://image.tmdb.org/t/p/w500"
     private val baseUrl: String = "https://api.themoviedb.org/3/movie/"
     private lateinit var idMovie: String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,35 +39,22 @@ class MovieDescriptionActivity : AppCompatActivity() {
     }
 
     private fun loadDetailsMovie(){
+        movieDetailsList.forEach {
+            if (it.id == idMovie.toInt()){
+                showDetails(it)
+                return
+            }
+        }
+
         CoroutineScope(Dispatchers.IO).launch{
             val call = getRetrofit().create(APIService::class.java).getDetailsMovie("${baseUrl+idMovie}?api_key=208e554046f1cf82cd9a3dd3e315fe5f&language=en-US")
             val movieDetail = call.body()
             runOnUiThread{
                 if (call.isSuccessful){
-                    movieDetail.let {
-                        binding.tvTitleMovieDescription.setText(it?.title ?: "No result")
-                        binding.tvOverviewMovieDescription.setText(it?.overview ?: "No result")
-                        Picasso.get().load(urlBackDropMovie+it!!.backdrop_path).into(binding.ivMovieBackDropDescription)
-                        binding.tvReleaseDateDescription.setText(it?.release_date  ?: "No result")
-                        binding.tvLanguageDescription.setText(it?.original_language!!.uppercase()  ?: "No result")
-                        binding.tvPopularityDescription.setText((it?.popularity ?: "No result").toString())
-                        Picasso.get().load(urlBackDropMovie+it.poster_path).into(binding.imPosterDescription)
-
-                        var genresContainer: String = ""
-                        it.genres.forEach { genre ->
-                            genresContainer += "${genre.name}, "
-                        }
-                        binding.tvGenresDescription.setText(genresContainer.dropLast(2))
-
-                        if (it.adult)
-                            binding.tvAdultDescription.setText("+18")
-                        else
-                            binding.tvAdultDescription.setText("All ages")
-
-                        binding.tvDurationDescription.setText(converterTime(it.runtime))
-                    }
+                    showDetails(movieDetail!!)
+                    movieDetailsList.add(movieDetail!!)
                 } else {
-                    Toast.makeText(this@MovieDescriptionActivity, "Ha ocurrido un error", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MovieDescriptionActivity, "Something bad happened. The movie couldn't load", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -81,5 +70,30 @@ class MovieDescriptionActivity : AppCompatActivity() {
         }
 
         return "${horas}:${min}"
+    }
+
+    private fun showDetails(movie: MovieDetailsResponse){
+        movie.let {
+            binding.tvTitleMovieDescription.setText(it?.title ?: "No result")
+            binding.tvOverviewMovieDescription.setText(it?.overview ?: "No result")
+            Picasso.get().load(urlBackDropMovie+it?.backdrop_path).into(binding.ivMovieBackDropDescription)
+            binding.tvReleaseDateDescription.setText(it?.release_date  ?: "No result")
+            binding.tvLanguageDescription.setText(it?.original_language!!.uppercase()  ?: "No result")
+            binding.tvPopularityDescription.setText((it?.popularity ?: "No result").toString())
+            Picasso.get().load(urlBackDropMovie+it.poster_path).into(binding.imPosterDescription)
+
+            var genresContainer: String = ""
+            it.genres.forEach { genre ->
+                genresContainer += "${genre.name}, "
+            }
+            binding.tvGenresDescription.setText(genresContainer.dropLast(2))
+
+            if (it.adult)
+                binding.tvAdultDescription.setText("18+")
+            else
+                binding.tvAdultDescription.setText("All ages")
+
+            binding.tvDurationDescription.setText(converterTime(it.runtime))
+        }
     }
 }

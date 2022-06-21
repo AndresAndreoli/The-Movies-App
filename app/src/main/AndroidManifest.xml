@@ -13,7 +13,8 @@
         android:theme="@style/Theme.TheMoviesApp">
         <activity
             android:name=".MovieDescriptionActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">

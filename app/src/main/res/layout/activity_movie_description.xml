@@ -7,6 +7,7 @@
     tools:context=".MovieDescriptionActivity"
     android:background="@color/colorPrimaryDark">
 
+
     <ImageView
         android:id="@+id/ivMovieBackDropDescription"
         android:layout_width="match_parent"
@@ -51,7 +52,6 @@
             android:translationX="-25dp"/>
     </LinearLayout>
 
-
     <TextView
         android:id="@+id/tvOverviewMovieDescription"
         android:layout_width="match_parent"
@@ -89,165 +89,166 @@
             style="@style/movie_description"
             android:gravity="center_horizontal"/>
 
-            <LinearLayout
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                style="@style/movie_details"
+                android:text="@string/releaseDateMovie"
+                android:textSize="16sp"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/white"
-                    style="@style/movie_details"
-                    android:text="@string/releaseDateMovie"
-                    android:textSize="16sp"/>
-
-                <TextView
-                    android:id="@+id/tvReleaseDateDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/white"
-                    style="@style/movie_details"
-                    android:text="DD/MM/YYYY"
-                    android:textSize="16sp"
-                    android:gravity="end"/>
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/tvReleaseDateDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                style="@style/movie_details"
+                android:text="DD/MM/YYYY"
+                android:textSize="16sp"
+                android:gravity="end"/>
+        </LinearLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/white"
-                    style="@style/movie_details"
-                    android:text="@string/languageMovie"
-                    android:textSize="16sp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tvLanguageDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/white"
-                    style="@style/movie_details"
-                    android:text="LG"
-                    android:textSize="16sp"
-                    android:gravity="end"/>
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                style="@style/movie_details"
+                android:text="@string/languageMovie"
+                android:textSize="16sp"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/white"
-                    style="@style/movie_details"
-                    android:text="@string/popularityMovie"
-                    android:textSize="16sp"/>
-
-                <TextView
-                    android:id="@+id/tvPopularityDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/white"
-                    style="@style/movie_details"
-                    android:text="99999"
-                    android:textSize="16sp"
-                    android:gravity="end"/>
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/tvLanguageDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                style="@style/movie_details"
+                android:text="LG"
+                android:textSize="16sp"
+                android:gravity="end"/>
+        </LinearLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/white"
-                    style="@style/movie_details"
-                    android:text="@string/genresMovie"
-                    android:textSize="16sp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tvGenresDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/white"
-                    style="@style/movie_details"
-                    android:text="A,B,C"
-                    android:textSize="16sp"
-                    android:gravity="end"/>
-
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                style="@style/movie_details"
+                android:text="@string/popularityMovie"
+                android:textSize="16sp"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/white"
-                    style="@style/movie_details"
-                    android:text="@string/adultMovie"
-                    android:textSize="16sp"/>
-
-                <TextView
-                    android:id="@+id/tvAdultDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/white"
-                    style="@style/movie_details"
-                    android:text="--"
-                    android:textSize="16sp"
-                    android:gravity="end"/>
-
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/tvPopularityDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                style="@style/movie_details"
+                android:text="99999"
+                android:textSize="16sp"
+                android:gravity="end"/>
+        </LinearLayout>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/white"
-                    style="@style/movie_details"
-                    android:text="@string/durationMovie"
-                    android:textSize="16sp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/tvDurationDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/white"
-                    style="@style/movie_details"
-                    android:text="99:99"
-                    android:textSize="16sp"
-                    android:gravity="end"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                style="@style/movie_details"
+                android:text="@string/genresMovie"
+                android:textSize="16sp"/>
 
-            </LinearLayout>
+            <TextView
+                android:id="@+id/tvGenresDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                style="@style/movie_details"
+                android:text="A,B,C"
+                android:textSize="16sp"
+                android:gravity="end"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                style="@style/movie_details"
+                android:text="@string/adultMovie"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/tvAdultDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                style="@style/movie_details"
+                android:text="--"
+                android:textSize="16sp"
+                android:gravity="end"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                style="@style/movie_details"
+                android:text="@string/durationMovie"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/tvDurationDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="@color/white"
+                style="@style/movie_details"
+                android:text="99:99"
+                android:textSize="16sp"
+                android:gravity="end"/>
+
+        </LinearLayout>
 
     </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

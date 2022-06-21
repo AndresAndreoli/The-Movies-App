@@ -10,4 +10,5 @@
     <string name="genresMovie">Genres: </string>
     <string name="adultMovie">Adult: </string>
     <string name="durationMovie">Duration: </string>
+    <string name="introduceMovie">Introduce movie name </string>
 </resources>

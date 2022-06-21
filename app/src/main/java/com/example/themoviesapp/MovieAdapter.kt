@@ -34,5 +34,7 @@ class MovieAdapter(private var movies: List<Movie>, var activity: Activity): Rec
         }
     }
 
-    override fun getItemCount(): Int =  movies.size
+    override fun getItemCount(): Int {
+        return movies.size
+    }
 }
