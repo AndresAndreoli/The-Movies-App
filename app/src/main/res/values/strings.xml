@@ -1,8 +1,15 @@
 <resources>
     <string name="app_name">theMoviesApp</string>
 
+    <!-- Layout - Main Activity -->
+    <string name="introduceMovie">Introduce movie name </string>
+
+    <!-- Layout - Item Movie (Item recyclerView) -->
+    <string name="waitingTitle"> *Waiting Title* </string>
+
+    <!-- Layout - Movie Description Activity -->
     <string name="titleMovie">Title movie</string>
-    <string name="app_overview">Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen. No sólo sobrevivió 500 años, sino que tambien ingresó como texto de relos 60s con lcontenian pasajes de Lorem Ipsum, y más recientemente con software de autoedición, como por ejemplo</string>
+    <string name="loadContent">*Waiting content*</string>
     <string name="descriptionMovie">Description</string>
     <string name="releaseDateMovie">Release Date: </string>
     <string name="languageMovie">Language: </string>
@@ -10,5 +17,6 @@
     <string name="genresMovie">Genres: </string>
     <string name="adultMovie">Adult: </string>
     <string name="durationMovie">Duration: </string>
-    <string name="introduceMovie">Introduce movie name </string>
+    <string name="voteMovie">Vote Average: </string>
+
 </resources>

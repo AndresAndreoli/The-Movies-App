@@ -11,8 +11,6 @@ import com.squareup.picasso.Picasso
 
 class MovieAdapter(private var movies: List<Movie>, var activity: Activity): RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
-    private val urlImage = "https://image.tmdb.org/t/p/w500"
-
     class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val binding = ItemMovieBinding.bind(itemView)
     }
@@ -24,7 +22,7 @@ class MovieAdapter(private var movies: List<Movie>, var activity: Activity): Rec
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val item = movies[position]
 
-        Picasso.get().load(urlImage+item.poster_path).into(holder.binding.ivImageMain)
+        Picasso.get().load(APIService.urlImage+item.poster_path).into(holder.binding.ivImageMain)
         holder.binding.tvTitleMain.setText(item.title)
 
         holder.binding.cvMovieContainer.setOnClickListener {

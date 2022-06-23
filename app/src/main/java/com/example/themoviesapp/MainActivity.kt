@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
 
     // Attributes
     private lateinit var binding: ActivityMainBinding
-    private val baseUrl: String = "https://api.themoviedb.org/3/movie/"
     private lateinit var adapter: MovieAdapter
     private var moviesList = mutableListOf<Movie>()
     private lateinit var layoutManager: LinearLayoutManager
@@ -46,6 +45,11 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
         binding.svMovie.setOnQueryTextListener(this)
         layoutManager = LinearLayoutManager(this)
         adapter = MovieAdapter(moviesList, this)
+
+        binding.ivLoadContent.setOnClickListener {
+            resetContent()
+        }
+
         initRecyclerView()
         loadRVWithMovies()
     }
@@ -75,7 +79,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
 
     private fun getRetrofit(): Retrofit{
         return Retrofit.Builder()
-            .baseUrl(baseUrl)
+            .baseUrl(APIService.urlEndPoint)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -85,7 +89,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
         isLoading = true
 
         CoroutineScope(Dispatchers.IO).launch {
-            val call = getRetrofit().create(APIService::class.java).getMovies("popular?api_key=208e554046f1cf82cd9a3dd3e315fe5f&language=en-US&page=${pageNum}")
+            val call = getRetrofit().create(APIService::class.java).getMovies("popular?api_key=${APIService.APIkey}&language=en-US&page=${pageNum}")
             val movie = call.body()
             runOnUiThread {
                 if (call.isSuccessful){
@@ -93,7 +97,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
                     moviesList.addAll(movies)
                     adapter.notifyDataSetChanged()
                 } else {
-                    Toast.makeText(this@MainActivity, "Ha ocurrido un error", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity, "We could not find more movies", Toast.LENGTH_SHORT).show()
                 }
                 isLoading = false
                 binding.pbLoadItems.visibility = View.GONE
@@ -111,24 +115,20 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
             moviesList.clear()
             moviesList.addAll(list)
             adapter.notifyDataSetChanged()
+            binding.svMovie.clearFocus()
 
             if (list.isEmpty()){
-                //hideKeyboard()
-                var toast = Toast.makeText(this, "Sorry, I coudn't found your movie", Toast.LENGTH_LONG)
-                toast.setGravity(Gravity.BOTTOM, 0, 40);
+                var toast = Toast.makeText(this, "Sorry, I could not found your movie", Toast.LENGTH_LONG)
+                toast.setGravity(Gravity.BOTTOM, 0, 50);
                 toast.show()
+                resetContent()
             }
         }
         return false
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
-        if (newText!!.isEmpty()){
-            // Vuelvo a traer los datos ya que puede haber una actualizacion en la lista de la pagina
-            moviesList.clear()
-            loadRVWithMovies()
-        }
-        return false
+        return true
     }
 
     private fun hideKeyboard() {
@@ -138,5 +138,12 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
 
     fun setFocus(view: View){
         binding.svMovie.onActionViewExpanded()
+    }
+
+    private fun resetContent(){
+        moviesList.clear()
+        pageNum = 1
+        loadRVWithMovies()
+        binding.svMovie.clearFocus()
     }
 }
