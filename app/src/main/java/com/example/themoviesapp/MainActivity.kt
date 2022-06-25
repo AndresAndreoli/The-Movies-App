@@ -1,13 +1,13 @@
 package com.example.themoviesapp
 
-import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
+import android.content.*
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
-import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +17,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
+import kotlin.concurrent.schedule
+
 
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
 
@@ -33,8 +36,9 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
     companion object{
         // Contiene los detalles de las peliculas ya vistas
         var movieDetailsList = mutableListOf<MovieDetailsResponse>()
-    }
 
+        //lateinit var sharedPreferences: SharedPreferences
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +49,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
         binding.svMovie.setOnQueryTextListener(this)
         layoutManager = LinearLayoutManager(this)
         adapter = MovieAdapter(moviesList, this)
+        //sharedPreferences =  getSharedPreferences("RATE_INFO", Context.MODE_PRIVATE)
 
         binding.ivLoadContent.setOnClickListener {
             resetContent()
@@ -52,10 +57,12 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
 
         initRecyclerView()
         loadRVWithMovies()
+        getGuestSessionId()
+
+        binding.svMovie.clearFocus()
     }
 
     private fun initRecyclerView(){
-
         binding.rvMovies.layoutManager = layoutManager
         binding.rvMovies.adapter = adapter
 
@@ -77,19 +84,26 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
         })
     }
 
-    private fun getRetrofit(): Retrofit{
+    private fun getRetrofit(url: String): Retrofit{
         return Retrofit.Builder()
-            .baseUrl(APIService.urlEndPoint)
+            .baseUrl(url)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
 
     private fun loadRVWithMovies(){
+        if (!isOnline()){
+            // Tendria que implementar un broadcastReceivers, para que, cuando haya o no internet, la app cargue o no los datos segun
+            // el estado de Internet. (no llegue con los tiempos para hacerlo)
+            Toast.makeText(this, "No connection", Toast.LENGTH_LONG).show()
+            return
+        }
         binding.pbLoadItems.visibility = View.VISIBLE
+        binding.ivLoadContent.visibility = View.INVISIBLE
         isLoading = true
 
         CoroutineScope(Dispatchers.IO).launch {
-            val call = getRetrofit().create(APIService::class.java).getMovies("popular?api_key=${APIService.APIkey}&language=en-US&page=${pageNum}")
+            val call = getRetrofit(APIService.urlEndPoint).create(APIService::class.java).getMovies("popular?api_key=${APIService.APIkey}&language=en-US&page=${pageNum}")
             val movie = call.body()
             runOnUiThread {
                 if (call.isSuccessful){
@@ -101,6 +115,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
                 }
                 isLoading = false
                 binding.pbLoadItems.visibility = View.GONE
+                binding.ivLoadContent.visibility = View.VISIBLE
             }
         }
     }
@@ -112,28 +127,25 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
                 it.title.lowercase().contains(query.lowercase())
             }
 
-            moviesList.clear()
-            moviesList.addAll(list)
-            adapter.notifyDataSetChanged()
-            binding.svMovie.clearFocus()
-
             if (list.isEmpty()){
-                var toast = Toast.makeText(this, "Sorry, I could not found your movie", Toast.LENGTH_LONG)
+                var toast = Toast.makeText(this, "Sorry, We could not find your movie", Toast.LENGTH_LONG)
                 toast.setGravity(Gravity.BOTTOM, 0, 50);
                 toast.show()
                 resetContent()
+            } else {
+                moviesList.clear()
+                moviesList.addAll(list)
+                binding.svMovie.clearFocus()
+                adapter.notifyDataSetChanged()
             }
+
+
         }
         return false
     }
 
     override fun onQueryTextChange(newText: String?): Boolean {
         return true
-    }
-
-    private fun hideKeyboard() {
-        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(binding.viewRoot.windowToken, 0)
     }
 
     fun setFocus(view: View){
@@ -145,5 +157,26 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
         pageNum = 1
         loadRVWithMovies()
         binding.svMovie.clearFocus()
+        adapter.notifyDataSetChanged()
+    }
+
+    private fun isOnline(): Boolean {
+        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val netInfo = cm.activeNetworkInfo
+        return netInfo != null && netInfo.isConnectedOrConnecting
+    }
+
+    private fun getGuestSessionId(){
+        CoroutineScope(Dispatchers.IO).launch {
+            val call = getRetrofit(APIService.urlAuthentication).create(APIService::class.java).getGuestSessionID(APIService.APIkey)
+            val guestSession = call.body()
+            runOnUiThread {
+                if (call.isSuccessful){
+                    APIService.guest_session_id = guestSession!!.guest_session_id
+                } else {
+                    Toast.makeText(this@MainActivity, "We could not get the guest session ID ", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 }

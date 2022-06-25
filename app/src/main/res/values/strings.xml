@@ -15,8 +15,9 @@
     <string name="languageMovie">Language: </string>
     <string name="popularityMovie">Popularity: </string>
     <string name="genresMovie">Genres: </string>
-    <string name="adultMovie">Adult: </string>
+    <string name="adultMovie">Age: </string>
     <string name="durationMovie">Duration: </string>
     <string name="voteMovie">Vote Average: </string>
+    <string name="leaveRate">Rate the movie: </string>
 
 </resources>

@@ -273,7 +273,42 @@
                             android:text= "@string/loadContent"
                             android:textSize="16sp"
                             android:gravity="end"/>
+
                     </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="@color/white"
+                        style="@style/movie_details"
+                        android:text="@string/leaveRate"
+                        android:textSize="16sp"/>
+
+                    <RatingBar
+                        android:id="@+id/rbRate"
+                        style="?android:attr/ratingBarStyleIndicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_weight="1"
+                        android:foregroundTint="@color/colorAccent"
+                        android:numStars="10"
+                        android:progressTint="@color/colorAccent"
+                        android:isIndicator="false"
+                        android:rating="-1"
+                        android:stepSize="1"/>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnRate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Calificar"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="15dp"
+                        android:enabled="false"/>
 
                 </LinearLayout>
 

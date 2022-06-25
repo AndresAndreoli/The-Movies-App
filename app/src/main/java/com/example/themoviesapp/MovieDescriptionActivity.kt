@@ -1,26 +1,33 @@
 package com.example.themoviesapp
 
+import android.content.Context
+import android.content.SharedPreferences
+import android.net.ConnectivityManager
 import android.os.Bundle
+import android.util.Half.toFloat
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.themoviesapp.APIService.Companion.APIkey
+import com.example.themoviesapp.APIService.Companion.guest_session_id
 import com.example.themoviesapp.MainActivity.Companion.movieDetailsList
 import com.example.themoviesapp.databinding.ActivityMovieDescriptionBinding
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.text.DecimalFormat
 
 class MovieDescriptionActivity : AppCompatActivity() {
 
     //Atributes
     private lateinit var binding: ActivityMovieDescriptionBinding
+    //private var edit = MainActivity.sharedPreferences.edit()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +36,16 @@ class MovieDescriptionActivity : AppCompatActivity() {
 
         val idMovie: String = getIntent().getStringExtra("ID").toString()
         loadDetailsMovie(idMovie)
+
+        binding.rbRate.setOnRatingBarChangeListener { ratingBar, fl, b ->
+            if (!binding.btnRate.isEnabled){
+                binding.btnRate.isEnabled = true
+            }
+        }
+
+        binding.btnRate.setOnClickListener{
+            rateMovie(idMovie)
+        }
     }
 
     private fun getRetrofit(): Retrofit{
@@ -42,8 +59,23 @@ class MovieDescriptionActivity : AppCompatActivity() {
         movieDetailsList.forEach {
             if (it.id == query.toInt()){
                 showDetails(it)
+
+                /*var retrieveRate = MainActivity.sharedPreferences.getFloat(query, -1F)
+
+                if (retrieveRate!=-1F){
+                    binding.btnRate.isEnabled = false
+                    binding.rbRate.rating = retrieveRate
+                    binding.rbRate.isEnabled = false
+                } else {
+                    println("It isn't")
+                }*/
                 return
             }
+        }
+
+        if (!isOnline()){
+            Toast.makeText(this, "No connection", Toast.LENGTH_LONG).show()
+            return
         }
 
         CoroutineScope(Dispatchers.IO).launch{
@@ -85,7 +117,7 @@ class MovieDescriptionActivity : AppCompatActivity() {
             binding.tvReleaseDateDescription.setText(it.release_date)
             binding.tvLanguageDescription.setText(it.original_language!!.uppercase())
             binding.tvPopularityDescription.setText((it.popularity).toString())
-            binding.tvVoteAverageDescription.setText("${(it.vote_average).toString()}/10")
+            binding.tvVoteAverageDescription.setText("${(DecimalFormat("#.#").format(it.vote_average)).toString()}/10")
             Picasso.get().load(APIService.urlImage+it.poster_path).into(binding.imPosterDescription)
 
             var genresContainer: String = ""
@@ -106,5 +138,31 @@ class MovieDescriptionActivity : AppCompatActivity() {
     private fun errorMessage(){
         Toast.makeText(this, "Error. The movie could not be loaded", Toast.LENGTH_LONG).show()
         finish()
+    }
+
+    private fun isOnline(): Boolean {
+        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val netInfo = cm.activeNetworkInfo
+        return netInfo != null && netInfo.isConnectedOrConnecting
+    }
+
+    private fun rateMovie(idMovie: String){
+        var rateObject = RateObject(binding.rbRate.rating)
+        var rate = binding.rbRate.rating
+        binding.btnRate.isEnabled = false
+
+        CoroutineScope(Dispatchers.IO).launch{
+            val call = getRetrofit().create(APIService::class.java).postMovie(idMovie.toInt(), APIService.APIkey, APIService.guest_session_id, rateObject)
+            val rateRes = call.body()
+            runOnUiThread{
+                if (call.code() == 201){
+                    Toast.makeText(this@MovieDescriptionActivity, "Rated successfully", Toast.LENGTH_LONG).show()
+                    //edit.putFloat(idMovie, rate)
+                } else {
+                    Toast.makeText(this@MovieDescriptionActivity, "Something went wrong", Toast.LENGTH_LONG).show()
+                }
+                binding.btnRate.isEnabled = true
+            }
+        }
     }
 }

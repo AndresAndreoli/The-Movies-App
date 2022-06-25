@@ -33,6 +33,8 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_autorenew"
             android:padding="10dp"
+            android:layout_marginRight="10dp"
+            android:visibility="invisible"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
