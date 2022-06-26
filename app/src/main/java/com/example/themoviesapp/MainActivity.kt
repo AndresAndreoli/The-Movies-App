@@ -138,8 +138,6 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
                 binding.svMovie.clearFocus()
                 adapter.notifyDataSetChanged()
             }
-
-
         }
         return false
     }

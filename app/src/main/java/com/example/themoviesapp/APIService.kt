@@ -15,7 +15,7 @@ interface APIService {
         lateinit var guest_session_id : String
     }
 
-    // Anotacion: decidi implementar 2 metodos de obtencion de datos de la API para poder experimentar
+    // Anotacion: decidi implementar 3 metodos de obtencion de datos de la API diferentes para poder experimentar
     @GET
     suspend fun getMovies(@Url url: String): Response<MoviesResponse>
 

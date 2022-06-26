@@ -48,7 +48,7 @@ class MovieDescriptionActivity : AppCompatActivity() {
         }
     }
 
-    private fun getRetrofit(): Retrofit{
+    private fun getRetrofit(url: String): Retrofit{
         return Retrofit.Builder()
             .baseUrl(APIService.urlEndPoint)
             .addConverterFactory(GsonConverterFactory.create())
@@ -79,7 +79,7 @@ class MovieDescriptionActivity : AppCompatActivity() {
         }
 
         CoroutineScope(Dispatchers.IO).launch{
-            val call = getRetrofit().create(APIService::class.java).getDetailsMovie(query)
+            val call = getRetrofit(APIService.urlEndPoint).create(APIService::class.java).getDetailsMovie(query)
             val movieDetail = call.body()
             runOnUiThread{
                 if (call.isSuccessful){
@@ -152,7 +152,7 @@ class MovieDescriptionActivity : AppCompatActivity() {
         binding.btnRate.isEnabled = false
 
         CoroutineScope(Dispatchers.IO).launch{
-            val call = getRetrofit().create(APIService::class.java).postMovie(idMovie.toInt(), APIService.APIkey, APIService.guest_session_id, rateObject)
+            val call = getRetrofit(APIService.urlEndPoint).create(APIService::class.java).postMovie(idMovie.toInt(), APIService.APIkey, APIService.guest_session_id, rateObject)
             val rateRes = call.body()
             runOnUiThread{
                 if (call.code() == 201){
@@ -164,5 +164,28 @@ class MovieDescriptionActivity : AppCompatActivity() {
                 binding.btnRate.isEnabled = true
             }
         }
+
+        /* Esta es una implementacion que decidi implementar al principio, pero luego decidi implementar la de arriba
+           para poder usar las corrutinas
+
+        val requestObject = getRetrofit().create(APIService::class.java).postMovie(rateObject)
+
+        // enqueue: nos permite realizar la petición de manera asincrónica
+        // execute: nos permite realizar la petición de manera sincrónica
+        requestObject.enqueue(object: Callback<MovieRateResponse>{
+            override fun onResponse(call: Call<MovieRateResponse>, response: Response<MovieRateResponse>) {
+                if (response.code()==201){
+                    Toast.makeText(this@MovieDescriptionActivity, "Bien", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this@MovieDescriptionActivity, "Mal", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<MovieRateResponse>, t: Throwable) {
+                println("fallo")
+            }
+
+        })*/
+
     }
 }
