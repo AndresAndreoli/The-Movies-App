@@ -1,6 +1,10 @@
-package com.example.themoviesapp
+package com.example.themoviesapp.services
 
-import retrofit2.Call
+import com.example.themoviesapp.GuestSessionIdResponse
+import com.example.themoviesapp.MovieDetailsResponse
+import com.example.themoviesapp.MovieRateResponse
+import com.example.themoviesapp.RateObject
+import com.example.themoviesapp.model.movieResponse.MoviesResponse
 import retrofit2.Response
 import retrofit2.http.*
 

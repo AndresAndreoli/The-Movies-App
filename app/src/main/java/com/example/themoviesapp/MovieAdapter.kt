@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.themoviesapp.databinding.ItemMovieBinding
+import com.example.themoviesapp.model.movieResponse.Movie
+import com.example.themoviesapp.services.APIService
 import com.squareup.picasso.Picasso
 
 class MovieAdapter(private var movies: List<Movie>, var activity: Activity): RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {

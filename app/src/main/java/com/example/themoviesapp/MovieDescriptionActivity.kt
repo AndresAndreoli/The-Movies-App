@@ -1,24 +1,17 @@
 package com.example.themoviesapp
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.util.Half.toFloat
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.themoviesapp.APIService.Companion.APIkey
-import com.example.themoviesapp.APIService.Companion.guest_session_id
 import com.example.themoviesapp.MainActivity.Companion.movieDetailsList
 import com.example.themoviesapp.databinding.ActivityMovieDescriptionBinding
+import com.example.themoviesapp.services.APIService
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.text.DecimalFormat

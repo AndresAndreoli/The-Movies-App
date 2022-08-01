@@ -1,4 +1,4 @@
-package com.example.themoviesapp
+package com.example.themoviesapp.model.movieResponse
 
 data class Movie(
     var adult: Boolean,

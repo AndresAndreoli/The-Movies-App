@@ -2,7 +2,6 @@ package com.example.themoviesapp
 
 import android.content.*
 import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.os.Bundle
 import android.view.Gravity
 import android.view.View
@@ -12,13 +11,13 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.themoviesapp.databinding.ActivityMainBinding
+import com.example.themoviesapp.model.movieResponse.Movie
+import com.example.themoviesapp.services.APIService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.util.*
-import kotlin.concurrent.schedule
 
 
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
@@ -166,7 +165,8 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
 
     private fun getGuestSessionId(){
         CoroutineScope(Dispatchers.IO).launch {
-            val call = getRetrofit(APIService.urlAuthentication).create(APIService::class.java).getGuestSessionID(APIService.APIkey)
+            val call = getRetrofit(APIService.urlAuthentication).create(APIService::class.java).getGuestSessionID(
+                APIService.APIkey)
             val guestSession = call.body()
             runOnUiThread {
                 if (call.isSuccessful){
