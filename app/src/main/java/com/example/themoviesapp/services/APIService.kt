@@ -19,9 +19,8 @@ interface APIService {
         lateinit var guest_session_id : String
     }
 
-    // Anotacion: decidi implementar 3 metodos de obtencion de datos de la API diferentes para poder experimentar
-    @GET
-    suspend fun getMovies(@Url url: String): Response<MoviesResponse>
+    @GET("popular?api_key=${APIkey}&language=en-US&page={pageNum}")
+    suspend fun getMovies(@Path ("pageNum") pageNum: Int): Response<MoviesResponse>
 
     @GET ("{idMovie}?api_key=208e554046f1cf82cd9a3dd3e315fe5f&language=en-US")
     suspend fun getDetailsMovie(@Path("idMovie") idMovie: String): Response<MovieDetailsResponse>

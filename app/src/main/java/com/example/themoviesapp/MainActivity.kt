@@ -13,13 +13,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.themoviesapp.databinding.ActivityMainBinding
 import com.example.themoviesapp.model.movieResponse.Movie
 import com.example.themoviesapp.services.APIService
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
 
     // Attributes
@@ -83,12 +84,6 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
         })
     }
 
-    private fun getRetrofit(url: String): Retrofit{
-        return Retrofit.Builder()
-            .baseUrl(url)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
 
     private fun loadRVWithMovies(){
         if (!isOnline()){
@@ -102,7 +97,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
         isLoading = true
 
         CoroutineScope(Dispatchers.IO).launch {
-            val call = getRetrofit(APIService.urlEndPoint).create(APIService::class.java).getMovies("popular?api_key=${APIService.APIkey}&language=en-US&page=${pageNum}")
+
             val movie = call.body()
             runOnUiThread {
                 if (call.isSuccessful){
