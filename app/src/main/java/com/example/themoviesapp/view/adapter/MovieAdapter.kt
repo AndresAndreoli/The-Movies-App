@@ -1,4 +1,4 @@
-package com.example.themoviesapp
+package com.example.themoviesapp.view.adapter
 
 import android.app.Activity
 import android.content.Intent
@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.themoviesapp.MovieDescriptionActivity
+import com.example.themoviesapp.R
 import com.example.themoviesapp.databinding.ItemMovieBinding
 import com.example.themoviesapp.model.movieResponse.Movie
 import com.example.themoviesapp.services.APIService

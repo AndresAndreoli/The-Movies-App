@@ -12,8 +12,8 @@ class MoviesService @Inject constructor (
     ) {
     suspend fun getMoviesResponse (page: Int): MoviesResponse{
         return withContext(Dispatchers.IO){
-              if (apiService.getMovies(page).isSuccessful){
-                  apiService.getMovies(page).body() ?: MoviesResponse(null, null, null, listOf(Movie(false, "",listOf(), null, "", "", "", null, "", "", "", false, null, null)))
+              if (apiService.getMovies().isSuccessful){
+                  apiService.getMovies().body() ?: MoviesResponse(null, null, null, listOf(Movie(false, "",listOf(), null, "", "", "", null, "", "", "", false, null, null)))
              } else {
                  MoviesResponse(null, null, null, listOf(Movie(false, "",listOf(), null, "", "", "", null, "", "", "", false, null, null)))
              }

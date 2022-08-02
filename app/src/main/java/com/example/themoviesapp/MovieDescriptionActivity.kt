@@ -5,7 +5,7 @@ import android.net.ConnectivityManager
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.themoviesapp.MainActivity.Companion.movieDetailsList
+import com.example.themoviesapp.view.MainActivity.Companion.movieDetailsList
 import com.example.themoviesapp.databinding.ActivityMovieDescriptionBinding
 import com.example.themoviesapp.services.APIService
 import com.squareup.picasso.Picasso
