@@ -1,14 +1,20 @@
-package com.example.themoviesapp
+package com.example.themoviesapp.view
 
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.example.themoviesapp.MovieDetailsResponse
+import com.example.themoviesapp.RateObject
 import com.example.themoviesapp.view.MainActivity.Companion.movieDetailsList
 import com.example.themoviesapp.databinding.ActivityMovieDescriptionBinding
 import com.example.themoviesapp.services.APIService
+import com.example.themoviesapp.viewmodel.ViewModelMovieDetails
+import com.example.themoviesapp.viewmodel.ViewModelMovies
 import com.squareup.picasso.Picasso
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,19 +22,22 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.text.DecimalFormat
 
+@AndroidEntryPoint
 class MovieDescriptionActivity : AppCompatActivity() {
 
     //Atributes
     private lateinit var binding: ActivityMovieDescriptionBinding
-    //private var edit = MainActivity.sharedPreferences.edit()
+    private val viewModel: ViewModelMovieDetails by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMovieDescriptionBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val idMovie: String = getIntent().getStringExtra("ID").toString()
-        loadDetailsMovie(idMovie)
+        val idMovie: Int = getIntent().getStringExtra("ID")!!.toInt()
+        viewModel.onCreateMovieDetails(idMovie)
+
+        //loadDetailsMovie(idMovie)
 
         binding.rbRate.setOnRatingBarChangeListener { ratingBar, fl, b ->
             if (!binding.btnRate.isEnabled){
@@ -37,16 +46,10 @@ class MovieDescriptionActivity : AppCompatActivity() {
         }
 
         binding.btnRate.setOnClickListener{
-            rateMovie(idMovie)
+            //rateMovie(idMovie)
         }
     }
 
-    private fun getRetrofit(url: String): Retrofit{
-        return Retrofit.Builder()
-            .baseUrl(APIService.urlEndPoint)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
 
     private fun loadDetailsMovie(query: String){
         movieDetailsList.forEach {
@@ -69,23 +72,6 @@ class MovieDescriptionActivity : AppCompatActivity() {
         if (!isOnline()){
             Toast.makeText(this, "No connection", Toast.LENGTH_LONG).show()
             return
-        }
-
-        CoroutineScope(Dispatchers.IO).launch{
-            val call = getRetrofit(APIService.urlEndPoint).create(APIService::class.java).getDetailsMovie(query)
-            val movieDetail = call.body()
-            runOnUiThread{
-                if (call.isSuccessful){
-                    if (movieDetail == null){
-                        errorMessage()
-                    } else {
-                        showDetails(movieDetail)
-                        movieDetailsList.add(movieDetail)
-                    }
-                } else {
-                    errorMessage()
-                }
-            }
         }
     }
 
@@ -124,7 +110,7 @@ class MovieDescriptionActivity : AppCompatActivity() {
             else
                 binding.tvAdultDescription.setText("All ages")
 
-            binding.tvDurationDescription.setText(converterTime(it.runtime))
+            //binding.tvDurationDescription.setText(converterTime(it.runtime))
         }
     }
 
@@ -139,7 +125,7 @@ class MovieDescriptionActivity : AppCompatActivity() {
         return netInfo != null && netInfo.isConnectedOrConnecting
     }
 
-    private fun rateMovie(idMovie: String){
+    /*private fun rateMovie(idMovie: String){
         var rateObject = RateObject(binding.rbRate.rating)
         var rate = binding.rbRate.rating
         binding.btnRate.isEnabled = false
@@ -156,7 +142,7 @@ class MovieDescriptionActivity : AppCompatActivity() {
                 }
                 binding.btnRate.isEnabled = true
             }
-        }
+        }*/
 
         /* Esta es una implementacion que decidi implementar al principio, pero luego decidi implementar la de arriba
            para poder usar las corrutinas
@@ -179,6 +165,4 @@ class MovieDescriptionActivity : AppCompatActivity() {
             }
 
         })*/
-
-    }
 }

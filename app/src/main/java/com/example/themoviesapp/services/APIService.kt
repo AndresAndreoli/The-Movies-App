@@ -18,13 +18,13 @@ interface APIService {
         const val APIkey = "208e554046f1cf82cd9a3dd3e315fe5f"
         lateinit var guest_session_id : String
     }
+    // https://developers.themoviedb.org/3/movies/get-popular-movies
 
-    //@GET("popular?api_key=${APIkey}&language=en-US&page={pageNum}")
-    @GET("popular?api_key=208e554046f1cf82cd9a3dd3e315fe5f&language=en-US&page=1")
-    suspend fun getMovies(): Response<MoviesResponse>
+    @GET("popular?language=en-US")
+    suspend fun getMovies(@Query("api_key") ApiKey: String, @Query("page") pageNum: Int): Response<MoviesResponse>
 
     @GET ("{idMovie}?api_key=208e554046f1cf82cd9a3dd3e315fe5f&language=en-US")
-    suspend fun getDetailsMovie(@Path("idMovie") idMovie: String): Response<MovieDetailsResponse>
+    suspend fun getDetailsMovie(@Path("idMovie") idMovie: Int): Response<MovieDetailsResponse>
 
     @GET("guest_session/new")
     suspend fun getGuestSessionID(@Query("api_key") apiKey: String): Response <GuestSessionIdResponse>

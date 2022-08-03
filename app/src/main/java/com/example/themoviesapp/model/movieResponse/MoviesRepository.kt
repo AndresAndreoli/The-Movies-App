@@ -1,17 +1,26 @@
 package com.example.themoviesapp.model.movieResponse
 
 import com.example.themoviesapp.MovieDetailsResponse
+import com.example.themoviesapp.model.Cache
 import com.example.themoviesapp.services.MoviesService
 import javax.inject.Inject
 
 class MoviesRepository @Inject constructor(
-    private val moviesService: MoviesService
+    private val moviesService: MoviesService,
+    private val moviesCache: Cache
     ) {
-    suspend fun getAllMovies(page: Int): List<Movie>{
-        return if (moviesService.getMoviesResponse(page).movies.size==1 && moviesService.getMoviesResponse(page).movies[0].id == null){
-            emptyList()
+    suspend fun getAllMovies(apiKey:String, page: Int): List<Movie>{
+        var movies: List<Movie>
+        if (moviesCache.movies.isEmpty()) {
+            if (moviesService.getMoviesResponse(apiKey, page).movies.size == 1 && moviesService.getMoviesResponse(apiKey, page).movies[0].id == null) {
+                movies = emptyList()
+            } else {
+                movies = moviesService.getMoviesResponse(apiKey, page).movies
+                moviesCache.movies = movies
+            }
         } else {
-            moviesService.getMoviesResponse(page).movies
+            movies = moviesCache.movies
         }
+        return movies
     }
 }

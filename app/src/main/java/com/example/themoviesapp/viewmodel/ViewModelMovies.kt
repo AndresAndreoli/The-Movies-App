@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.themoviesapp.domain.GetMoviesUseCase
 import com.example.themoviesapp.model.movieResponse.Movie
+import com.example.themoviesapp.services.APIService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,7 +21,7 @@ class ViewModelMovies @Inject constructor(
 
     fun onCreateMovies(page: Int){
         viewModelScope.launch{
-            val result = getMoviesUseCase(page)
+            val result = getMoviesUseCase(APIService.APIkey, page)
             if (result.isNotEmpty()){
                 _moviesList.postValue(result)
             } else {

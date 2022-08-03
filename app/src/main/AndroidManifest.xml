@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TheMoviesApp">
         <activity
-            android:name=".MovieDescriptionActivity"
+            android:name=".view.MovieDescriptionActivity"
             android:exported="false"
             android:screenOrientation="portrait"/>
         <activity

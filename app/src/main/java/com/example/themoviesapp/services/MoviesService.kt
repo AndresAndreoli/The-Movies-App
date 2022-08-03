@@ -10,10 +10,10 @@ import javax.inject.Inject
 class MoviesService @Inject constructor (
     private val apiService: APIService
     ) {
-    suspend fun getMoviesResponse (page: Int): MoviesResponse{
+    suspend fun getMoviesResponse (apiKey: String, page: Int): MoviesResponse{
         return withContext(Dispatchers.IO){
-              if (apiService.getMovies().isSuccessful){
-                  apiService.getMovies().body() ?: MoviesResponse(null, null, null, listOf(Movie(false, "",listOf(), null, "", "", "", null, "", "", "", false, null, null)))
+              if (apiService.getMovies(apiKey, page).isSuccessful){
+                  apiService.getMovies(apiKey, page).body() ?: MoviesResponse(null, null, null, listOf(Movie(false, "",listOf(), null, "", "", "", null, "", "", "", false, null, null)))
              } else {
                  MoviesResponse(null, null, null, listOf(Movie(false, "",listOf(), null, "", "", "", null, "", "", "", false, null, null)))
              }

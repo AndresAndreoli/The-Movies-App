@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.themoviesapp.MovieDescriptionActivity
+import com.example.themoviesapp.view.MovieDescriptionActivity
 import com.example.themoviesapp.R
 import com.example.themoviesapp.databinding.ItemMovieBinding
 import com.example.themoviesapp.model.movieResponse.Movie

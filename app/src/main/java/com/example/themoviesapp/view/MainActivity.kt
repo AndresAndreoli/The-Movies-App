@@ -64,9 +64,7 @@ class MainActivity : AppCompatActivity(){
         viewModel.moviesList.observe(this, Observer {
             binding.rvMovies.adapter = MovieAdapter(it, this)
             binding.rvMovies.layoutManager = LinearLayoutManager(this)
-        })
-
-
+       })
 
         /*binding.rvMovies.addOnScrollListener(object: RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
