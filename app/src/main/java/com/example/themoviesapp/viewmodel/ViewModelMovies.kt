@@ -33,11 +33,11 @@ class ViewModelMovies @Inject constructor(
 
             // Cleaning movies cache
             if (typeRequest.RESET == type){
-                cacheMovie.movies = emptyList()
+                cacheMovie.movies = mutableListOf()
             }
-            println(cacheMovie.movies.size)
+
             val result = getMoviesUseCase(APIService.APIkey, page)
-            println(cacheMovie.movies.size) -- VERR
+
             if (result.isNotEmpty()){
                 _moviesList.postValue(result)
                 _moviesStatus.postValue(status.SUCCESS)

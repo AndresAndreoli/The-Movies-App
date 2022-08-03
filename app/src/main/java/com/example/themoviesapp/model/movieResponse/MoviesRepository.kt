@@ -16,7 +16,7 @@ class MoviesRepository @Inject constructor(
                 movies = emptyList()
             } else {
                 movies = moviesService.getMoviesResponse(apiKey, page).movies
-                moviesCache.movies = movies
+                moviesCache.movies.addAll(movies)
             }
         } else {
             movies = moviesCache.movies

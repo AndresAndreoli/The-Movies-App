@@ -52,12 +52,6 @@ class MainActivity : AppCompatActivity(){
 
         //binding.svMovie.setOnQueryTextListener(this)
 
-
-        /*binding.ivLoadContent.setOnClickListener {
-            resetContent()
-        }*/
-
-
         //loadRVWithMovies()
         //getGuestSessionId()
 
@@ -69,24 +63,33 @@ class MainActivity : AppCompatActivity(){
         viewModel.moviesStatus.observe(this, Observer {
             when (it){
                 status.LOADING -> {
-                    //TODO: loading
                     binding.ivLoadContent.visibility = View.GONE
+                    binding.rvMovies.visibility = View.GONE
                 }
                 status.SUCCESS -> {
-                    viewModel.moviesList.observe(this, Observer {
-                        binding.rvMovies.adapter = MovieAdapter(it, this)
+                    viewModel.moviesList.observe(this, Observer { moviesList ->
+                        binding.rvMovies.adapter = MovieAdapter(moviesList, this)
                         binding.rvMovies.layoutManager = LinearLayoutManager(this)
 
                         binding.ivLoadContent.visibility = View.VISIBLE
+                        binding.rvMovies.visibility = View.VISIBLE
                     })
                 }
                 status.ERROR -> {
-                    //TODO: error
+                    // TODO: retry button
                     binding.ivLoadContent.visibility = View.GONE
+                    binding.rvMovies.visibility = View.GONE
                 }
             }
         })
-        /*binding.rvMovies.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+    }
+
+    private fun setUpListeners(){
+        binding.ivLoadContent.setOnClickListener {
+            resetContent()
+        }
+
+        binding.rvMovies.addOnScrollListener(object: RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
@@ -101,13 +104,7 @@ class MainActivity : AppCompatActivity(){
                     }
                 }
             }
-        })*/
-    }
-
-    private fun setUpListeners(){
-        binding.ivLoadContent.setOnClickListener {
-            resetContent()
-        }
+        })
     }
 
     private fun resetContent(){
