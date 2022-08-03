@@ -1,5 +1,6 @@
 package com.example.themoviesapp.view
 
+import android.annotation.SuppressLint
 import android.content.*
 import android.net.ConnectivityManager
 import android.os.Bundle
@@ -17,6 +18,8 @@ import com.example.themoviesapp.MovieDetailsResponse
 import com.example.themoviesapp.databinding.ActivityMainBinding
 import com.example.themoviesapp.services.APIService
 import com.example.themoviesapp.viewmodel.ViewModelMovies
+import com.example.themoviesapp.viewmodel.status
+import com.example.themoviesapp.viewmodel.typeRequest
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,7 +31,6 @@ class MainActivity : AppCompatActivity(){
 
     // Attributes
     private lateinit var binding: ActivityMainBinding
-    private lateinit var adapter: MovieAdapter
     private var movieDetailsList = mutableListOf<MovieDetailsResponse>()
     private val viewModel: ViewModelMovies by viewModels()
 
@@ -45,6 +47,9 @@ class MainActivity : AppCompatActivity(){
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initRecyclerView()
+        setUpListeners()
+
         //binding.svMovie.setOnQueryTextListener(this)
 
 
@@ -52,7 +57,7 @@ class MainActivity : AppCompatActivity(){
             resetContent()
         }*/
 
-        initRecyclerView()
+
         //loadRVWithMovies()
         //getGuestSessionId()
 
@@ -60,12 +65,27 @@ class MainActivity : AppCompatActivity(){
     }
 
     private fun initRecyclerView(){
-        viewModel.onCreateMovies(pageNum)
-        viewModel.moviesList.observe(this, Observer {
-            binding.rvMovies.adapter = MovieAdapter(it, this)
-            binding.rvMovies.layoutManager = LinearLayoutManager(this)
-       })
+        viewModel.onCreateMovies(typeRequest.CREATE, pageNum)
+        viewModel.moviesStatus.observe(this, Observer {
+            when (it){
+                status.LOADING -> {
+                    //TODO: loading
+                    binding.ivLoadContent.visibility = View.GONE
+                }
+                status.SUCCESS -> {
+                    viewModel.moviesList.observe(this, Observer {
+                        binding.rvMovies.adapter = MovieAdapter(it, this)
+                        binding.rvMovies.layoutManager = LinearLayoutManager(this)
 
+                        binding.ivLoadContent.visibility = View.VISIBLE
+                    })
+                }
+                status.ERROR -> {
+                    //TODO: error
+                    binding.ivLoadContent.visibility = View.GONE
+                }
+            }
+        })
         /*binding.rvMovies.addOnScrollListener(object: RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -84,7 +104,17 @@ class MainActivity : AppCompatActivity(){
         })*/
     }
 
+    private fun setUpListeners(){
+        binding.ivLoadContent.setOnClickListener {
+            resetContent()
+        }
+    }
 
+    private fun resetContent(){
+        pageNum = 1
+        viewModel.onCreateMovies(typeRequest.RESET, pageNum)
+        binding.svMovie.clearFocus()
+    }
 
 
     /*override fun onQueryTextSubmit(query: String?): Boolean {
@@ -117,13 +147,7 @@ class MainActivity : AppCompatActivity(){
         binding.svMovie.onActionViewExpanded()
     }
 
-    /*private fun resetContent(){
-        moviesList.clear()
-        pageNum = 1
-        loadRVWithMovies()
-        binding.svMovie.clearFocus()
-        adapter.notifyDataSetChanged()
-    }*/
+
 
     /*private fun isOnline(): Boolean {
         val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
