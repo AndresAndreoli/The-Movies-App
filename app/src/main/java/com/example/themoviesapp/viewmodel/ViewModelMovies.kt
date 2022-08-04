@@ -8,6 +8,7 @@ import com.example.themoviesapp.domain.GetMoviesUseCase
 import com.example.themoviesapp.model.Cache
 import com.example.themoviesapp.model.movieResponse.Movie
 import com.example.themoviesapp.services.APIService
+import com.example.themoviesapp.view.MainActivity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -52,10 +53,14 @@ class ViewModelMovies @Inject constructor(
         return cacheMovie.movies.size
     }
 
+    private val _isLoading = MutableLiveData<Boolean>()
+    val isLoading: LiveData<Boolean> = _isLoading
+
     fun loadMoreMovies(page: Int){
         viewModelScope.launch {
             val result = getMoviesUseCase(APIService.APIkey, page)
             _moviesList.postValue(result)
+            _isLoading.postValue(true)
         }
     }
 }

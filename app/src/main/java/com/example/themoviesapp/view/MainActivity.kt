@@ -65,6 +65,10 @@ class MainActivity : AppCompatActivity(){
         //getGuestSessionId()
 
         binding.svMovie.clearFocus()
+
+        viewModel.isLoading.observe(this, Observer {
+            isLoading = it
+        })
     }
 
     private fun initRecyclerView(){
@@ -111,6 +115,7 @@ class MainActivity : AppCompatActivity(){
                 if (!isLoading) {
                     if ((visibleItemCount + pastVisibleItem) >= total) {
                         pageNum++
+                        isLoading = false
                         viewModel.loadMoreMovies(pageNum)
                         adapter.notifyDataSetChanged()
                     }
