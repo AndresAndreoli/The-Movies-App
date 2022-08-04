@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.themoviesapp.view.adapter.MovieAdapter
 import com.example.themoviesapp.MovieDetailsResponse
 import com.example.themoviesapp.databinding.ActivityMainBinding
+import com.example.themoviesapp.model.Cache
+import com.example.themoviesapp.model.movieResponse.Movie
 import com.example.themoviesapp.services.APIService
 import com.example.themoviesapp.viewmodel.ViewModelMovies
 import com.example.themoviesapp.viewmodel.status
@@ -24,6 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 //class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
@@ -31,7 +34,9 @@ class MainActivity : AppCompatActivity(){
 
     // Attributes
     private lateinit var binding: ActivityMainBinding
-    private var movieDetailsList = mutableListOf<MovieDetailsResponse>()
+    private lateinit var linearLayout: LinearLayoutManager
+    private var moviesList: MutableList<Movie> = mutableListOf()
+    private lateinit var adapter: MovieAdapter
     private val viewModel: ViewModelMovies by viewModels()
 
     private var isLoading = false
@@ -47,6 +52,10 @@ class MainActivity : AppCompatActivity(){
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // initializing variables
+        linearLayout = LinearLayoutManager(this)
+        adapter = MovieAdapter(moviesList, this)
+
         initRecyclerView()
         setUpListeners()
 
@@ -60,6 +69,9 @@ class MainActivity : AppCompatActivity(){
 
     private fun initRecyclerView(){
         viewModel.onCreateMovies(typeRequest.CREATE, pageNum)
+        binding.rvMovies.adapter = adapter
+        binding.rvMovies.layoutManager = linearLayout
+
         viewModel.moviesStatus.observe(this, Observer {
             when (it){
                 status.LOADING -> {
@@ -67,10 +79,9 @@ class MainActivity : AppCompatActivity(){
                     binding.rvMovies.visibility = View.GONE
                 }
                 status.SUCCESS -> {
-                    viewModel.moviesList.observe(this, Observer { moviesList ->
-                        binding.rvMovies.adapter = MovieAdapter(moviesList, this)
-                        binding.rvMovies.layoutManager = LinearLayoutManager(this)
-
+                    viewModel.moviesList.observe(this, Observer {
+                        moviesList.addAll(it)
+                        adapter.notifyDataSetChanged()
                         binding.ivLoadContent.visibility = View.VISIBLE
                         binding.rvMovies.visibility = View.VISIBLE
                     })
@@ -92,15 +103,16 @@ class MainActivity : AppCompatActivity(){
         binding.rvMovies.addOnScrollListener(object: RecyclerView.OnScrollListener(){
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-
-                val visibleItemCount = layoutManager.childCount
-                val pastVisibleItem = layoutManager.findFirstCompletelyVisibleItemPosition()
-                val total = adapter.itemCount
+                val visibleItemCount = linearLayout.childCount
+                val pastVisibleItem = linearLayout.findFirstCompletelyVisibleItemPosition()
+                //val total = adapter.itemCount
+                val total = viewModel.returnCountItems()
 
                 if (!isLoading) {
                     if ((visibleItemCount + pastVisibleItem) >= total) {
                         pageNum++
-                        loadRVWithMovies()
+                        viewModel.loadMoreMovies(pageNum)
+                        adapter.notifyDataSetChanged()
                     }
                 }
             }
@@ -112,7 +124,6 @@ class MainActivity : AppCompatActivity(){
         viewModel.onCreateMovies(typeRequest.RESET, pageNum)
         binding.svMovie.clearFocus()
     }
-
 
     /*override fun onQueryTextSubmit(query: String?): Boolean {
         isLoading = true

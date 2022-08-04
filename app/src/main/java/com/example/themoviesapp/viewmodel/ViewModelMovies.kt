@@ -47,4 +47,15 @@ class ViewModelMovies @Inject constructor(
             }
         }
     }
+
+    fun returnCountItems(): Int{
+        return cacheMovie.movies.size
+    }
+
+    fun loadMoreMovies(page: Int){
+        viewModelScope.launch {
+            val result = getMoviesUseCase(APIService.APIkey, page)
+            _moviesList.postValue(result)
+        }
+    }
 }
