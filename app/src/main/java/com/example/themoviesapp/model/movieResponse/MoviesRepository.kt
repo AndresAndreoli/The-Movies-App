@@ -26,4 +26,8 @@ class MoviesRepository @Inject constructor(
         }
         return movies
     }
+
+    fun getMoviesFromCache(): List<Movie>{
+        return moviesCache.movies
+    }
 }

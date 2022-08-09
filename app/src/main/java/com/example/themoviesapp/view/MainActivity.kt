@@ -20,8 +20,8 @@ import com.example.themoviesapp.model.Cache
 import com.example.themoviesapp.model.movieResponse.Movie
 import com.example.themoviesapp.services.APIService
 import com.example.themoviesapp.viewmodel.ViewModelMovies
-import com.example.themoviesapp.viewmodel.status
-import com.example.themoviesapp.viewmodel.typeRequest
+import com.example.themoviesapp.viewmodel.Status
+import com.example.themoviesapp.viewmodel.TypeRequest
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -29,8 +29,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-//class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
 
     // Attributes
     private lateinit var binding: ActivityMainBinding
@@ -59,7 +58,7 @@ class MainActivity : AppCompatActivity(){
         initRecyclerView()
         setUpListeners()
 
-        //binding.svMovie.setOnQueryTextListener(this)
+        binding.svMovie.setOnQueryTextListener(this)
 
         //loadRVWithMovies()
         //getGuestSessionId()
@@ -72,25 +71,28 @@ class MainActivity : AppCompatActivity(){
     }
 
     private fun initRecyclerView(){
-        viewModel.onCreateMovies(typeRequest.CREATE, pageNum)
+        viewModel.onCreateMovies(TypeRequest.CREATE, pageNum)
         binding.rvMovies.adapter = adapter
         binding.rvMovies.layoutManager = linearLayout
 
         viewModel.moviesStatus.observe(this, Observer {
             when (it){
-                status.LOADING -> {
+                Status.LOADING -> {
                     binding.ivLoadContent.visibility = View.GONE
                     binding.rvMovies.visibility = View.GONE
+                    binding.pbLoadItems.visibility = View.VISIBLE
                 }
-                status.SUCCESS -> {
+                Status.SUCCESS -> {
                     viewModel.moviesList.observe(this, Observer {
+                        // It: only return 20 movies
                         moviesList.addAll(it)
                         adapter.notifyDataSetChanged()
                         binding.ivLoadContent.visibility = View.VISIBLE
                         binding.rvMovies.visibility = View.VISIBLE
+                        binding.pbLoadItems.visibility = View.GONE
                     })
                 }
-                status.ERROR -> {
+                Status.ERROR -> {
                     // TODO: retry button
                     binding.ivLoadContent.visibility = View.GONE
                     binding.rvMovies.visibility = View.GONE
@@ -109,52 +111,47 @@ class MainActivity : AppCompatActivity(){
                 super.onScrolled(recyclerView, dx, dy)
                 val visibleItemCount = linearLayout.childCount
                 val pastVisibleItem = linearLayout.findFirstCompletelyVisibleItemPosition()
-                //val total = adapter.itemCount
-                val total = viewModel.returnCountItems()
+                val total = adapter.itemCount
 
                 if (!isLoading) {
                     if ((visibleItemCount + pastVisibleItem) >= total) {
                         pageNum++
-                        isLoading = false
                         viewModel.loadMoreMovies(pageNum)
-                        adapter.notifyDataSetChanged()
                     }
                 }
             }
         })
     }
 
+    // reseting content main screen and cleaning cache
     private fun resetContent(){
         pageNum = 1
-        viewModel.onCreateMovies(typeRequest.RESET, pageNum)
+        viewModel.onCreateMovies(TypeRequest.RESET, pageNum)
         binding.svMovie.clearFocus()
     }
 
-    /*override fun onQueryTextSubmit(query: String?): Boolean {
-        isLoading = true
+    override fun onQueryTextSubmit(query: String?): Boolean {
         if (query!!.isNotEmpty()){
-            var list = moviesList.filter {
-                it.title.lowercase().contains(query.lowercase())
-            }
+            moviesList.clear()
+            viewModel.searchMovie(query)
+            /*
+            TODO: below if doesnt work
+            TODO: searchView hasnt finished yet
 
-            if (list.isEmpty()){
+            */
+            if (moviesList.isEmpty()){
                 var toast = Toast.makeText(this, "Sorry, We could not find your movie", Toast.LENGTH_LONG)
                 toast.setGravity(Gravity.BOTTOM, 0, 50);
                 toast.show()
-                resetContent()
-            } else {
-                moviesList.clear()
-                moviesList.addAll(list)
-                binding.svMovie.clearFocus()
-                adapter.notifyDataSetChanged()
+                // TODO: retrieve movies from cache
             }
         }
         return false
-    }*/
+    }
 
-   /* override fun onQueryTextChange(newText: String?): Boolean {
+    override fun onQueryTextChange(newText: String?): Boolean {
         return true
-    }*/
+    }
 
     fun setFocus(view: View){
         binding.svMovie.onActionViewExpanded()
