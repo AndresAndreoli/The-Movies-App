@@ -87,9 +87,9 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
                         // It: only return 20 movies
                         moviesList.addAll(it)
                         adapter.notifyDataSetChanged()
-                        binding.ivLoadContent.visibility = View.VISIBLE
-                        binding.rvMovies.visibility = View.VISIBLE
-                        binding.pbLoadItems.visibility = View.GONE
+                        binding.ivLoadContent.visibility = View.VISIBLE // reset button
+                        binding.rvMovies.visibility = View.VISIBLE // recyclerView
+                        binding.pbLoadItems.visibility = View.GONE // progres bar
                     })
                 }
                 Status.ERROR -> {
@@ -115,6 +115,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
 
                 if (!isLoading) {
                     if ((visibleItemCount + pastVisibleItem) >= total) {
+                        binding.pbLoadItems.visibility = View.VISIBLE // show SPINNER
                         pageNum++
                         viewModel.loadMoreMovies(pageNum)
                     }
@@ -133,17 +134,13 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
     override fun onQueryTextSubmit(query: String?): Boolean {
         if (query!!.isNotEmpty()){
             moviesList.clear()
-            viewModel.searchMovie(query)
-            /*
-            TODO: below if doesnt work
-            TODO: searchView hasnt finished yet
+            var movieFounded = viewModel.searchMovie(query)
 
-            */
-            if (moviesList.isEmpty()){
+            if (!movieFounded){
                 var toast = Toast.makeText(this, "Sorry, We could not find your movie", Toast.LENGTH_LONG)
                 toast.setGravity(Gravity.BOTTOM, 0, 50);
                 toast.show()
-                // TODO: retrieve movies from cache
+                viewModel.retrieveMoviesFromCache()
             }
         }
         return false

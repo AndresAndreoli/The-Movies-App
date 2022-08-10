@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.themoviesapp.domain.FindMovieUseCase
 import com.example.themoviesapp.domain.GetMoviesUseCase
+import com.example.themoviesapp.domain.RetrieveMoviesFromCacheUseCase
 import com.example.themoviesapp.model.Cache
 import com.example.themoviesapp.model.movieResponse.Movie
 import com.example.themoviesapp.services.APIService
@@ -20,7 +21,8 @@ enum class Status {LOADING, SUCCESS, ERROR}
 @HiltViewModel
 class ViewModelMovies @Inject constructor(
     private val getMoviesUseCase: GetMoviesUseCase,
-    private val findMovieUseCase: FindMovieUseCase
+    private val findMovieUseCase: FindMovieUseCase,
+    private val retrieveMoviesFromCacheUseCase: RetrieveMoviesFromCacheUseCase
 ): ViewModel() {
 
     private val _moviesList = MutableLiveData<List<Movie>>()
@@ -62,9 +64,17 @@ class ViewModelMovies @Inject constructor(
         }
     }
 
-    fun searchMovie(query: String){
+    // Search movies by Title
+    fun searchMovie(query: String): Boolean{
         _isLoading.postValue(true)
         var result = findMovieUseCase(query)
         _moviesList.postValue(result)
+        return result.isNotEmpty()
+    }
+
+    fun retrieveMoviesFromCache(){
+        var result = retrieveMoviesFromCacheUseCase()
+        _moviesList.postValue(result)
+        _isLoading.postValue(false)
     }
 }
