@@ -29,9 +29,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.properties.Delegates
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
+class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, ConnectivityReceiver.ConnectivityReceiverListener{
 
     // Attributes
     private lateinit var binding: ActivityMainBinding
@@ -59,6 +60,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
 
         initRecyclerView()
         setUpListeners()
+        setUpObservers()
 
         binding.svMovie.setOnQueryTextListener(this)
 
@@ -70,37 +72,19 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
         viewModel.isLoading.observe(this, Observer {
             isLoading = it
         })
+
+        registerReceiver(ConnectivityReceiver(), IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+    }
+
+    override fun onResume() {
+        super.onResume()
+        ConnectivityReceiver.connectivityReceiverListener = this
     }
 
     private fun initRecyclerView(){
         viewModel.onCreateMovies(TypeRequest.CREATE, pageNum)
         binding.rvMovies.adapter = adapter
         binding.rvMovies.layoutManager = linearLayout
-
-        viewModel.moviesStatus.observe(this, Observer {
-            when (it){
-                Status.LOADING -> {
-                    binding.ivLoadContent.visibility = View.GONE
-                    binding.rvMovies.visibility = View.GONE
-                    binding.pbLoadItems.visibility = View.VISIBLE
-                }
-                Status.SUCCESS -> {
-                    viewModel.moviesList.observe(this, Observer {
-                        // It: only return 20 movies
-                        moviesList.addAll(it)
-                        adapter.notifyDataSetChanged()
-                        binding.ivLoadContent.visibility = View.VISIBLE // reset button
-                        binding.rvMovies.visibility = View.VISIBLE // recyclerView
-                        binding.pbLoadItems.visibility = View.GONE // progres bar
-                    })
-                }
-                Status.ERROR -> {
-                    // TODO: retry button
-                    binding.ivLoadContent.visibility = View.GONE
-                    binding.rvMovies.visibility = View.GONE
-                }
-            }
-        })
     }
 
     private fun setUpListeners(){
@@ -126,6 +110,45 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
         })
     }
 
+    private fun setUpObservers() {
+        viewModel.moviesStatus.observe(this, Observer {
+            when (it){
+                Status.LOADING -> {
+                    binding.ivLoadContent.visibility = View.GONE
+                    binding.rvMovies.visibility = View.GONE
+                    binding.pbLoadItems.visibility = View.VISIBLE
+                }
+                Status.SUCCESS -> {
+                    viewModel.moviesList.observe(this, Observer {
+                        // It: only return 20 movies
+                        moviesList.addAll(it)
+                        adapter.notifyDataSetChanged()
+                        binding.ivLoadContent.visibility = View.VISIBLE // reset button
+                        binding.rvMovies.visibility = View.VISIBLE // recyclerView
+                        binding.pbLoadItems.visibility = View.GONE // progres bar
+                    })
+                }
+                Status.ERROR -> {
+                    // TODO: retry button
+                    binding.ivLoadContent.visibility = View.GONE
+                    binding.rvMovies.visibility = View.GONE
+                }
+            }
+        })
+
+        viewModel.isConnected.observe(this) {
+            if (it){
+                binding.ivLoadContent.visibility = View.VISIBLE
+                binding.rvMovies.visibility = View.VISIBLE
+                //resetContent()
+                println("hola")
+            } else {
+                binding.ivLoadContent.visibility = View.GONE
+                binding.rvMovies.visibility = View.GONE
+                showSnackBar("No connection", resources.getColor(R.color.warn_red))
+            }
+        }
+    }
     // reseting content main screen and cleaning cache
     private fun resetContent(){
         pageNum = 1
@@ -147,7 +170,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
             var movieFounded = viewModel.searchMovie(query)
 
             if (!movieFounded){
-                var toast = Toast.makeText(this, "Sorry, We could not find your movie", Toast.LENGTH_LONG)
+                var toast = Toast.makeText(this, resources.getString(R.string.movieNotFound), Toast.LENGTH_LONG)
                 toast.setGravity(Gravity.BOTTOM, 0, 50);
                 toast.show()
                 viewModel.retrieveMoviesFromCache()
@@ -171,11 +194,18 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
             .show()
     }
 
-    /*private fun isOnline(): Boolean {
-        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val netInfo = cm.activeNetworkInfo
-        return netInfo != null && netInfo.isConnectedOrConnecting
-    }*/
+    override fun onNetworkConnectionChanged(isConnected: Boolean) {
+        showNetworkMessage(isConnected)
+    }
+
+    private fun showNetworkMessage(isConnected: Boolean){
+        if (isConnected){
+            viewModel.connectionInternet(true)
+        } else {
+            viewModel.connectionInternet(false)
+        }
+    }
+
 
     /*private fun getGuestSessionId(){
         CoroutineScope(Dispatchers.IO).launch {

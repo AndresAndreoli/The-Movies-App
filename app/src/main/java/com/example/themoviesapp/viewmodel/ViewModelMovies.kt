@@ -33,18 +33,23 @@ class ViewModelMovies @Inject constructor(
     private val _moviesStatus = MutableLiveData<Status>()
     val moviesStatus: LiveData<Status> = _moviesStatus
 
+    private val _isConnected = MutableLiveData<Boolean>(true)
+    val isConnected : LiveData<Boolean> = _isConnected
+
     fun onCreateMovies(type: TypeRequest, page: Int){
         viewModelScope.launch{
             _moviesStatus.postValue(Status.LOADING)
 
-            val result = getMoviesUseCase(APIService.APIkey, page)
+            if (_isConnected.value!!){
+                val result = getMoviesUseCase(APIService.APIkey, page)
 
-            if (result.isNotEmpty()){
-                _moviesList.postValue(result)
-                _moviesStatus.postValue(Status.SUCCESS)
-            } else {
-                //TODO
-                _moviesStatus.postValue(Status.ERROR)
+                if (result.isNotEmpty()){
+                    _moviesList.postValue(result)
+                    _moviesStatus.postValue(Status.SUCCESS)
+                } else {
+                    //TODO
+                    _moviesStatus.postValue(Status.ERROR)
+                }
             }
         }
     }
@@ -54,10 +59,12 @@ class ViewModelMovies @Inject constructor(
 
     fun loadMoreMovies(page: Int){
         _isLoading.postValue(true)
-        viewModelScope.launch {
-            val result = getMoviesUseCase(APIService.APIkey, page)
-            _moviesList.postValue(result)
-            _isLoading.postValue(false)
+        if (_isConnected.value!!){
+            viewModelScope.launch {
+                val result = getMoviesUseCase(APIService.APIkey, page)
+                _moviesList.postValue(result)
+                _isLoading.postValue(false)
+            }
         }
     }
 
@@ -77,5 +84,9 @@ class ViewModelMovies @Inject constructor(
 
     fun clearCache(): Boolean {
         return clearingCacheUseCase()
+    }
+
+    fun connectionInternet(isConnected: Boolean){
+        _isConnected.postValue(isConnected)
     }
 }

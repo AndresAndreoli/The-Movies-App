@@ -23,5 +23,6 @@
     <!-- MainActivity -->
     <string name="successClearingMovies">Movies clearing successfully</string>
     <string name="errorClearingMovies">Something went wrong. Try later</string>
+    <string name="movieNotFound">Sorry, We could not find your movie</string>
 
 </resources>

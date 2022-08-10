@@ -62,4 +62,7 @@ dependencies {
     // Dagger Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+
+    //noinspection GradleCompatible
+    //implementation 'com.android.support:design:26.1.0'
 }
