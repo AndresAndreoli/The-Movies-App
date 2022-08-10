@@ -9,8 +9,13 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="colorPrimary">#151c25</color>
-        <color name="colorPrimaryDark">#151c25</color>
+    <color name="colorPrimaryDark">#151c25</color>
     <color name="colorAccent">#f1b814</color>
     <color name="text_light_blue">#566f9a</color>
     <color name="text_bg_blue">#1a242f</color>
+
+    <color name="green">#008f39</color>
+    <color name="red">#FF7F7F</color>
+    <color name="light_red">#FFCCCB</color>
+
 </resources>

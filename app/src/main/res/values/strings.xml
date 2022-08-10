@@ -20,4 +20,8 @@
     <string name="voteMovie">Vote Average: </string>
     <string name="leaveRate">Rate the movie: </string>
 
+    <!-- MainActivity -->
+    <string name="successClearingMovies">Movies clearing successfully</string>
+    <string name="errorClearingMovies">Something went wrong. Try later</string>
+
 </resources>

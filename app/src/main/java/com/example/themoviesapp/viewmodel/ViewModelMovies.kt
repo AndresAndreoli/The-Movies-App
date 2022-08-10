@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.themoviesapp.domain.ClearingCacheUseCase
 import com.example.themoviesapp.domain.FindMovieUseCase
 import com.example.themoviesapp.domain.GetMoviesUseCase
 import com.example.themoviesapp.domain.RetrieveMoviesFromCacheUseCase
@@ -22,7 +23,8 @@ enum class Status {LOADING, SUCCESS, ERROR}
 class ViewModelMovies @Inject constructor(
     private val getMoviesUseCase: GetMoviesUseCase,
     private val findMovieUseCase: FindMovieUseCase,
-    private val retrieveMoviesFromCacheUseCase: RetrieveMoviesFromCacheUseCase
+    private val retrieveMoviesFromCacheUseCase: RetrieveMoviesFromCacheUseCase,
+    private val clearingCacheUseCase: ClearingCacheUseCase
 ): ViewModel() {
 
     private val _moviesList = MutableLiveData<List<Movie>>()
@@ -34,11 +36,6 @@ class ViewModelMovies @Inject constructor(
     fun onCreateMovies(type: TypeRequest, page: Int){
         viewModelScope.launch{
             _moviesStatus.postValue(Status.LOADING)
-
-            // Cleaning movies cache
-            if (TypeRequest.RESET == type){
-                //cacheMovie.movies = mutableListOf()
-            }
 
             val result = getMoviesUseCase(APIService.APIkey, page)
 
@@ -76,5 +73,9 @@ class ViewModelMovies @Inject constructor(
         var result = retrieveMoviesFromCacheUseCase()
         _moviesList.postValue(result)
         _isLoading.postValue(false)
+    }
+
+    fun clearCache(): Boolean {
+        return clearingCacheUseCase()
     }
 }

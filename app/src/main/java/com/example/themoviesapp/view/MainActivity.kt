@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.themoviesapp.view.adapter.MovieAdapter
 import com.example.themoviesapp.MovieDetailsResponse
+import com.example.themoviesapp.R
 import com.example.themoviesapp.databinding.ActivityMainBinding
 import com.example.themoviesapp.model.Cache
 import com.example.themoviesapp.model.movieResponse.Movie
@@ -22,6 +23,7 @@ import com.example.themoviesapp.services.APIService
 import com.example.themoviesapp.viewmodel.ViewModelMovies
 import com.example.themoviesapp.viewmodel.Status
 import com.example.themoviesapp.viewmodel.TypeRequest
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -127,10 +129,18 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
     // reseting content main screen and cleaning cache
     private fun resetContent(){
         pageNum = 1
-        viewModel.onCreateMovies(TypeRequest.RESET, pageNum)
-        binding.svMovie.clearFocus()
+        var clear = viewModel.clearCache()
+        if (clear){
+            showSnackBar(resources.getString(R.string.successClearingMovies), resources.getColor(R.color.green))
+            viewModel.onCreateMovies(TypeRequest.RESET, pageNum)
+            binding.svMovie.clearFocus()
+        } else {
+            showSnackBar(resources.getString(R.string.errorClearingMovies), resources.getColor(R.color.red))
+        }
+
     }
 
+    // searchView: search by movie title
     override fun onQueryTextSubmit(query: String?): Boolean {
         if (query!!.isNotEmpty()){
             moviesList.clear()
@@ -154,7 +164,12 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener{
         binding.svMovie.onActionViewExpanded()
     }
 
-
+    // displays a generic message
+    private fun showSnackBar(message: String, color: Int) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
+            .setBackgroundTint(color)
+            .show()
+    }
 
     /*private fun isOnline(): Boolean {
         val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

@@ -30,4 +30,9 @@ class MoviesRepository @Inject constructor(
     fun getMoviesFromCache(): List<Movie>{
         return moviesCache.movies
     }
+
+    fun clearCache(): Boolean{
+        moviesCache.movies.clear()
+        return moviesCache.movies.isEmpty()
+    }
 }
