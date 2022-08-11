@@ -121,6 +121,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, Connec
                 Status.SUCCESS -> {
                     viewModel.moviesList.observe(this, Observer {
                         // It: only return 20 movies
+                        println(it.size)
                         moviesList.addAll(it)
                         adapter.notifyDataSetChanged()
                         binding.ivLoadContent.visibility = View.VISIBLE // reset button
@@ -135,19 +136,6 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, Connec
                 }
             }
         })
-
-        viewModel.isConnected.observe(this) {
-            if (it){
-                binding.ivLoadContent.visibility = View.VISIBLE
-                binding.rvMovies.visibility = View.VISIBLE
-                //resetContent()
-                println("hola")
-            } else {
-                binding.ivLoadContent.visibility = View.GONE
-                binding.rvMovies.visibility = View.GONE
-                showSnackBar("No connection", resources.getColor(R.color.warn_red))
-            }
-        }
     }
     // reseting content main screen and cleaning cache
     private fun resetContent(){
@@ -160,7 +148,6 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, Connec
         } else {
             showSnackBar(resources.getString(R.string.errorClearingMovies), resources.getColor(R.color.red))
         }
-
     }
 
     // searchView: search by movie title
@@ -201,11 +188,16 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, Connec
     private fun showNetworkMessage(isConnected: Boolean){
         if (isConnected){
             viewModel.connectionInternet(true)
+            //showSnackBar("Connected", resources.getColor(R.color.green))
+            binding.llNoInternet.visibility = View.GONE
+            binding.ivLoadContent.visibility = View.VISIBLE
         } else {
             viewModel.connectionInternet(false)
+            showSnackBar("No connection", resources.getColor(R.color.warn_red))
+            binding.llNoInternet.visibility = View.VISIBLE
+            binding.ivLoadContent.visibility = View.GONE
         }
     }
-
 
     /*private fun getGuestSessionId(){
         CoroutineScope(Dispatchers.IO).launch {

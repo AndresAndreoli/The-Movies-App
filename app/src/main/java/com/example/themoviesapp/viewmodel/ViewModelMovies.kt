@@ -38,9 +38,11 @@ class ViewModelMovies @Inject constructor(
 
     fun onCreateMovies(type: TypeRequest, page: Int){
         viewModelScope.launch{
+
             _moviesStatus.postValue(Status.LOADING)
 
             if (_isConnected.value!!){
+                _isLoading.postValue(true)
                 val result = getMoviesUseCase(APIService.APIkey, page)
 
                 if (result.isNotEmpty()){
@@ -51,6 +53,7 @@ class ViewModelMovies @Inject constructor(
                     _moviesStatus.postValue(Status.ERROR)
                 }
             }
+            _isLoading.postValue(false)
         }
     }
     
@@ -58,8 +61,8 @@ class ViewModelMovies @Inject constructor(
     val isLoading: LiveData<Boolean> = _isLoading
 
     fun loadMoreMovies(page: Int){
-        _isLoading.postValue(true)
         if (_isConnected.value!!){
+            _isLoading.postValue(true)
             viewModelScope.launch {
                 val result = getMoviesUseCase(APIService.APIkey, page)
                 _moviesList.postValue(result)
