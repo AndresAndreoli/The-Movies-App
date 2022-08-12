@@ -33,40 +33,44 @@ class ViewModelMovies @Inject constructor(
     private val _moviesStatus = MutableLiveData<Status>()
     val moviesStatus: LiveData<Status> = _moviesStatus
 
-    private val _isConnected = MutableLiveData<Boolean>(true)
-    val isConnected : LiveData<Boolean> = _isConnected
-
-    fun onCreateMovies(type: TypeRequest, page: Int){
-        viewModelScope.launch{
-
-            _moviesStatus.postValue(Status.LOADING)
-
-            if (_isConnected.value!!){
-                _isLoading.postValue(true)
-                val result = getMoviesUseCase(APIService.APIkey, page)
-
-                if (result.isNotEmpty()){
-                    _moviesList.postValue(result)
-                    _moviesStatus.postValue(Status.SUCCESS)
-                } else {
-                    //TODO
-                    _moviesStatus.postValue(Status.ERROR)
-                }
-            }
-            _isLoading.postValue(false)
-        }
-    }
-    
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
+    private val _isConnected = MutableLiveData<Boolean>(true)
+
+    fun onCreateMovies(type: TypeRequest, page: Int){
+        if (_isConnected.value!!){
+            _isLoading.postValue(true)
+            viewModelScope.launch{
+                _moviesStatus.postValue(Status.LOADING)
+
+                // TODO: ver si hay movies en cache
+
+
+                    val result = getMoviesUseCase(APIService.APIkey, page)
+
+                    if (result.isNotEmpty()){
+                        _moviesList.postValue(result)
+                        _moviesStatus.postValue(Status.SUCCESS)
+                    } else {
+                        //TODO
+                        _moviesStatus.postValue(Status.ERROR)
+
+                }
+                _isLoading.postValue(false)
+            }
+        }
+    }
+
     fun loadMoreMovies(page: Int){
         if (_isConnected.value!!){
+            _moviesStatus.postValue(Status.LOADING)
             _isLoading.postValue(true)
             viewModelScope.launch {
                 val result = getMoviesUseCase(APIService.APIkey, page)
                 _moviesList.postValue(result)
                 _isLoading.postValue(false)
+                _moviesStatus.postValue(Status.SUCCESS)
             }
         }
     }

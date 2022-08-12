@@ -69,10 +69,6 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, Connec
 
         binding.svMovie.clearFocus()
 
-        viewModel.isLoading.observe(this, Observer {
-            isLoading = it
-        })
-
         registerReceiver(ConnectivityReceiver(), IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
     }
 
@@ -111,36 +107,42 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, Connec
     }
 
     private fun setUpObservers() {
+        viewModel.moviesList.observe(this, Observer {
+            moviesList.clear()
+            moviesList.addAll(it)
+            adapter.notifyDataSetChanged()
+        })
+
         viewModel.moviesStatus.observe(this, Observer {
             when (it){
                 Status.LOADING -> {
                     binding.ivLoadContent.visibility = View.GONE
-                    binding.rvMovies.visibility = View.GONE
+                    //binding.rvMovies.visibility = View.GONE
                     binding.pbLoadItems.visibility = View.VISIBLE
                 }
                 Status.SUCCESS -> {
-                    viewModel.moviesList.observe(this, Observer {
-                        // It: only return 20 movies
-                        println(it.size)
-                        moviesList.addAll(it)
-                        adapter.notifyDataSetChanged()
-                        binding.ivLoadContent.visibility = View.VISIBLE // reset button
-                        binding.rvMovies.visibility = View.VISIBLE // recyclerView
-                        binding.pbLoadItems.visibility = View.GONE // progres bar
-                    })
+                    binding.ivLoadContent.visibility = View.VISIBLE // reset button
+                    //binding.rvMovies.visibility = View.VISIBLE // recyclerView
+                    binding.pbLoadItems.visibility = View.GONE // progress bar
                 }
                 Status.ERROR -> {
                     // TODO: retry button
+                    showSnackBar("ERROR", resources.getColor(R.color.warn_red))
                     binding.ivLoadContent.visibility = View.GONE
                     binding.rvMovies.visibility = View.GONE
                 }
             }
+        })
+
+        viewModel.isLoading.observe(this, Observer {
+            isLoading = it
         })
     }
     // reseting content main screen and cleaning cache
     private fun resetContent(){
         pageNum = 1
         var clear = viewModel.clearCache()
+        moviesList.clear()
         if (clear){
             showSnackBar(resources.getString(R.string.successClearingMovies), resources.getColor(R.color.green))
             viewModel.onCreateMovies(TypeRequest.RESET, pageNum)
