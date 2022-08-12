@@ -100,6 +100,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, Connec
                         binding.pbLoadItems.visibility = View.VISIBLE // show SPINNER
                         pageNum++
                         viewModel.loadMoreMovies(pageNum)
+                        binding.ivLoadContent.visibility = View.GONE
                     }
                 }
             }
@@ -117,12 +118,12 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, Connec
             when (it){
                 Status.LOADING -> {
                     binding.ivLoadContent.visibility = View.GONE
-                    //binding.rvMovies.visibility = View.GONE
+                    binding.rvMovies.visibility = View.GONE
                     binding.pbLoadItems.visibility = View.VISIBLE
                 }
                 Status.SUCCESS -> {
                     binding.ivLoadContent.visibility = View.VISIBLE // reset button
-                    //binding.rvMovies.visibility = View.VISIBLE // recyclerView
+                    binding.rvMovies.visibility = View.VISIBLE // recyclerView
                     binding.pbLoadItems.visibility = View.GONE // progress bar
                 }
                 Status.ERROR -> {

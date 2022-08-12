@@ -64,7 +64,6 @@ class ViewModelMovies @Inject constructor(
 
     fun loadMoreMovies(page: Int){
         if (_isConnected.value!!){
-            _moviesStatus.postValue(Status.LOADING)
             _isLoading.postValue(true)
             viewModelScope.launch {
                 val result = getMoviesUseCase(APIService.APIkey, page)
