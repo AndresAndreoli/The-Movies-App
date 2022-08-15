@@ -12,7 +12,7 @@ class MovieDetailsRepository @Inject constructor(
     var movieDetails: MovieDetailsResponse = MovieDetailsResponse()
     suspend fun getMovieDetails(idMovie: Int): MovieDetailsResponse{
 
-        // Checkear si dicha pelicula se encuentra ya en cache
+        // Checkeao si dicha pelicula se encuentra ya en cache
         val movieFound = (movieDetailsCache.movieDetailsList.find { it.id==idMovie })
 
         if (movieFound == null){

@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.themoviesapp.view.MovieDescriptionActivity
 import com.example.themoviesapp.R
 import com.example.themoviesapp.databinding.ItemMovieBinding
 import com.example.themoviesapp.model.movieResponse.Movie
 import com.example.themoviesapp.services.APIService
-import com.squareup.picasso.Picasso
 
 class MovieAdapter(private var movies: List<Movie>, var activity: Activity): RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
@@ -26,7 +26,9 @@ class MovieAdapter(private var movies: List<Movie>, var activity: Activity): Rec
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val item = movies[position]
 
-        Picasso.get().load(APIService.urlImage+item.poster_path).into(holder.binding.ivImageMain)
+        Glide.with(holder.binding.cvMovieContainer.context)
+            .load(APIService.urlImage+item.poster_path)
+            .into(holder.binding.ivImageMain)
         holder.binding.tvTitleMain.setText(item.title)
 
         holder.binding.cvMovieContainer.setOnClickListener {

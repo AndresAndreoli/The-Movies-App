@@ -22,5 +22,4 @@ class ViewModelMovieDetails @Inject constructor(
             _movieDetails.postValue(getMovieDetailsUseCase(idMovie)!!)
         }
     }
-
 }

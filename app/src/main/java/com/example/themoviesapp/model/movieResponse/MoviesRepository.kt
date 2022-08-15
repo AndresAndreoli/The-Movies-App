@@ -10,7 +10,6 @@ class MoviesRepository @Inject constructor(
     private val moviesCache: Cache
     ) {
     suspend fun getAllMovies(apiKey:String, page: Int): List<Movie>{
-
             if (moviesCache.movies.isEmpty()) {
                 var movies = moviesService.getMoviesResponse(apiKey, page).movies
                 if (movies.size == 1 && movies[0].id == null) {
@@ -23,19 +22,6 @@ class MoviesRepository @Inject constructor(
             }
         return moviesCache.movies
     }
-
-        /*if (moviesCache.movies.isEmpty() && page==1) {
-            if (moviesService.getMoviesResponse(apiKey, page).movies.size == 1 &&
-                moviesService.getMoviesResponse(apiKey, page).movies[0].id == null) {
-                return emptyList()
-            } else {
-                moviesCache.movies.addAll(moviesService.getMoviesResponse(apiKey, page).movies)
-            }
-        } else if (page>1){
-            moviesCache.movies.addAll(moviesService.getMoviesResponse(apiKey, page).movies)
-        }
-        return moviesCache.movies
-    }*/
 
     fun getMoviesFromCache(): List<Movie>{
         return moviesCache.movies

@@ -6,14 +6,15 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 import com.example.themoviesapp.MovieDetailsResponse
+import com.example.themoviesapp.R
 import com.example.themoviesapp.RateObject
 import com.example.themoviesapp.view.MainActivity.Companion.movieDetailsList
 import com.example.themoviesapp.databinding.ActivityMovieDescriptionBinding
 import com.example.themoviesapp.services.APIService
 import com.example.themoviesapp.viewmodel.ViewModelMovieDetails
 import com.example.themoviesapp.viewmodel.ViewModelMovies
-import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +38,7 @@ class MovieDescriptionActivity : AppCompatActivity() {
         val idMovie: Int = getIntent().getStringExtra("ID")!!.toInt()
         viewModel.onCreateMovieDetails(idMovie)
 
-        //loadDetailsMovie(idMovie)
+        setUpObservers()
 
         binding.rbRate.setOnRatingBarChangeListener { ratingBar, fl, b ->
             if (!binding.btnRate.isEnabled){
@@ -50,28 +51,38 @@ class MovieDescriptionActivity : AppCompatActivity() {
         }
     }
 
+    private fun setUpObservers() {
+        viewModel.movieDetails.observe(this){
+            it.let {
+                // Imprime los datos en la Movie Description Activity
+                binding.tvTitleMovieDescription.setText(it.title)
+                binding.tvOverviewMovieDescription.setText(it.overview)
+                Glide.with(this)
+                    .load(APIService.urlImage+it.backdrop_path)
+                    .placeholder(R.drawable.progress_animation)
+                    .into(binding.ivMovieBackDropDescription)
+                binding.tvReleaseDateDescription.setText(it.release_date)
+                binding.tvLanguageDescription.setText(it.original_language!!.uppercase())
+                binding.tvPopularityDescription.setText((it.popularity).toString())
+                binding.tvVoteAverageDescription.setText("${(DecimalFormat("#.#").format(it.vote_average)).toString()}/10")
+                Glide.with(this)
+                    .load(APIService.urlImage+it.poster_path)
+                    .placeholder(R.drawable.progress_animation)
+                    .into(binding.imPosterDescription)
 
-    private fun loadDetailsMovie(query: String){
-        movieDetailsList.forEach {
-            if (it.id == query.toInt()){
-                showDetails(it)
+                var genresContainer: String = ""
+                it.genres.forEach { genre ->
+                    genresContainer += "${genre.name}, "
+                }
+                binding.tvGenresDescription.setText(genresContainer.dropLast(2))
 
-                /*var retrieveRate = MainActivity.sharedPreferences.getFloat(query, -1F)
+                if (it.adult)
+                    binding.tvAdultDescription.setText("18+")
+                else
+                    binding.tvAdultDescription.setText("All ages")
 
-                if (retrieveRate!=-1F){
-                    binding.btnRate.isEnabled = false
-                    binding.rbRate.rating = retrieveRate
-                    binding.rbRate.isEnabled = false
-                } else {
-                    println("It isn't")
-                }*/
-                return
+                binding.tvDurationDescription.setText(converterTime(it.runtime!!))
             }
-        }
-
-        if (!isOnline()){
-            Toast.makeText(this, "No connection", Toast.LENGTH_LONG).show()
-            return
         }
     }
 
@@ -83,47 +94,10 @@ class MovieDescriptionActivity : AppCompatActivity() {
             horas++
             min -= 60
         }
-
         return "${horas}:${min}"
     }
 
-    private fun showDetails(movie: MovieDetailsResponse){
-        movie.let {
-            // Imprime los datos en la Movie Description Activity
-            binding.tvTitleMovieDescription.setText(it.title)
-            binding.tvOverviewMovieDescription.setText(it.overview)
-            Picasso.get().load(APIService.urlImage+it.backdrop_path).into(binding.ivMovieBackDropDescription)
-            binding.tvReleaseDateDescription.setText(it.release_date)
-            binding.tvLanguageDescription.setText(it.original_language!!.uppercase())
-            binding.tvPopularityDescription.setText((it.popularity).toString())
-            binding.tvVoteAverageDescription.setText("${(DecimalFormat("#.#").format(it.vote_average)).toString()}/10")
-            Picasso.get().load(APIService.urlImage+it.poster_path).into(binding.imPosterDescription)
 
-            var genresContainer: String = ""
-            it.genres.forEach { genre ->
-                genresContainer += "${genre.name}, "
-            }
-            binding.tvGenresDescription.setText(genresContainer.dropLast(2))
-
-            if (it.adult)
-                binding.tvAdultDescription.setText("18+")
-            else
-                binding.tvAdultDescription.setText("All ages")
-
-            //binding.tvDurationDescription.setText(converterTime(it.runtime))
-        }
-    }
-
-    private fun errorMessage(){
-        Toast.makeText(this, "Error. The movie could not be loaded", Toast.LENGTH_LONG).show()
-        finish()
-    }
-
-    private fun isOnline(): Boolean {
-        val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val netInfo = cm.activeNetworkInfo
-        return netInfo != null && netInfo.isConnectedOrConnecting
-    }
 
     /*private fun rateMovie(idMovie: String){
         var rateObject = RateObject(binding.rbRate.rating)
