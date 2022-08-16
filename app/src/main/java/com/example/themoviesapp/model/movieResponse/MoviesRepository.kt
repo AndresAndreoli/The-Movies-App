@@ -11,14 +11,14 @@ class MoviesRepository @Inject constructor(
     ) {
     suspend fun getAllMovies(apiKey:String, page: Int): List<Movie>{
             if (moviesCache.movies.isEmpty()) {
-                var movies = moviesService.getMoviesResponse(apiKey, page).movies
-                if (movies.size == 1 && movies[0].id == null) {
-                    return emptyList()
+                var movies = moviesService.getMoviesResponse(apiKey, page)
+                if (movies.success) {
+                    moviesCache.movies.addAll(movies.data.movies)
                 } else {
-                    moviesCache.movies.addAll(movies)
+                    return emptyList()
                 }
             } else if (page>1) {
-                moviesCache.movies.addAll(moviesService.getMoviesResponse(apiKey, page).movies)
+                moviesCache.movies.addAll(moviesService.getMoviesResponse(apiKey, page).data.movies)
             }
         return moviesCache.movies
     }

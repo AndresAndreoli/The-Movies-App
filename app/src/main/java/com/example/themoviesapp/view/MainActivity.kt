@@ -105,6 +105,10 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, Connec
                 }
             }
         })
+
+        binding.btnRetryMoviesCall.setOnClickListener {
+            resetContent()
+        }
     }
 
     private fun setUpObservers() {
@@ -120,6 +124,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, Connec
                     binding.ivLoadContent.visibility = View.GONE
                     binding.rvMovies.visibility = View.GONE
                     binding.pbLoadItems.visibility = View.VISIBLE
+                    binding.llErrorMovieCall.visibility = View.GONE
                 }
                 Status.SUCCESS -> {
                     binding.ivLoadContent.visibility = View.VISIBLE // reset button
@@ -127,10 +132,10 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, Connec
                     binding.pbLoadItems.visibility = View.GONE // progress bar
                 }
                 Status.ERROR -> {
-                    // TODO: retry button
-                    showSnackBar("ERROR", resources.getColor(R.color.warn_red))
                     binding.ivLoadContent.visibility = View.GONE
                     binding.rvMovies.visibility = View.GONE
+                    binding.pbLoadItems.visibility = View.GONE
+                    binding.llErrorMovieCall.visibility = View.VISIBLE
                 }
             }
         })

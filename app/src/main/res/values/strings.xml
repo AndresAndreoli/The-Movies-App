@@ -24,5 +24,7 @@
     <string name="successClearingMovies">Reseting content</string>
     <string name="errorClearingMovies">Something went wrong. Try later</string>
     <string name="movieNotFound">Sorry, We could not find your movie</string>
+    <string name="informationErrorButton">Try later</string>
+    <string name="informationError">Error loading movies</string>
 
 </resources>

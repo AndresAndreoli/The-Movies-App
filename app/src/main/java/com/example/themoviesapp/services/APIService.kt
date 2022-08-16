@@ -20,9 +20,11 @@ interface APIService {
     }
     // https://developers.themoviedb.org/3/movies/get-popular-movies
 
+    @Headers("Accept: application/json")
     @GET("popular?language=en-US")
     suspend fun getMovies(@Query("api_key") ApiKey: String, @Query("page") pageNum: Int): Response<MoviesResponse>
 
+    @Headers("Accept: application/json")
     @GET ("{idMovie}?api_key=208e554046f1cf82cd9a3dd3e315fe5f&language=en-US")
     suspend fun getDetailsMovie(@Path("idMovie") idMovie: Int): Response<MovieDetailsResponse>
 
