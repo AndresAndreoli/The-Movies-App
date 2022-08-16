@@ -33,6 +33,6 @@ data class MovieDetailsResponse(
     var vote_average: Float?,
     var vote_count: Int?
 ): Parcelable {
-    constructor():this(false, "", CollectionMovie(), null, emptyList(), "", null, "", "", "", "", null, "", emptyList(), emptyList(), "", null, null, emptyList(), "", "", "", false, null, null)
+    constructor():this(false, "", CollectionMovie(), null, emptyList(), "", -1, "", "", "", "", null, "", emptyList(), emptyList(), "", null, null, emptyList(), "", "", "", false, null, null)
 }
 

@@ -17,9 +17,19 @@ class ViewModelMovieDetails @Inject constructor(
     private val _movieDetails = MutableLiveData<MovieDetailsResponse>()
     val movieDetails: LiveData<MovieDetailsResponse> = _movieDetails
 
+    private val _movieDetailStatus = MutableLiveData<ValuesProvider.Status>()
+    val movieDetailStatus: LiveData<ValuesProvider.Status> = _movieDetailStatus
+
     fun onCreateMovieDetails(idMovie: Int) {
         viewModelScope.launch {
-            _movieDetails.postValue(getMovieDetailsUseCase(idMovie)!!)
+            _movieDetailStatus.postValue(ValuesProvider.Status.LOADING)
+            val getMovieDetails = getMovieDetailsUseCase(idMovie)
+            if (getMovieDetails.id != -1){
+                _movieDetails.postValue(getMovieDetails)
+                _movieDetailStatus.postValue(ValuesProvider.Status.SUCCESS)
+            } else {
+                _movieDetailStatus.postValue(ValuesProvider.Status.ERROR)
+            }
         }
     }
 }

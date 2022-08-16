@@ -9,15 +9,19 @@ class MovieDetailsRepository @Inject constructor(
     private val movieDetailsService: MovieDetailsService,
     private val movieDetailsCache: Cache
 ) {
-    var movieDetails: MovieDetailsResponse = MovieDetailsResponse()
     suspend fun getMovieDetails(idMovie: Int): MovieDetailsResponse{
-
-        // Checkeao si dicha pelicula se encuentra ya en cache
+        // Checkeo si dicha pelicula se encuentra ya en cache
         val movieFound = (movieDetailsCache.movieDetailsList.find { it.id==idMovie })
 
+        lateinit var movieDetails: MovieDetailsResponse
+
         if (movieFound == null){
-            movieDetails = movieDetailsService.getMovieDetailsResponse(idMovie)
-            movieDetailsCache.movieDetailsList.add(movieDetails)
+            val requestDetailMovie = movieDetailsService.getMovieDetailsResponse(idMovie)
+            if (requestDetailMovie.success){
+                movieDetails = requestDetailMovie.data
+                movieDetailsCache.movieDetailsList.add(movieDetails)
+            } else
+                movieDetails = MovieDetailsResponse()
         } else {
             movieDetails = movieFound
         }

@@ -13,13 +13,13 @@ class MoviesService @Inject constructor (
         return withContext(Dispatchers.IO){
             val request = apiService.getMovies(apiKey, page)
               if (request.isSuccessful){
-                  GenericResponse<MoviesResponse>(
+                  GenericResponse(
                       true,
                       request.body()!!
                   )
              } else {
                   // TODO: catch error
-                  GenericResponse<MoviesResponse>(
+                  GenericResponse(
                       false,
                       MoviesResponse()
                   )

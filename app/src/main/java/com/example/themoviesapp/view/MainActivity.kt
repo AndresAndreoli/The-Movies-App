@@ -20,9 +20,8 @@ import com.example.themoviesapp.databinding.ActivityMainBinding
 import com.example.themoviesapp.model.Cache
 import com.example.themoviesapp.model.movieResponse.Movie
 import com.example.themoviesapp.services.APIService
+import com.example.themoviesapp.viewmodel.ValuesProvider
 import com.example.themoviesapp.viewmodel.ViewModelMovies
-import com.example.themoviesapp.viewmodel.Status
-import com.example.themoviesapp.viewmodel.TypeRequest
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -78,7 +77,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, Connec
     }
 
     private fun initRecyclerView(){
-        viewModel.onCreateMovies(TypeRequest.CREATE, pageNum)
+        viewModel.onCreateMovies(pageNum)
         binding.rvMovies.adapter = adapter
         binding.rvMovies.layoutManager = linearLayout
     }
@@ -120,18 +119,18 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, Connec
 
         viewModel.moviesStatus.observe(this, Observer {
             when (it){
-                Status.LOADING -> {
+                ValuesProvider.Status.LOADING -> {
                     binding.ivLoadContent.visibility = View.GONE
                     binding.rvMovies.visibility = View.GONE
                     binding.pbLoadItems.visibility = View.VISIBLE
                     binding.llErrorMovieCall.visibility = View.GONE
                 }
-                Status.SUCCESS -> {
+                ValuesProvider.Status.SUCCESS -> {
                     binding.ivLoadContent.visibility = View.VISIBLE // reset button
                     binding.rvMovies.visibility = View.VISIBLE // recyclerView
                     binding.pbLoadItems.visibility = View.GONE // progress bar
                 }
-                Status.ERROR -> {
+                ValuesProvider.Status.ERROR -> {
                     binding.ivLoadContent.visibility = View.GONE
                     binding.rvMovies.visibility = View.GONE
                     binding.pbLoadItems.visibility = View.GONE
@@ -151,7 +150,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, Connec
         moviesList.clear()
         if (clear){
             showSnackBar(resources.getString(R.string.successClearingMovies), resources.getColor(R.color.green))
-            viewModel.onCreateMovies(TypeRequest.RESET, pageNum)
+            viewModel.onCreateMovies(pageNum)
             binding.svMovie.clearFocus()
         } else {
             showSnackBar(resources.getString(R.string.errorClearingMovies), resources.getColor(R.color.red))
@@ -196,7 +195,6 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, Connec
     private fun showNetworkMessage(isConnected: Boolean){
         if (isConnected){
             viewModel.connectionInternet(true)
-            //showSnackBar("Connected", resources.getColor(R.color.green))
             binding.llNoInternet.visibility = View.GONE
             binding.ivLoadContent.visibility = View.VISIBLE
         } else {

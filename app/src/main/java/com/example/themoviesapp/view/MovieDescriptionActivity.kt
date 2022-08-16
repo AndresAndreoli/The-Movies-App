@@ -1,6 +1,7 @@
 package com.example.themoviesapp.view
 
 import android.content.Context
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.widget.Toast
@@ -13,6 +14,7 @@ import com.example.themoviesapp.RateObject
 import com.example.themoviesapp.view.MainActivity.Companion.movieDetailsList
 import com.example.themoviesapp.databinding.ActivityMovieDescriptionBinding
 import com.example.themoviesapp.services.APIService
+import com.example.themoviesapp.viewmodel.ValuesProvider
 import com.example.themoviesapp.viewmodel.ViewModelMovieDetails
 import com.example.themoviesapp.viewmodel.ViewModelMovies
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,36 +54,48 @@ class MovieDescriptionActivity : AppCompatActivity() {
     }
 
     private fun setUpObservers() {
-        viewModel.movieDetails.observe(this){
-            it.let {
-                // Imprime los datos en la Movie Description Activity
-                binding.tvTitleMovieDescription.setText(it.title)
-                binding.tvOverviewMovieDescription.setText(it.overview)
-                Glide.with(this)
-                    .load(APIService.urlImage+it.backdrop_path)
-                    .placeholder(R.drawable.progress_animation)
-                    .into(binding.ivMovieBackDropDescription)
-                binding.tvReleaseDateDescription.setText(it.release_date)
-                binding.tvLanguageDescription.setText(it.original_language!!.uppercase())
-                binding.tvPopularityDescription.setText((it.popularity).toString())
-                binding.tvVoteAverageDescription.setText("${(DecimalFormat("#.#").format(it.vote_average)).toString()}/10")
-                Glide.with(this)
-                    .load(APIService.urlImage+it.poster_path)
-                    .placeholder(R.drawable.progress_animation)
-                    .into(binding.imPosterDescription)
 
-                var genresContainer: String = ""
-                it.genres.forEach { genre ->
-                    genresContainer += "${genre.name}, "
+        viewModel.movieDetailStatus.observe(this){
+            when (it){
+                ValuesProvider.Status.LOADING -> {}
+                ValuesProvider.Status.SUCCESS -> {
+                    viewModel.movieDetails.observe(this){
+                        it.let {
+                            // Imprime los datos en la Movie Description Activity
+                            binding.tvTitleMovieDescription.setText(it.title)
+                            binding.tvOverviewMovieDescription.setText(it.overview)
+                            Glide.with(this)
+                                .load(APIService.urlImage+it.backdrop_path)
+                                .placeholder(R.drawable.progress_animation)
+                                .into(binding.ivMovieBackDropDescription)
+                            binding.tvReleaseDateDescription.setText(it.release_date)
+                            binding.tvLanguageDescription.setText(it.original_language!!.uppercase())
+                            binding.tvPopularityDescription.setText((it.popularity).toString())
+                            binding.tvVoteAverageDescription.setText("${(DecimalFormat("#.#").format(it.vote_average))}/10")
+                            Glide.with(this)
+                                .load(APIService.urlImage+it.poster_path)
+                                .placeholder(R.drawable.progress_animation)
+                                .into(binding.imPosterDescription)
+
+                            var genresContainer = ""
+                            it.genres.forEach { genre ->
+                                genresContainer += "${genre.name}, "
+                            }
+                            binding.tvGenresDescription.setText(genresContainer.dropLast(2))
+
+                            if (it.adult)
+                                binding.tvAdultDescription.setText("18+")
+                            else
+                                binding.tvAdultDescription.setText("All ages")
+
+                            binding.tvDurationDescription.setText(converterTime(it.runtime!!))
+                        }
+                    }
                 }
-                binding.tvGenresDescription.setText(genresContainer.dropLast(2))
-
-                if (it.adult)
-                    binding.tvAdultDescription.setText("18+")
-                else
-                    binding.tvAdultDescription.setText("All ages")
-
-                binding.tvDurationDescription.setText(converterTime(it.runtime!!))
+                ValuesProvider.Status.ERROR -> {
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
+                }
             }
         }
     }

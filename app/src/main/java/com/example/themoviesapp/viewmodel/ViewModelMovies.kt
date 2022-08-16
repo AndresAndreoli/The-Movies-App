@@ -16,9 +16,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-enum class TypeRequest {CREATE, RESET}
-enum class Status {LOADING, SUCCESS, ERROR}
-
 @HiltViewModel
 class ViewModelMovies @Inject constructor(
     private val getMoviesUseCase: GetMoviesUseCase,
@@ -30,32 +27,27 @@ class ViewModelMovies @Inject constructor(
     private val _moviesList = MutableLiveData<List<Movie>>()
     val moviesList: LiveData<List<Movie>> = _moviesList
 
-    private val _moviesStatus = MutableLiveData<Status>()
-    val moviesStatus: LiveData<Status> = _moviesStatus
+    private val _moviesStatus = MutableLiveData<ValuesProvider.Status>()
+    val moviesStatus: LiveData<ValuesProvider.Status> = _moviesStatus
 
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _isConnected = MutableLiveData<Boolean>(true)
+    private val _isConnected = MutableLiveData<Boolean>()
 
-    fun onCreateMovies(type: TypeRequest, page: Int){
+    fun onCreateMovies(page: Int){
         if (_isConnected.value!!){
             _isLoading.postValue(true)
             viewModelScope.launch{
-                _moviesStatus.postValue(Status.LOADING)
-
-                // TODO: ver si hay movies en cache
-
+                _moviesStatus.postValue(ValuesProvider.Status.LOADING)
 
                     val result = getMoviesUseCase(APIService.APIkey, page)
 
                     if (result.isNotEmpty()){
                         _moviesList.postValue(result)
-                        _moviesStatus.postValue(Status.SUCCESS)
+                        _moviesStatus.postValue(ValuesProvider.Status.SUCCESS)
                     } else {
-                        //TODO
-                        _moviesStatus.postValue(Status.ERROR)
-
+                        _moviesStatus.postValue(ValuesProvider.Status.ERROR)
                 }
                 _isLoading.postValue(false)
             }
@@ -69,7 +61,7 @@ class ViewModelMovies @Inject constructor(
                 val result = getMoviesUseCase(APIService.APIkey, page)
                 _moviesList.postValue(result)
                 _isLoading.postValue(false)
-                _moviesStatus.postValue(Status.SUCCESS)
+                _moviesStatus.postValue(ValuesProvider.Status.SUCCESS)
             }
         }
     }
