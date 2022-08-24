@@ -63,9 +63,6 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, Connec
 
         binding.svMovie.setOnQueryTextListener(this)
 
-        //loadRVWithMovies()
-        //getGuestSessionId()
-
         binding.svMovie.clearFocus()
 
         registerReceiver(ConnectivityReceiver(), IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))

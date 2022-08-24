@@ -33,7 +33,7 @@ class ViewModelMovies @Inject constructor(
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-    private val _isConnected = MutableLiveData<Boolean>()
+    private val _isConnected = MutableLiveData<Boolean>(true)
 
     fun onCreateMovies(page: Int){
         if (_isConnected.value!!){
