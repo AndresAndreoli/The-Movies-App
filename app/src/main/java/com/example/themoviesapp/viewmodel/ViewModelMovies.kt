@@ -41,7 +41,7 @@ class ViewModelMovies @Inject constructor(
             viewModelScope.launch{
                 _moviesStatus.postValue(ValuesProvider.Status.LOADING)
 
-                    val result = getMoviesUseCase(APIService.APIkey, page)
+                    var result = getMoviesUseCase(APIService.APIkey, page)
 
                     if (result.success){
                         _moviesList.postValue(result.data)
