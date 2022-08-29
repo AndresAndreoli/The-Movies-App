@@ -43,8 +43,8 @@ class ViewModelMovies @Inject constructor(
 
                     val result = getMoviesUseCase(APIService.APIkey, page)
 
-                    if (result.isNotEmpty()){
-                        _moviesList.postValue(result)
+                    if (result.success){
+                        _moviesList.postValue(result.data)
                         _moviesStatus.postValue(ValuesProvider.Status.SUCCESS)
                     } else {
                         _moviesStatus.postValue(ValuesProvider.Status.ERROR)
@@ -59,9 +59,9 @@ class ViewModelMovies @Inject constructor(
             _isLoading.postValue(true)
             viewModelScope.launch {
                 val result = getMoviesUseCase(APIService.APIkey, page)
-                _moviesList.postValue(result)
-                _isLoading.postValue(false)
+                _moviesList.postValue(result.data)
                 _moviesStatus.postValue(ValuesProvider.Status.SUCCESS)
+                _isLoading.postValue(false)
             }
         }
     }

@@ -16,7 +16,7 @@ class MovieDetailsService @Inject constructor(
              if (request.isSuccessful){
                  GenericResponse(
                      true,
-                     MovieDetailsResponse()
+                     request.body()!!
                  )
              } else {
                  GenericResponse(

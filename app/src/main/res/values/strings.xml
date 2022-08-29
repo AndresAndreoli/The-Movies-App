@@ -26,5 +26,6 @@
     <string name="movieNotFound">Sorry, We could not find your movie</string>
     <string name="informationErrorButton">Try later</string>
     <string name="informationError">Error loading movies</string>
+    <string name="errorRetrieveMoreMovies">No pudimos recuperar mas peliculas. Intente mas tarde</string>
 
 </resources>

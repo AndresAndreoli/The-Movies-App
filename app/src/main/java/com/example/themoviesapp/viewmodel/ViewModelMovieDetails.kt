@@ -1,5 +1,6 @@
 package com.example.themoviesapp.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -23,9 +24,11 @@ class ViewModelMovieDetails @Inject constructor(
     fun onCreateMovieDetails(idMovie: Int) {
         viewModelScope.launch {
             _movieDetailStatus.postValue(ValuesProvider.Status.LOADING)
+
             val getMovieDetails = getMovieDetailsUseCase(idMovie)
-            if (getMovieDetails.id != -1){
-                _movieDetails.postValue(getMovieDetails)
+
+            if (getMovieDetails.success){
+                _movieDetails.postValue(getMovieDetails.data)
                 _movieDetailStatus.postValue(ValuesProvider.Status.SUCCESS)
             } else {
                 _movieDetailStatus.postValue(ValuesProvider.Status.ERROR)
