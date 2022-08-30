@@ -120,7 +120,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvMovies"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="0dp" />
 
                 <ProgressBar
                     android:id="@+id/pbLoadItems"
@@ -128,5 +128,12 @@
                     android:layout_height="wrap_content" />
             </LinearLayout>
         </ScrollView>
+
+        <com.ismaeldivita.chipnavigation.ChipNavigationBar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/white"
+            app:cnb_menuResource="@menu/bottom_navigation_bar" />
     </LinearLayout>
 </layout>

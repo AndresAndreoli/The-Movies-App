@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.themoviesapp"
-        minSdk 21
+        minSdk 23
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -64,7 +64,6 @@ dependencies {
     // Dagger Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
-
-    //noinspection GradleCompatible
-    //implementation 'com.android.support:design:26.1.0'
+    // chip-navigation-bat / custom bottom navigation bar
+    implementation 'com.github.ismaeldivita:chip-navigation-bar:1.4.0'
 }

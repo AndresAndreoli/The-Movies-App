@@ -7,10 +7,17 @@
         <entry key="..\:/Users/andre/AndroidStudioProjects/theMoviesApp/app/src/main/res/drawable-anydpi/ic_autorenew.xml" value="0.139" />
         <entry key="..\:/Users/andre/AndroidStudioProjects/theMoviesApp/app/src/main/res/drawable/background_searchview.xml" value="0.2465" />
         <entry key="..\:/Users/andre/AndroidStudioProjects/theMoviesApp/app/src/main/res/drawable/bg_retry.xml" value="0.105" />
+        <entry key="..\:/Users/andre/AndroidStudioProjects/theMoviesApp/app/src/main/res/drawable/ic_discover.xml" value="0.128" />
+        <entry key="..\:/Users/andre/AndroidStudioProjects/theMoviesApp/app/src/main/res/drawable/ic_favorite.xml" value="0.128" />
+        <entry key="..\:/Users/andre/AndroidStudioProjects/theMoviesApp/app/src/main/res/drawable/ic_home.xml" value="0.128" />
+        <entry key="..\:/Users/andre/AndroidStudioProjects/theMoviesApp/app/src/main/res/drawable/ic_homee.xml" value="0.136" />
+        <entry key="..\:/Users/andre/AndroidStudioProjects/theMoviesApp/app/src/main/res/drawable/ic_no_internet.xml" value="0.128" />
+        <entry key="..\:/Users/andre/AndroidStudioProjects/theMoviesApp/app/src/main/res/drawable/ic_profile.xml" value="0.128" />
         <entry key="..\:/Users/andre/AndroidStudioProjects/theMoviesApp/app/src/main/res/drawable/progress_animation.xml" value="0.1015" />
         <entry key="..\:/Users/andre/AndroidStudioProjects/theMoviesApp/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/andre/AndroidStudioProjects/theMoviesApp/app/src/main/res/layout/activity_movie_description.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/andre/AndroidStudioProjects/theMoviesApp/app/src/main/res/layout/item_movie.xml" value="0.1" />
+        <entry key="..\:/Users/andre/AndroidStudioProjects/theMoviesApp/app/src/main/res/menu/bottom_navigation_bar.xml" value="0.13697916666666668" />
       </map>
     </option>
   </component>
