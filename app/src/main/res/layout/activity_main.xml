@@ -7,133 +7,34 @@
 
     </data>
 
-    <LinearLayout
-        android:id="@+id/viewRoot"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".view.MainActivity"
-        android:background="@color/colorPrimaryDark"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.fragment.app.FragmentContainerView
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:id="@+id/navHostFragments"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp"
+            android:background="@color/colorPrimaryDark"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/nav_main"
 
-            <androidx.appcompat.widget.SearchView
-                android:id="@+id/svMovie"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:background="@drawable/background_searchview"
-                android:layout_margin="5dp"
-                app:queryHint="@string/introduceMovie"
-                android:onClick="setFocus"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/bnvMainActivity"/>
 
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/ivLoadContent" />
-
-            <ImageView
-                android:id="@+id/ivLoadContent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_autorenew"
-                android:padding="10dp"
-                android:layout_marginRight="10dp"
-                android:visibility="invisible"
-
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/svMovie" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <LinearLayout
-            android:id="@+id/llNoInternet"
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bnvMainActivity"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginVertical="10dp">
+            android:layout_height="50dp"
+            app:menu="@menu/bottom_navigation_bar"
 
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/ic_no_internet"/>
+            app:layout_constraintTop_toBottomOf="@+id/navHostFragments"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="No internet"
-                android:textColor="@color/gray"
-                android:textSize="30sp"
-                android:layout_marginLeft="10dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/llErrorMovieCall"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone"
-            android:layout_marginVertical="15dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/informationError"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:layout_marginBottom="10dp"/>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnRetryMoviesCall"
-                android:layout_width="120dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:background="@drawable/bg_retry"
-                android:drawableStart="@drawable/ic_autorenew"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp"
-                android:text="@string/informationErrorButton" />
-        </LinearLayout>
-
-        <ScrollView
-            android:id="@+id/svContent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fillViewport="true">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvMovies"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp" />
-
-                <ProgressBar
-                    android:id="@+id/pbLoadItems"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-        </ScrollView>
-
-        <com.ismaeldivita.chipnavigation.ChipNavigationBar
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@color/white"
-            app:cnb_menuResource="@menu/bottom_navigation_bar" />
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

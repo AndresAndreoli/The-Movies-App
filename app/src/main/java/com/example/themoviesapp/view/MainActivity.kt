@@ -11,6 +11,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.themoviesapp.view.adapter.MovieAdapter
@@ -31,7 +34,7 @@ import javax.inject.Inject
 import kotlin.properties.Delegates
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, ConnectivityReceiver.ConnectivityReceiverListener{
+class MainActivity : AppCompatActivity(){
 
     // Attributes
     private lateinit var binding: ActivityMainBinding
@@ -57,18 +60,23 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, Connec
         linearLayout = LinearLayoutManager(this)
         adapter = MovieAdapter(moviesList, this)
 
-        initRecyclerView()
-        setUpListeners()
-        setUpObservers()
+        // Retrieve NavController from the NavHostFragment
+        val navHostFragment = binding.navHostFragments.getFragment() as NavHostFragment
+        val navController = navHostFragment.navController
+        binding.bnvMainActivity.setupWithNavController(navController)
 
-        binding.svMovie.setOnQueryTextListener(this)
+        //initRecyclerView()
+        //setUpListeners()
+        //setUpObservers()
 
-        binding.svMovie.clearFocus()
+        //binding.svMovie.setOnQueryTextListener(this)
+
+        //binding.svMovie.clearFocus()
 
         registerReceiver(ConnectivityReceiver(), IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
     }
 
-    override fun onResume() {
+   /* override fun onResume() {
         super.onResume()
         ConnectivityReceiver.connectivityReceiverListener = this
     }
@@ -216,4 +224,6 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener, Connec
             }
         }
     }*/
+
+    */
 }

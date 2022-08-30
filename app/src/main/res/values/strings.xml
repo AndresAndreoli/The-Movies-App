@@ -27,5 +27,7 @@
     <string name="informationErrorButton">Try later</string>
     <string name="informationError">Error loading movies</string>
     <string name="errorRetrieveMoreMovies">No pudimos recuperar mas peliculas. Intente mas tarde</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
