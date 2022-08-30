@@ -10,14 +10,13 @@ class MoviesRepository @Inject constructor(
     private val moviesCache: Cache
     ) {
     suspend fun getAllMovies(apiKey:String, page: Int): GenericResponse<List<Movie>>{
-
         return if (chacheIsEmpty() || page>1){
             var movies = moviesService.getMoviesResponse(apiKey, page)
 
             moviesCache.movies.addAll(movies.data.movies)
             GenericResponse(
                 movies.success,
-                movies.data.movies
+                getMoviesFromCache()
             )
         } else {
             GenericResponse(
