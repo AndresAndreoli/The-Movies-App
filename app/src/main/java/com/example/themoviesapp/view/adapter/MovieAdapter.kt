@@ -13,7 +13,7 @@ import com.example.themoviesapp.databinding.ItemMovieBinding
 import com.example.themoviesapp.model.movieResponse.Movie
 import com.example.themoviesapp.services.APIService
 
-class MovieAdapter(private var movies: List<Movie>, var activity: Activity): RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
+class MovieAdapter(private var movies: List<Movie>): RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val binding = ItemMovieBinding.bind(itemView)
@@ -31,11 +31,6 @@ class MovieAdapter(private var movies: List<Movie>, var activity: Activity): Rec
             .into(holder.binding.ivImageMain)
         holder.binding.tvTitleMain.setText(item.title)
 
-        holder.binding.cvMovieContainer.setOnClickListener {
-            var intent = Intent(activity, MovieDescriptionActivity::class.java)
-            intent.putExtra("ID", item.id.toString())
-            activity.startActivity(intent)
-        }
     }
 
     override fun getItemCount(): Int {

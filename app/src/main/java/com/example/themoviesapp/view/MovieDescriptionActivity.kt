@@ -1,28 +1,16 @@
 package com.example.themoviesapp.view
 
-import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.example.themoviesapp.MovieDetailsResponse
 import com.example.themoviesapp.R
-import com.example.themoviesapp.RateObject
-import com.example.themoviesapp.view.MainActivity.Companion.movieDetailsList
 import com.example.themoviesapp.databinding.ActivityMovieDescriptionBinding
 import com.example.themoviesapp.services.APIService
 import com.example.themoviesapp.viewmodel.ValuesProvider
 import com.example.themoviesapp.viewmodel.ViewModelMovieDetails
-import com.example.themoviesapp.viewmodel.ViewModelMovies
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.text.DecimalFormat
 
 @AndroidEntryPoint

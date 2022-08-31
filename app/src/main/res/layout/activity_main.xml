@@ -12,8 +12,8 @@
         android:layout_height="match_parent">
 
         <androidx.fragment.app.FragmentContainerView
-            android:name="androidx.navigation.fragment.NavHostFragment"
             android:id="@+id/navHostFragments"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:background="@color/colorPrimaryDark"
@@ -24,6 +24,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/bnvMainActivity"/>
+
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bnvMainActivity"
