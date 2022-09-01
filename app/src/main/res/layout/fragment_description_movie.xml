@@ -17,6 +17,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <ToggleButton
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:translationY="50dp"
+                android:translationX="-20dp"
+                android:translationZ="10dp"
+                android:background="@drawable/tg_fav"
+                android:textOn=""
+                android:textOff=""
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/ivMovieBackDropDescription"/>
+
             <ImageView
                 android:id="@+id/ivMovieBackDropDescription"
                 android:layout_width="match_parent"
