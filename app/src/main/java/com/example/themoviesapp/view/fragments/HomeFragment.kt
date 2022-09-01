@@ -62,7 +62,9 @@ class homeFragment : Fragment(), SearchView.OnQueryTextListener{
     private fun initComponents(){
         // Initializing variables
         linearLayout = LinearLayoutManager(requireContext())
-        adapter = MovieAdapter(moviesList)
+        adapter = MovieAdapter(moviesList){
+            onMovieSelected(it)
+        }
 
         binding.svMovie.setOnQueryTextListener(this)
         binding.svMovie.clearFocus()

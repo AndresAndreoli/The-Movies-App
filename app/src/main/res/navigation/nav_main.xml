@@ -22,22 +22,25 @@
     </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
-        android:name="com.example.themoviesapp.view.favoriteFragment.favoriteFragment"
+        android:name="com.example.themoviesapp.view.fragments.favoriteFragment"
         android:label="fragment_favorite"
         tools:layout="@layout/fragment_favorite" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.themoviesapp.view.profileFragment.profileFragment"
+        android:name="com.example.themoviesapp.view.fragments.profileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/descriptionMovieFragment"
-        android:name="com.example.themoviesapp.descriptionMovieFragment"
+        android:name="com.example.themoviesapp.view.fragments.DescriptionMovieFragment"
         android:label="fragment_description_movie"
         tools:layout="@layout/fragment_description_movie" >
         <argument
             android:name="idMovie"
             app:argType="integer"
             android:defaultValue="-1" />
+        <action
+            android:id="@+id/action_descriptionMovieFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
     </fragment>
 </navigation>
