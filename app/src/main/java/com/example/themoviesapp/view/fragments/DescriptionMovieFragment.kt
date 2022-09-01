@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -99,13 +100,13 @@ class DescriptionMovieFragment : Fragment() {
                     }
                 }
                 ValuesProvider.Status.ERROR -> {
-                    // TODO: checkear this
                     val action = DescriptionMovieFragmentDirections.actionDescriptionMovieFragmentToHomeFragment()
                     findNavController().navigate(action)
+
+                    Toast.makeText(requireContext(), "No se pudo encontrar la pelicula", Toast.LENGTH_LONG).show()
                 }
             }
         }
-
     }
 
     private fun converterTime(minutes: Int): String{

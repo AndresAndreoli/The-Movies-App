@@ -19,6 +19,7 @@ import com.example.themoviesapp.model.movieResponse.Movie
 import com.example.themoviesapp.view.adapter.MovieAdapter
 import com.example.themoviesapp.viewmodel.ValuesProvider
 import com.example.themoviesapp.viewmodel.ViewModelMovies
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -39,6 +40,8 @@ class homeFragment : Fragment(), SearchView.OnQueryTextListener{
     private var isLoading = false
     private var pageNum = 1
 
+    private lateinit var navBar: BottomNavigationView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,12 +57,16 @@ class homeFragment : Fragment(), SearchView.OnQueryTextListener{
             // destruyo el binding cuando destruyo la vista del fragment, ya que puedo tener
             // error cuando uso un liveData, por ejemplo, si intento poblar un recyclerView
         }
-
         initComponents()
     }
 
     // Start all components
     private fun initComponents(){
+        navBar = requireActivity().findViewById(R.id.bnvMainActivity)
+
+        // Show botton navigation bar
+        navBar.visibility = View.VISIBLE
+
         // Initializing variables
         linearLayout = LinearLayoutManager(requireContext())
         adapter = MovieAdapter(moviesList){
@@ -191,5 +198,8 @@ class homeFragment : Fragment(), SearchView.OnQueryTextListener{
     private fun onMovieSelected(idMovie: Int){
         val action = homeFragmentDirections.actionHomeFragmentToDescriptionMovieFragment(idMovie)
         findNavController().navigate(action)
+
+        // Hide navigation bar
+        navBar.visibility = View.GONE
     }
 }
