@@ -40,6 +40,8 @@ android {
 }
 
 dependencies {
+    var room_version = "2.4.3"
+
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     def glide_version="4.13.2"
 
@@ -73,4 +75,7 @@ dependencies {
     // Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+    // Room
+    implementation "androidx.room:room-ktx:2.4.0"
+    kapt "androidx.room:room-compiler:2.4.0"
 }
