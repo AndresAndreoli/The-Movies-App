@@ -3,7 +3,7 @@ package com.example.themoviesapp.model.movieDetailsResponse
 import com.example.themoviesapp.MovieDetailsResponse
 import com.example.themoviesapp.model.Cache
 import com.example.themoviesapp.model.GenericResponse
-import com.example.themoviesapp.services.MovieDetailsService
+import com.example.themoviesapp.data.services.MovieDetailsService
 import javax.inject.Inject
 
 class MovieDetailsRepository @Inject constructor(

@@ -1,4 +1,4 @@
-package com.example.themoviesapp.services
+package com.example.themoviesapp.data.services
 
 import com.example.themoviesapp.GuestSessionIdResponse
 import com.example.themoviesapp.MovieDetailsResponse

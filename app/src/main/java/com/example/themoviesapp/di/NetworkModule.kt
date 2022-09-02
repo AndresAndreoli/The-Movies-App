@@ -1,6 +1,6 @@
-package com.example.themoviesapp.services.di
+package com.example.themoviesapp.di
 
-import com.example.themoviesapp.services.APIService
+import com.example.themoviesapp.data.services.APIService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,7 +24,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provediteApiService(retrofit: Retrofit): APIService{
+    fun provediteApiService(retrofit: Retrofit): APIService {
         return retrofit.create(APIService::class.java)
     }
 }

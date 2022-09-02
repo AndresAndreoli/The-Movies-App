@@ -1,8 +1,8 @@
-package com.example.themoviesapp.services
+package com.example.themoviesapp.data.services
 
 import com.example.themoviesapp.MovieDetailsResponse
+import com.example.themoviesapp.data.services.APIService
 import com.example.themoviesapp.model.GenericResponse
-import com.example.themoviesapp.model.movieResponse.Movie
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

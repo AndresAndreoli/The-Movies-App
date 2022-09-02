@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.example.themoviesapp.R
 import com.example.themoviesapp.databinding.ItemMovieBinding
 import com.example.themoviesapp.model.movieResponse.Movie
-import com.example.themoviesapp.services.APIService
+import com.example.themoviesapp.data.services.APIService
 
 class MovieAdapter(
     private var movies: List<Movie>,

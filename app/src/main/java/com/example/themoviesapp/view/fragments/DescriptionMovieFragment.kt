@@ -1,6 +1,5 @@
 package com.example.themoviesapp.view.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,7 +12,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.themoviesapp.R
 import com.example.themoviesapp.databinding.FragmentDescriptionMovieBinding
-import com.example.themoviesapp.services.APIService
+import com.example.themoviesapp.data.services.APIService
 import com.example.themoviesapp.viewmodel.ValuesProvider
 import com.example.themoviesapp.viewmodel.ViewModelMovieDetails
 import dagger.hilt.android.AndroidEntryPoint
