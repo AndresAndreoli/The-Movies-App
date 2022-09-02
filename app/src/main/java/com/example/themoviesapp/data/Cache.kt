@@ -1,4 +1,4 @@
-package com.example.themoviesapp.model
+package com.example.themoviesapp.data
 
 import com.example.themoviesapp.MovieDetailsResponse
 import com.example.themoviesapp.model.movieResponse.Movie

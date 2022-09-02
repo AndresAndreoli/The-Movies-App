@@ -24,7 +24,7 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provediteApiService(retrofit: Retrofit): APIService {
+    fun provideApiService(retrofit: Retrofit): APIService {
         return retrofit.create(APIService::class.java)
     }
 }
