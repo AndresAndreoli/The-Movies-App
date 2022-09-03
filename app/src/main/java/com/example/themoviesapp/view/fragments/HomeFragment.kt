@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.themoviesapp.R
 import com.example.themoviesapp.databinding.FragmentHomeBinding
-import com.example.themoviesapp.model.movieResponse.Movie
+import com.example.themoviesapp.model.movieResponse.MovieModel
 import com.example.themoviesapp.view.adapter.MovieAdapter
 import com.example.themoviesapp.viewmodel.ValuesProvider
 import com.example.themoviesapp.viewmodel.ViewModelMovies
@@ -34,7 +34,7 @@ class homeFragment : Fragment(), SearchView.OnQueryTextListener{
     private val viewModel: ViewModelMovies by viewModels()
 
     // RecyclerView
-    private var moviesList: MutableList<Movie> = mutableListOf()
+    private var moviesList: MutableList<MovieModel> = mutableListOf()
     private lateinit var linearLayout: LinearLayoutManager
     private lateinit var adapter: MovieAdapter
     private var isLoading = false

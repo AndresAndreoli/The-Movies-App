@@ -9,7 +9,7 @@ data class MoviesResponse(
     var page: Int?,
     var total_page: Int?,
     var total_results: Int?,
-    @SerializedName("results") var movies: List<Movie>
+    @SerializedName("results") var movieModels: List<MovieModel>
 ): Parcelable {
     constructor(): this (null, null, null, emptyList())
 }

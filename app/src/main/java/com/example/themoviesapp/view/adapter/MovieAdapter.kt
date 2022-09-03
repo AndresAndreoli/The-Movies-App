@@ -7,11 +7,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.themoviesapp.R
 import com.example.themoviesapp.databinding.ItemMovieBinding
-import com.example.themoviesapp.model.movieResponse.Movie
+import com.example.themoviesapp.model.movieResponse.MovieModel
 import com.example.themoviesapp.data.services.APIService
 
 class MovieAdapter(
-    private var movies: List<Movie>,
+    private var movieModels: List<MovieModel>,
     private val onClickListener: (idMovie: Int) -> Unit
     ): RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
@@ -19,16 +19,16 @@ class MovieAdapter(
         val binding = ItemMovieBinding.bind(itemView)
 
         fun render (
-            movie: Movie,
+            movieModel: MovieModel,
             onClickListener: (idMovie: Int) -> Unit
         ){
             Glide.with(binding.cvMovieContainer.context)
-                .load(APIService.urlImage+movie.poster_path)
+                .load(APIService.urlImage+movieModel.poster_path)
                 .into(binding.ivImageMain)
-            binding.tvTitleMain.setText(movie.title)
+            binding.tvTitleMain.setText(movieModel.title)
 
             binding.cvMovieContainer.setOnClickListener {
-                onClickListener(movie.id ?: -1)
+                onClickListener(movieModel.id ?: -1)
             }
 
         }
@@ -39,11 +39,11 @@ class MovieAdapter(
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-        val item = movies[position]
+        val item = movieModels[position]
         holder.render(item, onClickListener)
     }
 
     override fun getItemCount(): Int {
-        return movies.size
+        return movieModels.size
     }
 }

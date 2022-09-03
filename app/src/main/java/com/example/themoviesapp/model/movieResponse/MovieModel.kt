@@ -3,7 +3,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Movie(
+data class MovieModel(
     var adult: Boolean,
     var backdrop_path: String,
     var genre_ids: List<Int>,

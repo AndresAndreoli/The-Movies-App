@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 
 // Este es el nombre de la tabla de la base de datos
-@Entity(tableName = "movie_table")
+@Entity(tableName = "movies_favorite_table")
 data class MovieEntity(
     // ColumnInfo -> name: es el nombre de la columna de la base de datos
     @ColumnInfo(name = "adult") var adult: Boolean,
