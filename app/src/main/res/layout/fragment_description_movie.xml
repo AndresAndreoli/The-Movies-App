@@ -18,6 +18,7 @@
             android:layout_height="wrap_content">
 
             <ToggleButton
+                android:id="@+id/tbFavoriteMovie"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:translationY="50dp"

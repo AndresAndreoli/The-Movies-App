@@ -6,6 +6,7 @@ import com.example.themoviesapp.data.database.entities.MovieEntity
 import com.example.themoviesapp.model.GenericResponse
 import com.example.themoviesapp.data.services.MoviesService
 import com.example.themoviesapp.domain.model.MovieItem
+import com.example.themoviesapp.utils.toDataBase
 import com.example.themoviesapp.utils.toDomain
 import javax.inject.Inject
 
@@ -30,10 +31,15 @@ class MoviesRepository @Inject constructor(
         }
     }
 
-    suspend fun getMoviesFavoriteFromDB(): List<MovieItem>{
+    suspend fun getFavoriteMoviesFromDB(): List<MovieItem>{
         // mapeo el modelo de datos de ModelEntity a Model
         val response: List<MovieEntity> = moviesDao.getAllFavoriteMovies()
         return response.map { it.toDomain() }
+    }
+
+    suspend fun insertFavoriteMovieToDB(movie: MovieItem){
+        val convertMovie = movie.toDataBase()
+        moviesDao.insertMovie(convertMovie)
     }
 
     fun getMoviesFromCache(): List<MovieItem>{

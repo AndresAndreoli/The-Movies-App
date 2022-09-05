@@ -6,14 +6,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.themoviesapp.MovieDetailsResponse
+import com.example.themoviesapp.data.database.entities.MovieEntity
 import com.example.themoviesapp.domain.GetMovieDetailsUseCase
+import com.example.themoviesapp.domain.InsertFavoriteMovieUseCase
+import com.example.themoviesapp.domain.model.MovieItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ViewModelMovieDetails @Inject constructor(
-    private val getMovieDetailsUseCase: GetMovieDetailsUseCase
+    private val getMovieDetailsUseCase: GetMovieDetailsUseCase,
+    private val insertFavoriteMovieUseCase: InsertFavoriteMovieUseCase
 ) : ViewModel() {
     private val _movieDetails = MutableLiveData<MovieDetailsResponse>()
     val movieDetails: LiveData<MovieDetailsResponse> = _movieDetails
@@ -33,6 +37,12 @@ class ViewModelMovieDetails @Inject constructor(
             } else {
                 _movieDetailStatus.postValue(ValuesProvider.Status.ERROR)
             }
+        }
+    }
+
+    fun insertFavoriteMovieToDB(movie: MovieItem){
+        viewModelScope.launch {
+            insertFavoriteMovieUseCase(movie)
         }
     }
 }

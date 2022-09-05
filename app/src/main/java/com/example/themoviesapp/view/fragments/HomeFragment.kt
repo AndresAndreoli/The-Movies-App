@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.themoviesapp.R
 import com.example.themoviesapp.databinding.FragmentHomeBinding
+import com.example.themoviesapp.domain.model.MovieItem
 import com.example.themoviesapp.model.movieResponse.MovieModel
 import com.example.themoviesapp.view.adapter.MovieAdapter
 import com.example.themoviesapp.viewmodel.ValuesProvider
@@ -24,7 +25,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class homeFragment : Fragment(), SearchView.OnQueryTextListener{
+class HomeFragment : Fragment(), SearchView.OnQueryTextListener{
 
     // Binding
     private var _binding: FragmentHomeBinding? = null
@@ -34,7 +35,7 @@ class homeFragment : Fragment(), SearchView.OnQueryTextListener{
     private val viewModel: ViewModelMovies by viewModels()
 
     // RecyclerView
-    private var moviesList: MutableList<MovieModel> = mutableListOf()
+    private var moviesList: MutableList<MovieItem> = mutableListOf()
     private lateinit var linearLayout: LinearLayoutManager
     private lateinit var adapter: MovieAdapter
     private var isLoading = false
@@ -196,7 +197,7 @@ class homeFragment : Fragment(), SearchView.OnQueryTextListener{
 
     // Function to open the description movie fragment
     private fun onMovieSelected(idMovie: Int){
-        val action = homeFragmentDirections.actionHomeFragmentToDescriptionMovieFragment(idMovie)
+        val action = HomeFragmentDirections.actionHomeFragmentToDescriptionMovieFragment(idMovie)
         findNavController().navigate(action)
 
         // Hide navigation bar

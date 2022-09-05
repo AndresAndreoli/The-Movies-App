@@ -26,7 +26,7 @@ object RoomModule {
 
     @Singleton
     @Provides
-    fun provideMovieDato(db: MovieDatabase): MovieDao {
+    fun provideMovieDao(db: MovieDatabase): MovieDao {
         return db.getMovieDao()
     }
 }

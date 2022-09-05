@@ -10,6 +10,7 @@ import com.example.themoviesapp.domain.GetMoviesUseCase
 import com.example.themoviesapp.domain.RetrieveMoviesFromCacheUseCase
 import com.example.themoviesapp.model.movieResponse.MovieModel
 import com.example.themoviesapp.data.services.APIService
+import com.example.themoviesapp.domain.model.MovieItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,8 +23,8 @@ class ViewModelMovies @Inject constructor(
     private val clearingCacheUseCase: ClearingCacheUseCase
 ): ViewModel() {
 
-    private val _moviesList = MutableLiveData<List<MovieModel>>()
-    val moviesList: LiveData<List<MovieModel>> = _moviesList
+    private val _moviesList = MutableLiveData<List<MovieItem>>()
+    val moviesList: LiveData<List<MovieItem>> = _moviesList
 
     private val _moviesStatus = MutableLiveData<ValuesProvider.Status>()
     val moviesStatus: LiveData<ValuesProvider.Status> = _moviesStatus

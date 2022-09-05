@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.example.themoviesapp.view.homeFragment"
+        android:name="com.example.themoviesapp.view.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
@@ -22,12 +22,12 @@
     </fragment>
     <fragment
         android:id="@+id/favoriteFragment"
-        android:name="com.example.themoviesapp.view.fragments.favoriteFragment"
+        android:name="com.example.themoviesapp.view.fragments.FavoriteFragment"
         android:label="fragment_favorite"
         tools:layout="@layout/fragment_favorite" />
     <fragment
         android:id="@+id/profileFragment"
-        android:name="com.example.themoviesapp.view.fragments.profileFragment"
+        android:name="com.example.themoviesapp.view.fragments.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
     <fragment

@@ -9,9 +9,10 @@ import com.example.themoviesapp.R
 import com.example.themoviesapp.databinding.ItemMovieBinding
 import com.example.themoviesapp.model.movieResponse.MovieModel
 import com.example.themoviesapp.data.services.APIService
+import com.example.themoviesapp.domain.model.MovieItem
 
 class MovieAdapter(
-    private var movieModels: List<MovieModel>,
+    private var movieModels: List<MovieItem>,
     private val onClickListener: (idMovie: Int) -> Unit
     ): RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
@@ -19,7 +20,7 @@ class MovieAdapter(
         val binding = ItemMovieBinding.bind(itemView)
 
         fun render (
-            movieModel: MovieModel,
+            movieModel: MovieItem,
             onClickListener: (idMovie: Int) -> Unit
         ){
             Glide.with(binding.cvMovieContainer.context)

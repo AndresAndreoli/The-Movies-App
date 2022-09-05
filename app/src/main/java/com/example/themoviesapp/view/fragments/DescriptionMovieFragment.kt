@@ -10,9 +10,11 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.example.themoviesapp.MovieDetailsResponse
 import com.example.themoviesapp.R
 import com.example.themoviesapp.databinding.FragmentDescriptionMovieBinding
 import com.example.themoviesapp.data.services.APIService
+import com.example.themoviesapp.domain.model.MovieItem
 import com.example.themoviesapp.viewmodel.ValuesProvider
 import com.example.themoviesapp.viewmodel.ViewModelMovieDetails
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,6 +27,8 @@ class DescriptionMovieFragment : Fragment() {
 
     private val args: DescriptionMovieFragmentArgs by navArgs()
     private val viewModel: ViewModelMovieDetails by viewModels()
+
+    private lateinit var movieDetails: MovieDetailsResponse
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,6 +62,28 @@ class DescriptionMovieFragment : Fragment() {
         }
 
         setUpObservers()
+        setUpListeners()
+    }
+
+    private fun setUpListeners() {
+        binding.tbFavoriteMovie.setOnClickListener {
+            viewModel.insertFavoriteMovieToDB(MovieItem(
+                movieDetails.adult,
+                movieDetails.backdrop_path,
+                listOf(1,2),
+                movieDetails.id,
+                movieDetails.original_language,
+                movieDetails.original_title,
+                movieDetails.overview,
+                movieDetails.popularity,
+                movieDetails.poster_path,
+                movieDetails.release_date,
+                movieDetails.title,
+                movieDetails.video,
+                movieDetails.vote_average,
+                movieDetails.vote_count
+            ))
+        }
     }
 
     private fun setUpObservers() {
@@ -66,36 +92,8 @@ class DescriptionMovieFragment : Fragment() {
                 ValuesProvider.Status.LOADING -> {}
                 ValuesProvider.Status.SUCCESS -> {
                     viewModel.movieDetails.observe(viewLifecycleOwner){
-                        it.let {
-                            // Imprime los datos en la Movie Description Activity
-                            binding.tvTitleMovieDescription.setText(it.title)
-                            binding.tvOverviewMovieDescription.setText(it.overview)
-                            Glide.with(this)
-                                .load(APIService.urlImage+it.backdrop_path)
-                                .placeholder(R.drawable.progress_animation)
-                                .into(binding.ivMovieBackDropDescription)
-                            binding.tvReleaseDateDescription.setText(it.release_date)
-                            binding.tvLanguageDescription.setText(it.original_language!!.uppercase())
-                            binding.tvPopularityDescription.setText((it.popularity).toString())
-                            binding.tvVoteAverageDescription.setText("${(DecimalFormat("#.#").format(it.vote_average))}/10")
-                            Glide.with(this)
-                                .load(APIService.urlImage+it.poster_path)
-                                .placeholder(R.drawable.progress_animation)
-                                .into(binding.imPosterDescription)
-
-                            var genresContainer = ""
-                            it.genres.forEach { genre ->
-                                genresContainer += "${genre.name}, "
-                            }
-                            binding.tvGenresDescription.setText(genresContainer.dropLast(2))
-
-                            if (it.adult)
-                                binding.tvAdultDescription.setText("18+")
-                            else
-                                binding.tvAdultDescription.setText("All ages")
-
-                            binding.tvDurationDescription.setText(converterTime(it.runtime!!))
-                        }
+                        movieDetails = it
+                        loadMovieContentToFragment(it)
                     }
                 }
                 ValuesProvider.Status.ERROR -> {
@@ -117,6 +115,39 @@ class DescriptionMovieFragment : Fragment() {
             min -= 60
         }
         return "${horas}:${min}"
+    }
+
+    private fun loadMovieContentToFragment(movie: MovieDetailsResponse){
+        movie.let {
+            // Imprime los datos en la Movie Description Activity
+            binding.tvTitleMovieDescription.setText(it.title)
+            binding.tvOverviewMovieDescription.setText(it.overview)
+            Glide.with(this)
+                .load(APIService.urlImage+it.backdrop_path)
+                .placeholder(R.drawable.progress_animation)
+                .into(binding.ivMovieBackDropDescription)
+            binding.tvReleaseDateDescription.setText(it.release_date)
+            binding.tvLanguageDescription.setText(it.original_language!!.uppercase())
+            binding.tvPopularityDescription.setText((it.popularity).toString())
+            binding.tvVoteAverageDescription.setText("${(DecimalFormat("#.#").format(it.vote_average))}/10")
+            Glide.with(this)
+                .load(APIService.urlImage+it.poster_path)
+                .placeholder(R.drawable.progress_animation)
+                .into(binding.imPosterDescription)
+
+            var genresContainer = ""
+            it.genres.forEach { genre ->
+                genresContainer += "${genre.name}, "
+            }
+            binding.tvGenresDescription.setText(genresContainer.dropLast(2))
+
+            if (it.adult)
+                binding.tvAdultDescription.setText("18+")
+            else
+                binding.tvAdultDescription.setText("All ages")
+
+            binding.tvDurationDescription.setText(converterTime(it.runtime!!))
+        }
     }
 
     /*private fun rateMovie(idMovie: String){
