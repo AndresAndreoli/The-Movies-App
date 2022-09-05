@@ -31,7 +31,6 @@ class MovieAdapter(
             binding.cvMovieContainer.setOnClickListener {
                 onClickListener(movieModel.id ?: -1)
             }
-
         }
     }
 

@@ -7,8 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.themoviesapp.MovieDetailsResponse
 import com.example.themoviesapp.R
 import com.example.themoviesapp.domain.model.MovieItem
+import com.example.themoviesapp.view.adapter.FavoriteMovieAdapter
 import com.example.themoviesapp.view.adapter.MovieAdapter
 import com.example.themoviesapp.viewmodel.ViewModelFavoriteMovies
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,7 +24,7 @@ class FavoriteFragment : Fragment() {
     // RecyclerView
     private var moviesList: MutableList<MovieItem> = mutableListOf()
     private lateinit var linearLayout: LinearLayoutManager
-    private lateinit var adapter: MovieAdapter
+    private lateinit var adapter: FavoriteMovieAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,14 +43,16 @@ class FavoriteFragment : Fragment() {
 
     private fun initComponents() {
         viewModel.getFavoriteMoviesFromDB()
+
+        // Initializing variables
+        linearLayout = LinearLayoutManager(requireContext())
+        adapter = FavoriteMovieAdapter(moviesList)
     }
 
     private fun setUpObservers() {
         viewModel.favoriteMovies.observe(viewLifecycleOwner){
-            it.forEach {
-                println(it.id)
-            }
+                moviesList.addAll(it)
+                adapter.notifyDataSetChanged()
         }
     }
-
 }
