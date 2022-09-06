@@ -111,6 +111,10 @@ class DescriptionMovieFragment : Fragment() {
                 }
             }
         }
+
+        viewModel.favoriteMovie.observe(viewLifecycleOwner){
+            binding.tbFavoriteMovie.isChecked = it
+        }
     }
 
     private fun converterTime(minutes: Int): String{

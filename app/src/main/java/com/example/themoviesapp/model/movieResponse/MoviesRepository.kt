@@ -34,8 +34,18 @@ class MoviesRepository @Inject constructor(
     suspend fun getFavoriteMoviesFromDB(): List<MovieItem>{
         // mapeo el modelo de datos de ModelEntity a Model
         val response: List<MovieEntity> = moviesDao.getAllFavoriteMovies()
+
         return response.map { it.toDomain() }
     }
+
+    /*suspend fun loadFavoriteMoviesOnCache(){
+        // Saving favorite movies on cache
+        val response: List<MovieEntity> = moviesDao.getAllFavoriteMovies()
+        response.forEach {
+            if (!moviesCache.favoriteMovies.contains(it.id!!))
+                moviesCache.favoriteMovies.add(it.id!!)
+        }
+    }*/
 
     suspend fun insertFavoriteMovieToDB(movie: MovieItem){
         val convertMovie = movie.toDataBase()

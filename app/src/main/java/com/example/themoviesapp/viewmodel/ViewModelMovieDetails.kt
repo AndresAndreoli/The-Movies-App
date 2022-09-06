@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.themoviesapp.MovieDetailsResponse
 import com.example.themoviesapp.domain.GetMovieDetailsUseCase
 import com.example.themoviesapp.domain.InsertFavoriteMovieUseCase
+import com.example.themoviesapp.domain.MovieIsFavoriteUseCase
 import com.example.themoviesapp.domain.model.MovieItem
 import com.example.themoviesapp.utils.ValuesProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,13 +17,18 @@ import javax.inject.Inject
 @HiltViewModel
 class ViewModelMovieDetails @Inject constructor(
     private val getMovieDetailsUseCase: GetMovieDetailsUseCase,
-    private val insertFavoriteMovieUseCase: InsertFavoriteMovieUseCase
+    private val insertFavoriteMovieUseCase: InsertFavoriteMovieUseCase,
+    private val movieIsFavoriteUseCase: MovieIsFavoriteUseCase
 ) : ViewModel() {
+
     private val _movieDetails = MutableLiveData<MovieDetailsResponse>()
     val movieDetails: LiveData<MovieDetailsResponse> = _movieDetails
 
     private val _movieDetailStatus = MutableLiveData<ValuesProvider.Status>()
     val movieDetailStatus: LiveData<ValuesProvider.Status> = _movieDetailStatus
+
+    private val _favoriteMovie = MutableLiveData<Boolean>(false)
+    val favoriteMovie: LiveData<Boolean> = _favoriteMovie
 
     fun onCreateMovieDetails(idMovie: Int) {
         viewModelScope.launch {
@@ -36,6 +42,9 @@ class ViewModelMovieDetails @Inject constructor(
             } else {
                 _movieDetailStatus.postValue(ValuesProvider.Status.ERROR)
             }
+
+            // Check if the movie is favorite
+            _favoriteMovie.postValue(movieIsFavoriteUseCase(idMovie))
         }
     }
 

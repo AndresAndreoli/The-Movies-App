@@ -1,7 +1,8 @@
 
 ERRORS:
 
-
+- Firebase
+- Corroborar movies duplicadas en DB (el hash estar harcodeando esto)
 - Cambiar modelo de datos
 - Cambiar metodos de repositorio
 - Controlar rotacion de pantalla

@@ -9,4 +9,5 @@ import javax.inject.Singleton
 class Cache @Inject constructor(){
     var movie: MutableList<MovieModel> = mutableListOf()
     var movieDetailsList: MutableList<MovieDetailsResponse> = mutableListOf()
+    var favoriteMovies = HashSet<Int>() // This will be load with firebase
 }
