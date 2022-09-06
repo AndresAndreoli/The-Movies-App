@@ -8,9 +8,9 @@ import com.example.themoviesapp.domain.ClearingCacheUseCase
 import com.example.themoviesapp.domain.FindMovieUseCase
 import com.example.themoviesapp.domain.GetMoviesUseCase
 import com.example.themoviesapp.domain.RetrieveMoviesFromCacheUseCase
-import com.example.themoviesapp.model.movieResponse.MovieModel
 import com.example.themoviesapp.data.services.APIService
 import com.example.themoviesapp.domain.model.MovieItem
+import com.example.themoviesapp.utils.ValuesProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

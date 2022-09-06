@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -15,7 +16,8 @@ import com.example.themoviesapp.R
 import com.example.themoviesapp.databinding.FragmentDescriptionMovieBinding
 import com.example.themoviesapp.data.services.APIService
 import com.example.themoviesapp.domain.model.MovieItem
-import com.example.themoviesapp.viewmodel.ValuesProvider
+import com.example.themoviesapp.utils.KindOfFragment
+import com.example.themoviesapp.utils.ValuesProvider
 import com.example.themoviesapp.viewmodel.ViewModelMovieDetails
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
@@ -97,9 +99,14 @@ class DescriptionMovieFragment : Fragment() {
                     }
                 }
                 ValuesProvider.Status.ERROR -> {
-                    val action = DescriptionMovieFragmentDirections.actionDescriptionMovieFragmentToHomeFragment()
-                    findNavController().navigate(action)
-
+                    when (args.fragmentBefore){
+                        KindOfFragment.HOME_FRAGMENT -> {
+                            findNavController().navigate(DescriptionMovieFragmentDirections.actionDescriptionMovieFragmentToHomeFragment())
+                        }
+                        KindOfFragment.FAVORITE_FRAGMENT -> {
+                            findNavController().navigate(DescriptionMovieFragmentDirections.actionDescriptionMovieFragmentToFavoriteFragment())
+                        }
+                    }
                     Toast.makeText(requireContext(), "No se pudo encontrar la pelicula", Toast.LENGTH_LONG).show()
                 }
             }

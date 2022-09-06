@@ -14,7 +14,7 @@
             android:id="@+id/action_homeFragment_to_favoriteFragment"
             app:destination="@id/favoriteFragment"/>
         <action
-            android:id="@+id/action_homeFragment_to_profileFragment2"
+            android:id="@+id/action_homeFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
         <action
             android:id="@+id/action_homeFragment_to_descriptionMovieFragment"
@@ -24,7 +24,12 @@
         android:id="@+id/favoriteFragment"
         android:name="com.example.themoviesapp.view.fragments.FavoriteFragment"
         android:label="fragment_favorite"
-        tools:layout="@layout/fragment_favorite" />
+        tools:layout="@layout/fragment_favorite" >
+
+        <action
+            android:id="@+id/action_favoriteFragment_to_descriptionMovieFragment"
+            app:destination="@id/descriptionMovieFragment" />
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.themoviesapp.view.fragments.ProfileFragment"
@@ -42,5 +47,12 @@
         <action
             android:id="@+id/action_descriptionMovieFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <argument
+            android:name="fragmentBefore"
+            app:argType="com.example.themoviesapp.utils.KindOfFragment"
+            android:defaultValue="HOME_FRAGMENT" />
+        <action
+            android:id="@+id/action_descriptionMovieFragment_to_favoriteFragment"
+            app:destination="@id/favoriteFragment" />
     </fragment>
 </navigation>

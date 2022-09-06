@@ -16,16 +16,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.themoviesapp.R
 import com.example.themoviesapp.databinding.FragmentHomeBinding
 import com.example.themoviesapp.domain.model.MovieItem
-import com.example.themoviesapp.model.movieResponse.MovieModel
+import com.example.themoviesapp.utils.KindOfFragment
+import com.example.themoviesapp.utils.ValuesProvider
 import com.example.themoviesapp.view.adapter.MovieAdapter
-import com.example.themoviesapp.viewmodel.ValuesProvider
 import com.example.themoviesapp.viewmodel.ViewModelMovies
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(), SearchView.OnQueryTextListener{
+class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
 
     // Binding
     private var _binding: FragmentHomeBinding? = null
@@ -62,7 +62,7 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener{
     }
 
     // Start all components
-    private fun initComponents(){
+    private fun initComponents() {
         navBar = requireActivity().findViewById(R.id.bnvMainActivity)
 
         // Show botton navigation bar
@@ -70,7 +70,7 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener{
 
         // Initializing variables
         linearLayout = LinearLayoutManager(requireContext())
-        adapter = MovieAdapter(moviesList){
+        adapter = MovieAdapter(moviesList) {
             onMovieSelected(it)
         }
 
@@ -88,7 +88,7 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener{
         binding.rvMovies.layoutManager = linearLayout
     }
 
-    private fun setUpListeners(){
+    private fun setUpListeners() {
         binding.ivLoadContent.setOnClickListener {
             resetContent()
         }
@@ -97,7 +97,7 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener{
             binding.svMovie.onActionViewExpanded()
         }
 
-        binding.rvMovies.addOnScrollListener(object: RecyclerView.OnScrollListener(){
+        binding.rvMovies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val visibleItemCount = linearLayout.childCount
@@ -121,16 +121,22 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener{
     }
 
     // reseting content main screen and cleaning cache
-    private fun resetContent(){
+    private fun resetContent() {
         pageNum = 1
         var clear = viewModel.clearCache()
         moviesList.clear()
-        if (clear){
-            showSnackBar(resources.getString(R.string.successClearingMovies), resources.getColor(R.color.green))
+        if (clear) {
+            showSnackBar(
+                resources.getString(R.string.successClearingMovies),
+                resources.getColor(R.color.green)
+            )
             viewModel.onCreateMovies(pageNum)
             binding.svMovie.clearFocus()
         } else {
-            showSnackBar(resources.getString(R.string.errorClearingMovies), resources.getColor(R.color.red))
+            showSnackBar(
+                resources.getString(R.string.errorClearingMovies),
+                resources.getColor(R.color.red)
+            )
         }
     }
 
@@ -149,7 +155,7 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener{
         })
 
         viewModel.moviesStatus.observe(viewLifecycleOwner, Observer {
-            when (it){
+            when (it) {
                 ValuesProvider.Status.LOADING -> {
                     binding.ivLoadContent.visibility = View.GONE
                     binding.rvMovies.visibility = View.GONE
@@ -177,12 +183,16 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener{
 
     // searchView: search by movie title
     override fun onQueryTextSubmit(query: String?): Boolean {
-        if (query!!.isNotEmpty()){
+        if (query!!.isNotEmpty()) {
             moviesList.clear()
             var movieFounded = viewModel.searchMovie(query)
 
-            if (!movieFounded){
-                var toast = Toast.makeText(requireContext(), resources.getString(R.string.movieNotFound), Toast.LENGTH_LONG)
+            if (!movieFounded) {
+                var toast = Toast.makeText(
+                    requireContext(),
+                    resources.getString(R.string.movieNotFound),
+                    Toast.LENGTH_LONG
+                )
                 toast.setGravity(Gravity.BOTTOM, 0, 50);
                 toast.show()
                 viewModel.retrieveMoviesFromCache()
@@ -196,8 +206,8 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener{
     }
 
     // Function to open the description movie fragment
-    private fun onMovieSelected(idMovie: Int){
-        val action = HomeFragmentDirections.actionHomeFragmentToDescriptionMovieFragment(idMovie)
+    private fun onMovieSelected(idMovie: Int) {
+        val action = HomeFragmentDirections.actionHomeFragmentToDescriptionMovieFragment(idMovie, KindOfFragment.HOME_FRAGMENT)
         findNavController().navigate(action)
 
         // Hide navigation bar
