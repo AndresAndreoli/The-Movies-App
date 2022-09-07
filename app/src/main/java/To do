@@ -1,9 +1,10 @@
 
 ERRORS:
 
+- Implementar FLOW
 - Firebase
 - Corroborar movies duplicadas en DB (el hash estar harcodeando esto)
-- Cambiar modelo de datos
+- Cambiar modelo de datos (no voy a guardar todos los datos)
 - Cambiar metodos de repositorio
 - Controlar rotacion de pantalla
 - Gestion de internet
