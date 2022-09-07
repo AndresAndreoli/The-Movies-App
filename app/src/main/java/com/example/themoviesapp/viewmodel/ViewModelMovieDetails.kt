@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.themoviesapp.MovieDetailsResponse
 import com.example.themoviesapp.domain.GetMovieDetailsUseCase
-import com.example.themoviesapp.domain.InsertFavoriteMovieUseCase
+import com.example.themoviesapp.domain.HandleFavoriteMovieUseCase
 import com.example.themoviesapp.domain.MovieIsFavoriteUseCase
 import com.example.themoviesapp.domain.model.MovieItem
 import com.example.themoviesapp.utils.ValuesProvider
@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ViewModelMovieDetails @Inject constructor(
     private val getMovieDetailsUseCase: GetMovieDetailsUseCase,
-    private val insertFavoriteMovieUseCase: InsertFavoriteMovieUseCase,
+    private val HandleFavoriteMovieUseCase: HandleFavoriteMovieUseCase,
     private val movieIsFavoriteUseCase: MovieIsFavoriteUseCase
 ) : ViewModel() {
 
@@ -48,9 +48,12 @@ class ViewModelMovieDetails @Inject constructor(
         }
     }
 
-    fun insertFavoriteMovieToDB(movie: MovieItem){
+    fun handleFavoriteMovie(movie: MovieItem, type: ValuesProvider.ActionFavMovie){
         viewModelScope.launch {
-            insertFavoriteMovieUseCase(movie)
+            when (type){
+                ValuesProvider.ActionFavMovie.ADD -> HandleFavoriteMovieUseCase.addNewFavoriteMovie(movie)
+                ValuesProvider.ActionFavMovie.DELETE -> HandleFavoriteMovieUseCase.deleteFavoriteMovie(movie.id!!)
+            }
         }
     }
 }

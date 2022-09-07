@@ -38,18 +38,25 @@ class MoviesRepository @Inject constructor(
         return response.map { it.toDomain() }
     }
 
-    /*suspend fun loadFavoriteMoviesOnCache(){
-        // Saving favorite movies on cache
-        val response: List<MovieEntity> = moviesDao.getAllFavoriteMovies()
-        response.forEach {
-            if (!moviesCache.favoriteMovies.contains(it.id!!))
-                moviesCache.favoriteMovies.add(it.id!!)
-        }
-    }*/
-
     suspend fun insertFavoriteMovieToDB(movie: MovieItem){
         val convertMovie = movie.toDataBase()
+        // Insert on DB
         moviesDao.insertMovie(convertMovie)
+
+        // Insert movie ID on Cache
+        if (!moviesCache.favoriteMovies.contains(movie.id)){
+            moviesCache.favoriteMovies.add(movie.id!!)
+        }
+    }
+
+    suspend fun deleteFavoriteMovieFromDB(idMovie: Int){
+        // Delete from DB
+        moviesDao.removeMovieFromDB(idMovie)
+
+        // Delete favorite movie ID on Cache
+        if (moviesCache.favoriteMovies.contains(idMovie)){
+            moviesCache.favoriteMovies.remove(idMovie)
+        }
     }
 
     fun getMoviesFromCache(): List<MovieItem>{

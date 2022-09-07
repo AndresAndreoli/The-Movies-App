@@ -4,11 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.themoviesapp.domain.ClearingCacheUseCase
-import com.example.themoviesapp.domain.FindMovieUseCase
-import com.example.themoviesapp.domain.GetMoviesUseCase
-import com.example.themoviesapp.domain.RetrieveMoviesFromCacheUseCase
+import com.example.themoviesapp.data.repositories.FavoriteMoviesRepository
 import com.example.themoviesapp.data.services.APIService
+import com.example.themoviesapp.domain.*
 import com.example.themoviesapp.domain.model.MovieItem
 import com.example.themoviesapp.utils.ValuesProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +18,8 @@ class ViewModelMovies @Inject constructor(
     private val getMoviesUseCase: GetMoviesUseCase,
     private val findMovieUseCase: FindMovieUseCase,
     private val retrieveMoviesFromCacheUseCase: RetrieveMoviesFromCacheUseCase,
-    private val clearingCacheUseCase: ClearingCacheUseCase
+    private val clearingCacheUseCase: ClearingCacheUseCase,
+    private val retrieveIDFavMoviesFirebaseUseCase: RetrieveIDFavMoviesFirebaseUseCase
 ): ViewModel() {
 
     private val _moviesList = MutableLiveData<List<MovieItem>>()
@@ -85,5 +84,11 @@ class ViewModelMovies @Inject constructor(
 
     fun connectionInternet(isConnected: Boolean){
         _isConnected.postValue(isConnected)
+    }
+
+    fun retrieveFavMoviesFromFirebase() {
+        viewModelScope.launch {
+            retrieveIDFavMoviesFirebaseUseCase()
+        }
     }
 }

@@ -69,7 +69,7 @@ class DescriptionMovieFragment : Fragment() {
 
     private fun setUpListeners() {
         binding.tbFavoriteMovie.setOnClickListener {
-            viewModel.insertFavoriteMovieToDB(MovieItem(
+            var movie = MovieItem(
                 movieDetails.adult,
                 movieDetails.backdrop_path,
                 listOf(1,2),
@@ -84,7 +84,15 @@ class DescriptionMovieFragment : Fragment() {
                 movieDetails.video,
                 movieDetails.vote_average,
                 movieDetails.vote_count
-            ))
+            )
+
+            if (binding.tbFavoriteMovie.isChecked){
+                // Save movie
+                viewModel.handleFavoriteMovie(movie, ValuesProvider.ActionFavMovie.ADD)
+            } else {
+                // Delete movie
+                viewModel.handleFavoriteMovie(movie, ValuesProvider.ActionFavMovie.DELETE)
+            }
         }
     }
 

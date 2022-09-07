@@ -78,6 +78,7 @@ class FavoriteFragment : Fragment() {
 
     private fun setUpObservers() {
         viewModel.favoriteMovies.observe(viewLifecycleOwner){
+                moviesList.clear()
                 moviesList.addAll(it)
                 adapter.notifyDataSetChanged()
         }
