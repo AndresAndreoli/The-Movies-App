@@ -19,7 +19,7 @@ class ViewModelMovies @Inject constructor(
     private val findMovieUseCase: FindMovieUseCase,
     private val retrieveMoviesFromCacheUseCase: RetrieveMoviesFromCacheUseCase,
     private val clearingCacheUseCase: ClearingCacheUseCase,
-    private val retrieveIDFavMoviesFirebaseUseCase: RetrieveIDFavMoviesFirebaseUseCase
+    private val retrieveFavoriteMoviesFromFirestore: RetrieveFavoriteMoviesFromFirestore
 ): ViewModel() {
 
     private val _moviesList = MutableLiveData<List<MovieItem>>()
@@ -86,9 +86,9 @@ class ViewModelMovies @Inject constructor(
         _isConnected.postValue(isConnected)
     }
 
-    fun retrieveFavMoviesFromFirebase() {
+    fun dataFirebase() {
         viewModelScope.launch {
-            retrieveIDFavMoviesFirebaseUseCase()
+            retrieveFavoriteMoviesFromFirestore()
         }
     }
 }

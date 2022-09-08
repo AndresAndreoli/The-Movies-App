@@ -65,9 +65,6 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
     private fun initComponents() {
         navBar = requireActivity().findViewById(R.id.bnvMainActivity)
 
-        // retrieve favorite movies id from firebase
-        viewModel.retrieveFavMoviesFromFirebase()
-
         // Show botton navigation bar
         navBar.visibility = View.VISIBLE
 

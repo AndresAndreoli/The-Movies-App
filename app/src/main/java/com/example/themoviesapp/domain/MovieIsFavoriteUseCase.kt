@@ -7,6 +7,6 @@ class MovieIsFavoriteUseCase @Inject constructor(
     private val movieCache: Cache
 ) {
     operator fun invoke(idMovie: Int): Boolean{
-        return movieCache.favoriteMovies.contains(idMovie)
+        return movieCache.favoriteMovies.containsKey(idMovie)
     }
 }

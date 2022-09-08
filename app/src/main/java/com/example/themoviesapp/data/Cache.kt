@@ -10,5 +10,5 @@ class Cache @Inject constructor(){
     // This is a volatile cache
     var movie: MutableList<MovieModel> = mutableListOf()
     var movieDetailsList: MutableList<MovieDetailsResponse> = mutableListOf()
-    var favoriteMovies = HashSet<Int>() // This will be load with firebase
+    var favoriteMovies = HashMap<Int, String>() // This will be load with firebase
 }

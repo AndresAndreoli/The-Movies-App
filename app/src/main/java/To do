@@ -21,5 +21,6 @@ ERRORS:
 
 
 Firebase:
-
+- Favorito no anda bien cuando entra a la app (revisar que hace el codigo cuando se entra a la app por primera vez)
 - Al cerrar la app, carga firesotre
+- Almacenar las peliculas favoritas cada vez que aprete en guardar?

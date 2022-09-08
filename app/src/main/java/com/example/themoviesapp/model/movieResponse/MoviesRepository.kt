@@ -8,12 +8,14 @@ import com.example.themoviesapp.data.services.MoviesService
 import com.example.themoviesapp.domain.model.MovieItem
 import com.example.themoviesapp.utils.toDataBase
 import com.example.themoviesapp.utils.toDomain
+import com.google.firebase.firestore.FirebaseFirestore
 import javax.inject.Inject
 
 class MoviesRepository @Inject constructor(
     private val moviesService: MoviesService,
     private val moviesCache: Cache,
-    private val moviesDao: MovieDao
+    private val moviesDao: MovieDao,
+    private val firebaseFirestore: FirebaseFirestore
     ) {
     suspend fun getAllMovies(apiKey:String, page: Int): GenericResponse<List<MovieItem>>{
         return if (chacheIsEmpty() || page>1){
@@ -43,20 +45,45 @@ class MoviesRepository @Inject constructor(
         // Insert on DB
         moviesDao.insertMovie(convertMovie)
 
-        // Insert movie ID on Cache
-        if (!moviesCache.favoriteMovies.contains(movie.id)){
-            moviesCache.favoriteMovies.add(movie.id!!)
-        }
+        // Insert on Firestore
+        firebaseFirestore.collection("favoriteMovies")
+            .add(hashMapOf(
+                "ID" to movie.id
+            ))
+            .addOnSuccessListener {
+                // TODO: evento analitys
+
+                // Insert movie ID on Cache
+                if (!moviesCache.favoriteMovies.contains(movie.id)){
+                    moviesCache.favoriteMovies.put(movie.id!!, it.id)
+                }
+
+            }
+            .addOnFailureListener {
+                //TODO: evento analitys
+            }
     }
 
     suspend fun deleteFavoriteMovieFromDB(idMovie: Int){
         // Delete from DB
         moviesDao.removeMovieFromDB(idMovie)
 
-        // Delete favorite movie ID on Cache
-        if (moviesCache.favoriteMovies.contains(idMovie)){
-            moviesCache.favoriteMovies.remove(idMovie)
-        }
+        // Delete from Firestore
+        var idDocument = moviesCache.favoriteMovies.get(idMovie)
+        firebaseFirestore.collection("favoriteMovies")
+            .document(idDocument ?: "000aaa")
+            .delete()
+            .addOnSuccessListener {
+                // TODO: evento analitys
+
+                // Delete favorite movie ID on Cache
+                if (moviesCache.favoriteMovies.contains(idMovie)){
+                    moviesCache.favoriteMovies.remove(idMovie)
+                }
+            }
+            .addOnFailureListener {
+                //TODO: evento analitys
+            }
     }
 
     fun getMoviesFromCache(): List<MovieItem>{
