@@ -1,5 +1,6 @@
 package com.example.themoviesapp.utils
 
+import com.example.themoviesapp.MovieDetailsResponse
 import com.example.themoviesapp.data.database.entities.MovieEntity
 import com.example.themoviesapp.domain.model.MovieItem
 import com.example.themoviesapp.model.movieResponse.MovieModel
@@ -45,6 +46,40 @@ fun MovieItem.toDataBase() = MovieEntity(
     adult,
     backdrop_path,
     genre_ids,
+    id,
+    original_language,
+    original_title,
+    overview,
+    popularity,
+    poster_path,
+    release_date,
+    title,
+    video,
+    vote_average,
+    vote_count
+)
+
+fun MovieModel.toDataBase() = MovieEntity(
+    adult,
+    backdrop_path,
+    genre_ids,
+    id,
+    original_language,
+    original_title,
+    overview,
+    popularity,
+    poster_path,
+    release_date,
+    title,
+    video,
+    vote_average,
+    vote_count
+)
+
+fun MovieDetailsResponse.toDataBase() = MovieEntity(
+    adult,
+    backdrop_path,
+    genres.map { it.id!!},
     id,
     original_language,
     original_title,

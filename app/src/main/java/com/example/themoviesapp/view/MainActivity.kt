@@ -35,8 +35,17 @@ class MainActivity : AppCompatActivity(){
     }
 
     private fun initComponents() {
+        viewModel.clearDB()
         // retrieve favorite movies id from firebase
         viewModel.dataFirebase()
+    }
+
+    override fun onStop() {
+        super.onStop()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 
     /* override fun onResume() {

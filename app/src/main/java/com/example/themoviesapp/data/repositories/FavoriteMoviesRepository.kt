@@ -2,6 +2,7 @@ package com.example.themoviesapp.data.repositories
 
 import android.util.Log
 import com.example.themoviesapp.data.Cache
+import com.example.themoviesapp.data.database.dao.MovieDao
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import javax.inject.Inject
@@ -9,6 +10,7 @@ import javax.inject.Inject
 
 class FavoriteMoviesRepository @Inject constructor(
     private val firebaseFirestore: FirebaseFirestore,
+    private val moviesDao: MovieDao,
     private val moviesCache: Cache
 ) {
      suspend fun retrieveIDFavoriteMoviesFromFirebase(){
@@ -31,5 +33,9 @@ class FavoriteMoviesRepository @Inject constructor(
             .addOnFailureListener { exception ->
                 Log.w("Error FireStore", "Error getting documents: ", exception)
             }
+    }
+
+    suspend fun clearDB(){
+        moviesDao.clearDB()
     }
 }

@@ -3,6 +3,8 @@ package com.example.themoviesapp.model.movieResponse
 import com.example.themoviesapp.data.Cache
 import com.example.themoviesapp.data.database.dao.MovieDao
 import com.example.themoviesapp.data.database.entities.MovieEntity
+import com.example.themoviesapp.data.services.APIService
+import com.example.themoviesapp.data.services.MovieDetailsService
 import com.example.themoviesapp.model.GenericResponse
 import com.example.themoviesapp.data.services.MoviesService
 import com.example.themoviesapp.domain.model.MovieItem
@@ -13,6 +15,7 @@ import javax.inject.Inject
 
 class MoviesRepository @Inject constructor(
     private val moviesService: MoviesService,
+    private val moviesDetailsService: MovieDetailsService,
     private val moviesCache: Cache,
     private val moviesDao: MovieDao,
     private val firebaseFirestore: FirebaseFirestore
@@ -20,7 +23,10 @@ class MoviesRepository @Inject constructor(
     suspend fun getAllMovies(apiKey:String, page: Int): GenericResponse<List<MovieItem>>{
         return if (chacheIsEmpty() || page>1){
             var movies = moviesService.getMoviesResponse(apiKey, page)
-            moviesCache.movie.addAll(movies.data.movieModels)
+            movies.data.movieModels.forEach{
+                moviesCache.movie.put(it.id!!, it)
+            }
+
             GenericResponse(
                 movies.success,
                 getMoviesFromCache()
@@ -38,6 +44,18 @@ class MoviesRepository @Inject constructor(
         val response: List<MovieEntity> = moviesDao.getAllFavoriteMovies()
 
         return response.map { it.toDomain() }
+    }
+
+    suspend fun loadDBWithFavoriteMovies(){
+        moviesCache.favoriteMovies.forEach{
+            if (moviesCache.movie.containsKey(it.key)){
+                var result = moviesCache.movie.get(it.key)
+                moviesDao.insertMovie(result!!.toDataBase())
+            } else {
+                var result = moviesDetailsService.getMovieDetailsResponse(it.key)
+                moviesDao.insertMovie(result.data.toDataBase())
+            }
+        }
     }
 
     suspend fun insertFavoriteMovieToDB(movie: MovieItem){
@@ -88,7 +106,7 @@ class MoviesRepository @Inject constructor(
 
     fun getMoviesFromCache(): List<MovieItem>{
         // mapeo el modelo de datos de ModelEntity a Model
-        val response : List<MovieModel> = moviesCache.movie.toList()
+        val response : List<MovieModel> = moviesCache.movie.values.toList()
         return response.map { it.toDomain() }
     }
 
@@ -101,9 +119,5 @@ class MoviesRepository @Inject constructor(
         // TODO: cambiar solo a caso de uso
         moviesCache.movie.clear()
         return moviesCache.movie.isEmpty()
-    }
-
-    suspend fun insertMovieToDB(movie: MovieEntity) {
-        moviesDao.insertMovie(movie)
     }
 }

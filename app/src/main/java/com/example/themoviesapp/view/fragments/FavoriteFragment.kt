@@ -63,6 +63,7 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun initComponents() {
+        viewModel.loadDBWithFavMovies()
         viewModel.getFavoriteMoviesFromDB()
 
         // Show botton navigation bar

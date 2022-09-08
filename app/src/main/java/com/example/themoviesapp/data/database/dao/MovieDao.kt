@@ -1,5 +1,6 @@
 package com.example.themoviesapp.data.database.dao
 
+import android.graphics.Movie
 import androidx.room.*
 import com.example.themoviesapp.data.database.entities.MovieEntity
 
@@ -16,4 +17,10 @@ interface MovieDao {
 
     @Query("DELETE FROM movies_favorite_table WHERE ID = :idMovie")
     suspend fun removeMovieFromDB(idMovie: Int)
+
+    @Query("DELETE FROM movies_favorite_table")
+    suspend fun clearDB()
+
+    @Query("SELECT * FROM movies_favorite_table WHERE ID = :idMovie")
+    suspend fun searchMovie(idMovie: Int): MovieEntity
 }

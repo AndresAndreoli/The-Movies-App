@@ -213,4 +213,5 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
         // Hide navigation bar
         navBar.visibility = View.GONE
     }
+
 }

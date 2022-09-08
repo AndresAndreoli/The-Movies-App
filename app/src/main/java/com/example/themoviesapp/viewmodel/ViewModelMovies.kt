@@ -13,13 +13,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+// main activity and home fragment's ViewModel
 @HiltViewModel
 class ViewModelMovies @Inject constructor(
     private val getMoviesUseCase: GetMoviesUseCase,
     private val findMovieUseCase: FindMovieUseCase,
     private val retrieveMoviesFromCacheUseCase: RetrieveMoviesFromCacheUseCase,
     private val clearingCacheUseCase: ClearingCacheUseCase,
-    private val retrieveFavoriteMoviesFromFirestore: RetrieveFavoriteMoviesFromFirestore
+    private val retrieveFavoriteMoviesFromFirestore: RetrieveFavoriteMoviesFromFirestore,
+    private val deleteMoviesBDUseCase: DeleteMoviesBDUseCase
 ): ViewModel() {
 
     private val _moviesList = MutableLiveData<List<MovieItem>>()
@@ -89,6 +91,12 @@ class ViewModelMovies @Inject constructor(
     fun dataFirebase() {
         viewModelScope.launch {
             retrieveFavoriteMoviesFromFirestore()
+        }
+    }
+
+    fun clearDB(){
+        viewModelScope.launch {
+            deleteMoviesBDUseCase()
         }
     }
 }
