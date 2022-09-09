@@ -45,6 +45,7 @@ class MoviesRepository @Inject constructor(
         return response.map { it.toDomain() }
     }
 
+    // This function optimizes the data load, since fill the DB with movies already searched before, otherwise, fetch on api
     suspend fun loadDBWithFavoriteMovies() {
         var IDsFromDB: HashSet<Int> = moviesDao.recoverIDs().toHashSet()
         moviesCache.favoriteMovies.forEach {

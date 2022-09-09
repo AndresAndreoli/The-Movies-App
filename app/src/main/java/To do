@@ -1,9 +1,9 @@
 
 ERRORS:
-- Anda mal el recycler view principal
 
-- Controlar flujo de datos
 
+
+OTROS:
 - Implementar FLOW
 - Corroborar movies duplicadas en DB (el hash estar harcodeando esto)
 - Cambiar modelo de datos (no voy a guardar todos los datos)
