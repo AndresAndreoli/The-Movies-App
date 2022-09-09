@@ -19,11 +19,11 @@ class MoviesRepository @Inject constructor(
     private val moviesCache: Cache,
     private val moviesDao: MovieDao,
     private val firebaseFirestore: FirebaseFirestore
-    ) {
-    suspend fun getAllMovies(apiKey:String, page: Int): GenericResponse<List<MovieItem>>{
-        return if (chacheIsEmpty() || page>1){
+) {
+    suspend fun getAllMovies(apiKey: String, page: Int): GenericResponse<List<MovieItem>> {
+        return if (chacheIsEmpty() || page > 1) {
             var movies = moviesService.getMoviesResponse(apiKey, page)
-            movies.data.movieModels.forEach{
+            movies.data.movieModels.forEach {
                 moviesCache.movie.put(it.id!!, it)
             }
 
@@ -39,40 +39,47 @@ class MoviesRepository @Inject constructor(
         }
     }
 
-    suspend fun getFavoriteMoviesFromDB(): List<MovieItem>{
+    suspend fun getFavoriteMoviesFromDB(): List<MovieItem> {
         // mapeo el modelo de datos de ModelEntity a Model
         val response: List<MovieEntity> = moviesDao.getAllFavoriteMovies()
 
         return response.map { it.toDomain() }
     }
 
-    suspend fun loadDBWithFavoriteMovies(){
-        moviesCache.favoriteMovies.forEach{
-            if (moviesCache.movie.containsKey(it.key)){
-                var result = moviesCache.movie.get(it.key)
-                moviesDao.insertMovie(result!!.toDataBase())
-            } else {
-                var result = moviesDetailsService.getMovieDetailsResponse(it.key)
-                moviesDao.insertMovie(result.data.toDataBase())
+    suspend fun loadDBWithFavoriteMovies() {
+        var IDsFromDB: HashSet<Int> = moviesDao.recoverIDs().toHashSet()
+        moviesCache.favoriteMovies.forEach {
+            if (!IDsFromDB.contains(it.key)) {
+                if (moviesCache.movie.containsKey(it.key)) {
+                    // Recover favorite movie from CACHE
+                    var result = moviesCache.movie.get(it.key)
+                    moviesDao.insertMovie(result!!.toDataBase())
+                } else {
+                    // Recover favorite movie from API
+                    var result = moviesDetailsService.getMovieDetailsResponse(it.key)
+                    moviesDao.insertMovie(result.data.toDataBase())
+                }
             }
         }
     }
 
-    suspend fun insertFavoriteMovieToDB(movie: MovieItem){
+    suspend fun insertFavoriteMovieToDB(movie: MovieItem) {
         val convertMovie = movie.toDataBase()
         // Insert on DB
         moviesDao.insertMovie(convertMovie)
 
         // Insert on Firestore
         firebaseFirestore.collection("favoriteMovies")
-            .add(hashMapOf(
-                "ID" to movie.id
-            ))
+            .add(
+                hashMapOf(
+                    "ID" to movie.id
+                )
+            )
             .addOnSuccessListener {
                 // TODO: evento analitys
 
                 // Insert movie ID on Cache
-                if (!moviesCache.favoriteMovies.contains(movie.id)){
+                if (!moviesCache.favoriteMovies.contains(movie.id)) {
                     moviesCache.favoriteMovies.put(movie.id!!, it.id)
                 }
 
@@ -82,7 +89,7 @@ class MoviesRepository @Inject constructor(
             }
     }
 
-    suspend fun deleteFavoriteMovieFromDB(idMovie: Int){
+    suspend fun deleteFavoriteMovieFromDB(idMovie: Int) {
         // Delete from DB
         moviesDao.removeMovieFromDB(idMovie)
 
@@ -95,7 +102,7 @@ class MoviesRepository @Inject constructor(
                 // TODO: evento analitys
 
                 // Delete favorite movie ID on Cache
-                if (moviesCache.favoriteMovies.contains(idMovie)){
+                if (moviesCache.favoriteMovies.contains(idMovie)) {
                     moviesCache.favoriteMovies.remove(idMovie)
                 }
             }
@@ -104,18 +111,18 @@ class MoviesRepository @Inject constructor(
             }
     }
 
-    fun getMoviesFromCache(): List<MovieItem>{
+    fun getMoviesFromCache(): List<MovieItem> {
         // mapeo el modelo de datos de ModelEntity a Model
-        val response : List<MovieModel> = moviesCache.movie.values.toList()
+        val response: List<MovieModel> = moviesCache.movie.values.toList()
         return response.map { it.toDomain() }
     }
 
-    fun chacheIsEmpty(): Boolean{
+    fun chacheIsEmpty(): Boolean {
         // TODO: cambiar solo a caso de uso
         return moviesCache.movie.isEmpty()
     }
 
-    fun clearCache(): Boolean{
+    fun clearCache(): Boolean {
         // TODO: cambiar solo a caso de uso
         moviesCache.movie.clear()
         return moviesCache.movie.isEmpty()

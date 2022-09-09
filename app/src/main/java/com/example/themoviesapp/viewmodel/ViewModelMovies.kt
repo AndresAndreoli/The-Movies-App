@@ -88,15 +88,19 @@ class ViewModelMovies @Inject constructor(
         _isConnected.postValue(isConnected)
     }
 
+    // Fetch favorite movies ID from firestore and load them on cache volatile
     fun dataFirebase() {
         viewModelScope.launch {
             retrieveFavoriteMoviesFromFirestore()
         }
     }
 
+    // Cleaning the daba base up
     fun clearDB(){
         viewModelScope.launch {
             deleteMoviesBDUseCase()
         }
     }
+
+
 }

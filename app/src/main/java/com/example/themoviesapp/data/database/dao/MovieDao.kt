@@ -23,4 +23,10 @@ interface MovieDao {
 
     @Query("SELECT * FROM movies_favorite_table WHERE ID = :idMovie")
     suspend fun searchMovie(idMovie: Int): MovieEntity
+
+    @Query("SELECT EXISTS(SELECT * FROM movies_favorite_table WHERE id = :idMovie)")
+    fun isRowIsExist(idMovie : Int) : Boolean
+
+    @Query("SELECT id FROM movies_favorite_table")
+    suspend fun recoverIDs(): List<Int>
 }

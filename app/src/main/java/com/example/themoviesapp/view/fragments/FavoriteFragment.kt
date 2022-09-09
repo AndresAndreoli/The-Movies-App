@@ -14,6 +14,7 @@ import com.example.themoviesapp.R
 import com.example.themoviesapp.databinding.FragmentFavoriteBinding
 import com.example.themoviesapp.domain.model.MovieItem
 import com.example.themoviesapp.utils.KindOfFragment
+import com.example.themoviesapp.utils.ValuesProvider
 import com.example.themoviesapp.view.HomeFragmentDirections
 import com.example.themoviesapp.view.adapter.FavoriteMovieAdapter
 import com.example.themoviesapp.viewmodel.ViewModelFavoriteMovies
@@ -53,8 +54,6 @@ class FavoriteFragment : Fragment() {
         }
 
         initComponents()
-        setUpObservers()
-        initRecyclerViewFavoriteMovies()
     }
 
     private fun initRecyclerViewFavoriteMovies() {
@@ -63,8 +62,10 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun initComponents() {
+        setUpObservers()
+
+        // Loading DB with favorites movies
         viewModel.loadDBWithFavMovies()
-        viewModel.getFavoriteMoviesFromDB()
 
         // Show botton navigation bar
         navBar = requireActivity().findViewById(R.id.bnvMainActivity)
@@ -75,13 +76,37 @@ class FavoriteFragment : Fragment() {
         adapter = FavoriteMovieAdapter(moviesList){
             onMovieSelected(it)
         }
+
+        initRecyclerViewFavoriteMovies()
     }
 
     private fun setUpObservers() {
+        viewModel.dataBaseStatus.observe(viewLifecycleOwner){
+            when (it){
+                ValuesProvider.Status.LOADING -> println("pto")
+                ValuesProvider.Status.SUCCESS -> viewModel.getFavoriteMoviesFromDB()
+                ValuesProvider.Status.ERROR -> TODO()
+            }
+        }
+
         viewModel.favoriteMovies.observe(viewLifecycleOwner){
                 moviesList.clear()
                 moviesList.addAll(it)
                 adapter.notifyDataSetChanged()
+        }
+
+        viewModel.moviesStatus.observe(viewLifecycleOwner){
+            when (it){
+                ValuesProvider.Status.LOADING -> {
+                    binding.rvFavoriteMovies.visibility = View.GONE
+                    binding.pbLoadItems.visibility = View.VISIBLE
+                }
+                ValuesProvider.Status.SUCCESS -> {
+                    binding.rvFavoriteMovies.visibility = View.VISIBLE
+                    binding.pbLoadItems.visibility = View.GONE
+                }
+                ValuesProvider.Status.ERROR -> TODO()
+            }
         }
     }
 
