@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavController
-import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.themoviesapp.R
@@ -15,8 +13,6 @@ import com.example.themoviesapp.databinding.FragmentFavoriteBinding
 import com.example.themoviesapp.domain.model.MovieItem
 import com.example.themoviesapp.utils.KindOfFragment
 import com.example.themoviesapp.utils.ValuesProvider
-import com.example.themoviesapp.view.HomeFragmentDirections
-import com.example.themoviesapp.view.adapter.FavoriteMovieAdapter
 import com.example.themoviesapp.view.adapter.MovieAdapter
 import com.example.themoviesapp.viewmodel.ViewModelFavoriteMovies
 import com.google.android.material.bottomnavigation.BottomNavigationView
