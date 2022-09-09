@@ -26,7 +26,6 @@ class MoviesRepository @Inject constructor(
             movies.data.movieModels.forEach {
                 moviesCache.movie.put(it.id!!, it)
             }
-
             GenericResponse(
                 movies.success,
                 getMoviesFromCache()
@@ -50,15 +49,15 @@ class MoviesRepository @Inject constructor(
         var IDsFromDB: HashSet<Int> = moviesDao.recoverIDs().toHashSet()
         moviesCache.favoriteMovies.forEach {
             if (!IDsFromDB.contains(it.key)) {
+                var result: MovieEntity
                 if (moviesCache.movie.containsKey(it.key)) {
                     // Recover favorite movie from CACHE
-                    var result = moviesCache.movie.get(it.key)
-                    moviesDao.insertMovie(result!!.toDataBase())
+                    result = moviesCache.movie.get(it.key)!!.toDataBase()
                 } else {
                     // Recover favorite movie from API
-                    var result = moviesDetailsService.getMovieDetailsResponse(it.key)
-                    moviesDao.insertMovie(result.data.toDataBase())
+                    result = moviesDetailsService.getMovieDetailsResponse(it.key).data.toDataBase()
                 }
+                moviesDao.insertMovie(result)
             }
         }
     }

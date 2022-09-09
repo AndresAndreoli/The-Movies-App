@@ -9,7 +9,7 @@ import javax.inject.Singleton
 class Cache @Inject constructor(){
     // This is a volatile cache
     //var movie: MutableList<MovieModel> = mutableListOf()
-    var movie = HashMap<Int,MovieModel>()
+    var movie = LinkedHashMap<Int,MovieModel>()
     var movieDetailsList: MutableList<MovieDetailsResponse> = mutableListOf()
-    var favoriteMovies = HashMap<Int, String>() // This will be load with firebase
+    var favoriteMovies = LinkedHashMap<Int, String>() // This will be load with firebase
 }

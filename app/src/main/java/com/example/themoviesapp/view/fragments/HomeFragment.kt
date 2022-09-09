@@ -63,9 +63,8 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
 
     // Start all components
     private fun initComponents() {
-        navBar = requireActivity().findViewById(R.id.bnvMainActivity)
-
         // Show botton navigation bar
+        navBar = requireActivity().findViewById(R.id.bnvMainActivity)
         navBar.visibility = View.VISIBLE
 
         // Initializing variables
@@ -108,6 +107,7 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
                     if ((visibleItemCount + pastVisibleItem) >= total) {
                         binding.pbLoadItems.visibility = View.VISIBLE // show SPINNER
                         pageNum++
+                        println(pageNum)
                         viewModel.loadMoreMovies(pageNum)
                         binding.ivLoadContent.visibility = View.GONE
                     }
@@ -151,6 +151,7 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
         viewModel.moviesList.observe(viewLifecycleOwner, Observer {
             moviesList.clear()
             moviesList.addAll(it)
+            println(it.size)
             adapter.notifyDataSetChanged()
         })
 
