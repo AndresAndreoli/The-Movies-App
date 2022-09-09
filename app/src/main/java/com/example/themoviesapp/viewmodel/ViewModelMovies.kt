@@ -4,9 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.themoviesapp.data.repositories.FavoriteMoviesRepository
 import com.example.themoviesapp.data.services.APIService
-import com.example.themoviesapp.domain.*
+import com.example.themoviesapp.domain.homeUseCase.*
 import com.example.themoviesapp.domain.model.MovieItem
 import com.example.themoviesapp.utils.ValuesProvider
 import dagger.hilt.android.lifecycle.HiltViewModel

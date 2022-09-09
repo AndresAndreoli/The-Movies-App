@@ -118,13 +118,6 @@ class MoviesRepository @Inject constructor(
     }
 
     fun chacheIsEmpty(): Boolean {
-        // TODO: cambiar solo a caso de uso
-        return moviesCache.movie.isEmpty()
-    }
-
-    fun clearCache(): Boolean {
-        // TODO: cambiar solo a caso de uso
-        moviesCache.movie.clear()
         return moviesCache.movie.isEmpty()
     }
 }

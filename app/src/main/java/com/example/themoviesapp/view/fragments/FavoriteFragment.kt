@@ -17,6 +17,7 @@ import com.example.themoviesapp.utils.KindOfFragment
 import com.example.themoviesapp.utils.ValuesProvider
 import com.example.themoviesapp.view.HomeFragmentDirections
 import com.example.themoviesapp.view.adapter.FavoriteMovieAdapter
+import com.example.themoviesapp.view.adapter.MovieAdapter
 import com.example.themoviesapp.viewmodel.ViewModelFavoriteMovies
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,7 +35,7 @@ class FavoriteFragment : Fragment() {
     // RecyclerView
     private var moviesList: MutableList<MovieItem> = mutableListOf()
     private lateinit var linearLayout: LinearLayoutManager
-    private lateinit var adapter: FavoriteMovieAdapter
+    private lateinit var adapter: MovieAdapter
 
     private lateinit var navBar: BottomNavigationView
 
@@ -56,11 +57,6 @@ class FavoriteFragment : Fragment() {
         initComponents()
     }
 
-    private fun initRecyclerViewFavoriteMovies() {
-        binding.rvFavoriteMovies.adapter = adapter
-        binding.rvFavoriteMovies.layoutManager = linearLayout
-    }
-
     private fun initComponents() {
         setUpObservers()
 
@@ -73,17 +69,22 @@ class FavoriteFragment : Fragment() {
 
         // Initializing variables
         linearLayout = LinearLayoutManager(requireContext())
-        adapter = FavoriteMovieAdapter(moviesList){
+        adapter = MovieAdapter(moviesList){
             onMovieSelected(it)
         }
 
         initRecyclerViewFavoriteMovies()
     }
 
+    private fun initRecyclerViewFavoriteMovies() {
+        binding.rvFavoriteMovies.adapter = adapter
+        binding.rvFavoriteMovies.layoutManager = linearLayout
+    }
+
     private fun setUpObservers() {
         viewModel.dataBaseStatus.observe(viewLifecycleOwner){
             when (it){
-                ValuesProvider.Status.LOADING -> println("pto")
+                ValuesProvider.Status.LOADING -> println("nada") // TODO
                 ValuesProvider.Status.SUCCESS -> viewModel.getFavoriteMoviesFromDB()
                 ValuesProvider.Status.ERROR -> TODO()
             }

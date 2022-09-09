@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.themoviesapp.MovieDetailsResponse
-import com.example.themoviesapp.domain.GetMovieDetailsUseCase
-import com.example.themoviesapp.domain.HandleFavoriteMovieUseCase
-import com.example.themoviesapp.domain.MovieIsFavoriteUseCase
+import com.example.themoviesapp.domain.movieDetailsUseCase.GetMovieDetailsUseCase
+import com.example.themoviesapp.domain.movieDetailsUseCase.HandleFavoriteMovieUseCase
+import com.example.themoviesapp.domain.movieDetailsUseCase.MovieIsFavoriteUseCase
 import com.example.themoviesapp.domain.model.MovieItem
 import com.example.themoviesapp.utils.ValuesProvider
 import dagger.hilt.android.lifecycle.HiltViewModel

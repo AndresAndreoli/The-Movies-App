@@ -18,6 +18,7 @@ import com.example.themoviesapp.data.services.APIService
 import com.example.themoviesapp.domain.model.MovieItem
 import com.example.themoviesapp.utils.KindOfFragment
 import com.example.themoviesapp.utils.ValuesProvider
+import com.example.themoviesapp.utils.converterTime
 import com.example.themoviesapp.viewmodel.ViewModelMovieDetails
 import dagger.hilt.android.AndroidEntryPoint
 import java.text.DecimalFormat
@@ -125,16 +126,6 @@ class DescriptionMovieFragment : Fragment() {
         }
     }
 
-    private fun converterTime(minutes: Int): String{
-        var horas: Int = 0
-        var min: Int = minutes
-
-        while (min>60){
-            horas++
-            min -= 60
-        }
-        return "${horas}:${min}"
-    }
 
     private fun loadMovieContentToFragment(movie: MovieDetailsResponse){
         movie.let {
@@ -165,7 +156,7 @@ class DescriptionMovieFragment : Fragment() {
             else
                 binding.tvAdultDescription.setText("All ages")
 
-            binding.tvDurationDescription.setText(converterTime(it.runtime!!))
+            binding.tvDurationDescription.setText(it.runtime!!.converterTime())
         }
     }
 
@@ -187,27 +178,4 @@ class DescriptionMovieFragment : Fragment() {
                 binding.btnRate.isEnabled = true
             }
         }*/
-
-    /* Esta es una implementacion que decidi implementar al principio, pero luego decidi implementar la de arriba
-       para poder usar las corrutinas
-
-    val requestObject = getRetrofit().create(APIService::class.java).postMovie(rateObject)
-
-    // enqueue: nos permite realizar la petición de manera asincrónica
-    // execute: nos permite realizar la petición de manera sincrónica
-    requestObject.enqueue(object: Callback<MovieRateResponse>{
-        override fun onResponse(call: Call<MovieRateResponse>, response: Response<MovieRateResponse>) {
-            if (response.code()==201){
-                Toast.makeText(this@MovieDescriptionActivity, "Bien", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this@MovieDescriptionActivity, "Mal", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        override fun onFailure(call: Call<MovieRateResponse>, t: Throwable) {
-            println("fallo")
-        }
-
-    })*/
-
 }

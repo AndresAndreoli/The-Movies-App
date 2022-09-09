@@ -107,7 +107,6 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
                     if ((visibleItemCount + pastVisibleItem) >= total) {
                         binding.pbLoadItems.visibility = View.VISIBLE // show SPINNER
                         pageNum++
-                        println(pageNum)
                         viewModel.loadMoreMovies(pageNum)
                         binding.ivLoadContent.visibility = View.GONE
                     }

@@ -14,17 +14,17 @@ import com.example.themoviesapp.domain.model.MovieItem
 class MovieAdapter(
     private var movieModels: List<MovieItem>,
     private val onClickListener: (idMovie: Int) -> Unit
-    ): RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
+) : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
-    class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = ItemMovieBinding.bind(itemView)
 
-        fun render (
+        fun render(
             movieModel: MovieItem,
             onClickListener: (idMovie: Int) -> Unit
-        ){
+        ) {
             Glide.with(binding.cvMovieContainer.context)
-                .load(APIService.urlImage+movieModel.poster_path)
+                .load(APIService.urlImage + movieModel.poster_path)
                 .into(binding.ivImageMain)
             binding.tvTitleMain.setText(movieModel.title)
 
@@ -35,7 +35,9 @@ class MovieAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        return MovieViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false))
+        return MovieViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
@@ -43,7 +45,5 @@ class MovieAdapter(
         holder.render(item, onClickListener)
     }
 
-    override fun getItemCount(): Int {
-        return movieModels.size
-    }
+    override fun getItemCount() = movieModels.size
 }

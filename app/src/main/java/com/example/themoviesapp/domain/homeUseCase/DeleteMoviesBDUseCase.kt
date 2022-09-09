@@ -1,4 +1,4 @@
-package com.example.themoviesapp.domain
+package com.example.themoviesapp.domain.homeUseCase
 
 import com.example.themoviesapp.data.repositories.FavoriteMoviesRepository
 import javax.inject.Inject

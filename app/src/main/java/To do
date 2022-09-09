@@ -1,9 +1,12 @@
 
 ERRORS:
 
+-HACER
+SWIPE to delete favorite
 
 
 OTROS:
+- Favorite fragment acomodar
 - Implementar FLOW
 - Corroborar movies duplicadas en DB (el hash estar harcodeando esto)
 - Cambiar modelo de datos (no voy a guardar todos los datos)

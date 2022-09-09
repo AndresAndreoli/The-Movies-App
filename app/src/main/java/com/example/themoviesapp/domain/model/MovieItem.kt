@@ -1,8 +1,8 @@
 package com.example.themoviesapp.domain.model
 
-// Este es el modelo de datos con el que la capa de UI y la capa de domio van a trabajar, ya que si
-// se cambiar la base de adtos o retrofit, este no se vera afectado porque la informacion que llegue al
-// dominio va a ser de este tipo de modelo de dato.
+// Este es el modelo de datos con el que la capa de UI y la capa de dominio van a trabajar, ya que si
+// el backend (base de datos/API), este no se vera afectado porque la informacion que le llegue
+// va a ser de este tipo de modelo de dato.
 data class MovieItem(
     var adult: Boolean,
     var backdrop_path: String,

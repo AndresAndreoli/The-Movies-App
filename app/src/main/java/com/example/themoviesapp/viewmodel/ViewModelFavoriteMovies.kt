@@ -3,11 +3,11 @@ package com.example.themoviesapp.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.themoviesapp.domain.GetFavoriteMoviesUseCase
+import com.example.themoviesapp.domain.favoriteUseCase.GetFavoriteMoviesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import androidx.lifecycle.viewModelScope
-import com.example.themoviesapp.domain.LoadDBWithFavMoviesUseCase
+import com.example.themoviesapp.domain.favoriteUseCase.LoadDBWithFavMoviesUseCase
 import com.example.themoviesapp.domain.model.MovieItem
 import com.example.themoviesapp.utils.ValuesProvider
 import kotlinx.coroutines.launch

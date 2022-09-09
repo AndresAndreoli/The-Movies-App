@@ -14,8 +14,7 @@ import com.example.themoviesapp.domain.model.MovieItem
 class FavoriteMovieAdapter(
     private var favoriteMovies: List<MovieItem>,
     private val onClickListener: (idMovie: Int) -> Unit
-) :
-    RecyclerView.Adapter<FavoriteMovieAdapter.FavoriteMovieViewHolder>() {
+) : RecyclerView.Adapter<FavoriteMovieAdapter.FavoriteMovieViewHolder>() {
 
     class FavoriteMovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val binding = ItemMovieBinding.bind(itemView)
@@ -47,5 +46,4 @@ class FavoriteMovieAdapter(
     }
 
     override fun getItemCount() = favoriteMovies.size
-
 }

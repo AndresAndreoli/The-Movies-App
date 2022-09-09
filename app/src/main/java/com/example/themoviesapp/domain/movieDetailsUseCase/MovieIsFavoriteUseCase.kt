@@ -1,4 +1,4 @@
-package com.example.themoviesapp.domain
+package com.example.themoviesapp.domain.movieDetailsUseCase
 
 import com.example.themoviesapp.data.Cache
 import javax.inject.Inject
