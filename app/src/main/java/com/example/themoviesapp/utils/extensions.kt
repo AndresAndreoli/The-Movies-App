@@ -1,7 +1,7 @@
 package com.example.themoviesapp.utils
 
 import com.example.themoviesapp.MovieDetailsResponse
-import com.example.themoviesapp.data.database.entities.MovieEntity
+import com.example.themoviesapp.model.entities.MovieEntity
 import com.example.themoviesapp.domain.model.MovieItem
 import com.example.themoviesapp.model.movieResponse.MovieModel
 

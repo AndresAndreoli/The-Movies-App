@@ -1,10 +1,10 @@
-package com.example.themoviesapp.di
+package com.example.themoviesapp.data.di
 
 import android.content.Context
 import androidx.room.Room
 import com.example.themoviesapp.data.database.MovieDatabase
 import com.example.themoviesapp.data.database.dao.MovieDao
-import com.example.themoviesapp.data.database.entities.MovieEntity
+import com.example.themoviesapp.model.entities.MovieEntity
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -2,7 +2,7 @@ package com.example.themoviesapp.data.database.dao
 
 import android.graphics.Movie
 import androidx.room.*
-import com.example.themoviesapp.data.database.entities.MovieEntity
+import com.example.themoviesapp.model.entities.MovieEntity
 
 @Dao
 interface MovieDao {

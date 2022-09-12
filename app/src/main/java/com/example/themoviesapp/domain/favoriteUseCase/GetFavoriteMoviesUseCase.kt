@@ -1,10 +1,11 @@
 package com.example.themoviesapp.domain.favoriteUseCase
 
-import com.example.themoviesapp.model.movieResponse.MoviesRepository
+import com.example.themoviesapp.data.repositories.FavoriteMoviesRepository
+import com.example.themoviesapp.data.repositories.MoviesRepository
 import javax.inject.Inject
 
 class GetFavoriteMoviesUseCase @Inject constructor(
-    private val moviesRepository: MoviesRepository
+    private val favoriteMoviesRepository: FavoriteMoviesRepository
 ) {
-    suspend operator fun invoke() = moviesRepository.getFavoriteMoviesFromDB()
+    suspend operator fun invoke() = favoriteMoviesRepository.getFavoriteMoviesFromDB()
 }

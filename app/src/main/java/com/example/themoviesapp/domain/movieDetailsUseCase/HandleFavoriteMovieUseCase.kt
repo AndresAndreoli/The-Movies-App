@@ -1,17 +1,18 @@
 package com.example.themoviesapp.domain.movieDetailsUseCase
 
+import com.example.themoviesapp.data.repositories.FavoriteMoviesRepository
 import com.example.themoviesapp.domain.model.MovieItem
-import com.example.themoviesapp.model.movieResponse.MoviesRepository
+import com.example.themoviesapp.data.repositories.MoviesRepository
 import javax.inject.Inject
 
 class HandleFavoriteMovieUseCase @Inject constructor(
-    private val repository: MoviesRepository
+    private val favoriteMoviesRepository: FavoriteMoviesRepository
 ) {
     suspend fun addNewFavoriteMovie (movie: MovieItem){
-        repository.insertFavoriteMovieToDB(movie)
+        favoriteMoviesRepository.insertFavoriteMovieToDB(movie)
     }
 
     suspend fun deleteFavoriteMovie(idMovie: Int){
-        repository.deleteFavoriteMovieFromDB(idMovie)
+        favoriteMoviesRepository.deleteFavoriteMovieFromDB(idMovie)
     }
 }

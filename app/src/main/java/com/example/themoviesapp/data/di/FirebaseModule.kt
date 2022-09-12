@@ -1,4 +1,4 @@
-package com.example.themoviesapp.di
+package com.example.themoviesapp.data.di
 
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module

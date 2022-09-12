@@ -2,6 +2,8 @@ package com.example.themoviesapp.view.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.example.themoviesapp.R
 import com.example.themoviesapp.domain.model.MovieItem
@@ -19,6 +21,9 @@ class MovieAdapter(
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val item = movieModels[position]
+        // Animation slides from left
+        val animation : Animation = AnimationUtils.loadAnimation(holder.itemView.context, android.R.anim.slide_in_left)
+        holder.itemView.startAnimation(animation)
         holder.render(item, onClickListener)
     }
 

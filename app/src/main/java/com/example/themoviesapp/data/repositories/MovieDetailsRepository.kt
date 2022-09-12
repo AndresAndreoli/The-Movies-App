@@ -1,4 +1,4 @@
-package com.example.themoviesapp.model.movieDetailsResponse
+package com.example.themoviesapp.data.repositories
 
 import com.example.themoviesapp.MovieDetailsResponse
 import com.example.themoviesapp.data.Cache
