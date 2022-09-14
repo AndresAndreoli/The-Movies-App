@@ -7,6 +7,7 @@ import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.RecyclerView
 import com.example.themoviesapp.R
 import com.example.themoviesapp.domain.model.MovieItem
+import com.example.themoviesapp.utils.ValuesProvider
 
 class MovieAdapter(
     private var movieModels: List<MovieItem>,

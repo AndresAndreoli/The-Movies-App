@@ -241,7 +241,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="5dp"
                             android:layout_marginTop="15dp"
-                            android:text="@string/lastestMovies"
+                            android:text="@string/popularMovies"
                             android:fontFamily="@font/nunito_600"
                             android:textColor="@color/white"
                             android:textSize="26sp"
@@ -268,7 +268,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rvLastestMovies"
+                        android:id="@+id/rvPopularMovies"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
@@ -292,7 +292,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="5dp"
                             android:layout_marginTop="15dp"
-                            android:text="@string/popularMovies"
+                            android:text="@string/topRatedMovies"
                             android:fontFamily="@font/nunito_500"
                             android:textColor="@color/white"
                             android:textSize="26sp"
@@ -319,7 +319,7 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rvPopularMovies"
+                        android:id="@+id/rvTopRatedMovies"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"

@@ -22,7 +22,15 @@ interface APIService {
 
     @Headers("Accept: application/json")
     @GET("popular?language=en-US")
-    suspend fun getMovies(@Query("api_key") ApiKey: String, @Query("page") pageNum: Int): Response<MoviesResponse>
+    suspend fun getPopularMovies(@Query("api_key") ApiKey: String, @Query("page") pageNum: Int): Response<MoviesResponse>
+
+    @Headers("Accept: application/json")
+    @GET("top_rated?language=en-US")
+    suspend fun getTopRatedMovies(@Query("api_key") ApiKey: String, @Query("page") pageNum: Int): Response<MoviesResponse>
+
+    @Headers("Accept: application/json")
+    @GET("upcoming?language=en-US")
+    suspend fun getUpcomingMovies(@Query("api_key") ApiKey: String, @Query("page") pageNum: Int): Response<MoviesResponse>
 
     @Headers("Accept: application/json")
     @GET ("{idMovie}?api_key=208e554046f1cf82cd9a3dd3e315fe5f&language=en-US")

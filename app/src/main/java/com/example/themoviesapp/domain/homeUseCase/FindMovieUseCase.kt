@@ -8,7 +8,7 @@ class FindMovieUseCase @Inject constructor(
     val moviesRepository: MoviesRepository
 ){
     operator fun invoke(query: String): List<MovieItem>{
-        return moviesRepository.getMoviesFromCache()
+        return moviesRepository.getAllMoviesFromCache()
             .filter {
                 it.title.lowercase().contains(query.lowercase())
             }

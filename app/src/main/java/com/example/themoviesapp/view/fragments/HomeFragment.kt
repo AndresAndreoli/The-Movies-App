@@ -35,9 +35,12 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
     private val viewModel: ViewModelMovies by viewModels()
 
     // RecyclerView
-    private var moviesList: MutableList<MovieItem> = mutableListOf()
-    private lateinit var linearLayout: LinearLayoutManager
-    private lateinit var adapter: MovieAdapter
+    private var popularMoviesList: MutableList<MovieItem> = mutableListOf()
+    private var topRatedMoviesList: MutableList<MovieItem> = mutableListOf()
+    private var upcomingMoviesList: MutableList<MovieItem> = mutableListOf()
+    private lateinit var adapterPopular: MovieAdapter
+    private lateinit var adapterTopRated: MovieAdapter
+    private lateinit var adapterUpcoming: MovieAdapter
     private var isLoading = false
     private var pageNum = 1
 
@@ -68,27 +71,33 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
         navBar.visibility = View.VISIBLE
 
         // Initializing variables
+        adapterPopular = MovieAdapter(popularMoviesList) {
+            onMovieSelected(it)
+        }
 
-        linearLayout = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        adapter = MovieAdapter(moviesList) {
+        adapterTopRated = MovieAdapter(topRatedMoviesList) {
+            onMovieSelected(it)
+        }
+
+        adapterUpcoming = MovieAdapter(upcomingMoviesList) {
             onMovieSelected(it)
         }
 
         //binding.svMovie.setOnQueryTextListener(this)
         //binding.svMovie.clearFocus()
 
-        initRecyclerViewPopulateMovies()
-        setUpListeners()
         setUpObservers()
+        setUpListeners()
+        initRecyclerViewPopulateMovies()
     }
 
     private fun initRecyclerViewPopulateMovies() {
         viewModel.onCreateMovies(pageNum)
-        binding.rvLastestMovies.adapter = adapter
+        binding.rvPopularMovies.adapter = adapterPopular
 
-        binding.rvPopularMovies.adapter = adapter
+        binding.rvTopRatedMovies.adapter = adapterTopRated
 
-        binding.rvUpcomingMovies.adapter = adapter
+        binding.rvUpcomingMovies.adapter = adapterUpcoming
     }
 
     private fun setUpListeners() {
@@ -119,12 +128,12 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
         })*/
 
         binding.btnRetryMoviesCall.setOnClickListener {
-            resetContent()
+            //resetContent()
         }
     }
 
     // reseting content main screen and cleaning cache
-    private fun resetContent() {
+    /*private fun resetContent() {
         pageNum = 1
         var clear = viewModel.clearCache()
         moviesList.clear()
@@ -141,7 +150,7 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
                 resources.getColor(R.color.red)
             )
         }
-    }
+    }*/
 
     // displays a generic message
     private fun showSnackBar(message: String, color: Int) {
@@ -151,31 +160,72 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     private fun setUpObservers() {
-        viewModel.moviesList.observe(viewLifecycleOwner, Observer {
-            moviesList.clear()
-            moviesList.addAll(it)
-            println(it.size)
-            adapter.notifyDataSetChanged()
+        viewModel.popularMoviesList.observe(viewLifecycleOwner, Observer {
+            popularMoviesList.clear()
+            popularMoviesList.addAll(it)
+            adapterPopular.notifyDataSetChanged()
+        })
+
+        viewModel.topRatedMoviesList.observe(viewLifecycleOwner, Observer {
+            topRatedMoviesList.clear()
+            topRatedMoviesList.addAll(it)
+            adapterTopRated.notifyDataSetChanged()
+        })
+
+        viewModel.upcomingMoviesList.observe(viewLifecycleOwner, Observer {
+            upcomingMoviesList.clear()
+            upcomingMoviesList.addAll(it)
+            adapterUpcoming.notifyDataSetChanged()
         })
 
         viewModel.moviesStatus.observe(viewLifecycleOwner, Observer {
-            when (it) {
+            when (it.load) {
                 ValuesProvider.Status.LOADING -> {
+                    when (it.type){
+                        ValuesProvider.typeRequest.POPULAR -> {
+                            //binding.rvPopularMovies.visibility = View.GONE
+                        }
+                        ValuesProvider.typeRequest.TOP_RATED -> {
+                            //binding.rvTopRatedMovies.visibility = View.GONE
+                        }
+                        ValuesProvider.typeRequest.UPCOMING -> {
+                            binding.rvUpcomingMovies.visibility = View.GONE
+                        }
+                    }
                     //binding.ivLoadContent.visibility = View.GONE
-                    binding.rvLastestMovies.visibility = View.GONE
-                    binding.pbLoadItems.visibility = View.VISIBLE
-                    binding.llErrorMovieCall.visibility = View.GONE
+                    //binding.pbLoadItems.visibility = View.VISIBLE
+                    //binding.llErrorMovieCall.visibility = View.GONE
                 }
                 ValuesProvider.Status.SUCCESS -> {
+                    when (it.type){
+                        ValuesProvider.typeRequest.POPULAR -> {
+                            binding.rvPopularMovies.visibility = View.VISIBLE
+                        }
+                        ValuesProvider.typeRequest.TOP_RATED -> {
+                            binding.rvTopRatedMovies.visibility = View.VISIBLE
+                        }
+                        ValuesProvider.typeRequest.UPCOMING -> {
+                            binding.rvUpcomingMovies.visibility = View.VISIBLE
+                        }
+                    }
                     //binding.ivLoadContent.visibility = View.VISIBLE // reset button
-                    binding.rvLastestMovies.visibility = View.VISIBLE // recyclerView
-                    binding.pbLoadItems.visibility = View.GONE // progress bar
+                    //binding.pbLoadItems.visibility = View.GONE // progress bar
                 }
                 ValuesProvider.Status.ERROR -> {
+                    when (it.type){
+                        ValuesProvider.typeRequest.POPULAR -> {
+                            binding.rvPopularMovies.visibility = View.GONE
+                        }
+                        ValuesProvider.typeRequest.TOP_RATED -> {
+                            binding.rvTopRatedMovies.visibility = View.GONE
+                        }
+                        ValuesProvider.typeRequest.UPCOMING -> {
+                            binding.rvUpcomingMovies.visibility = View.GONE
+                        }
+                    }
                     //binding.ivLoadContent.visibility = View.GONE
-                    binding.rvLastestMovies.visibility = View.GONE
-                    binding.pbLoadItems.visibility = View.GONE
-                    binding.llErrorMovieCall.visibility = View.VISIBLE
+                    //binding.pbLoadItems.visibility = View.GONE
+                    //binding.llErrorMovieCall.visibility = View.VISIBLE
                 }
             }
         })
@@ -188,10 +238,10 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
     // searchView: search by movie title
     override fun onQueryTextSubmit(query: String?): Boolean {
         if (query!!.isNotEmpty()) {
-            moviesList.clear()
-            var movieFounded = viewModel.searchMovie(query)
+            //moviesList.clear()
+            //var movieFounded = viewModel.searchMovie(query)
 
-            if (!movieFounded) {
+            /*if (!movieFounded) {
                 var toast = Toast.makeText(
                     requireContext(),
                     resources.getString(R.string.movieNotFound),
@@ -199,8 +249,8 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
                 )
                 toast.setGravity(Gravity.BOTTOM, 0, 50);
                 toast.show()
-                viewModel.retrieveMoviesFromCache()
-            }
+                //viewModel.retrieveMoviesFromCache()
+            }*/
         }
         return false
     }

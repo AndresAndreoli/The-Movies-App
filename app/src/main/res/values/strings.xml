@@ -35,7 +35,8 @@
     <string name="nameUser">Andres A.</string>
     <string name="comingSoon">Coming Soon</string>
     <string name="releaseDate">11 october 2022</string>
-    <string name="lastestMovies">Lastest</string>
+
+    <string name="topRatedMovies">Top Rated</string>
     <string name="popularMovies">Popular</string>
     <string name="upcomingMovies">Upcoming</string>
 

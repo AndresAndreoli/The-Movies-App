@@ -8,6 +8,7 @@ class RetrieveMoviesFromCacheUseCase @Inject constructor(
     private val repository: MoviesRepository
 ) {
     operator fun invoke(): List<MovieItem>{
-        return repository.getMoviesFromCache()
+        //return repository.getMoviesFromCache()
+        return emptyList()
     }
 }

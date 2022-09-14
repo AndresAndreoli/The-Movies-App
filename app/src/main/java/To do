@@ -6,6 +6,7 @@ SWIPE to delete favorite
 
 
 OTROS:
+- Sacar titulos de peliculas ya que no entran
 - Favorite fragment acomodar
 - Implementar FLOW
 - Corroborar movies duplicadas en DB (el hash estar harcodeando esto)

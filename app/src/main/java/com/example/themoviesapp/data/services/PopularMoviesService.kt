@@ -7,16 +7,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class MoviesService @Inject constructor (
+class PopularMoviesService @Inject constructor (
     private val apiService: APIService
     ) {
-    suspend fun getMoviesResponse (apiKey: String, page: Int): GenericResponse<MoviesResponse>{
+    suspend fun getPopularMoviesResponse (apiKey: String, page: Int): GenericResponse<MoviesResponse>{
         return withContext(Dispatchers.IO){
-            val request = apiService.getMovies(apiKey, page)
-              if (request.isSuccessful){
+            val response = apiService.getPopularMovies(apiKey, page)
+              if (response.isSuccessful){
                   GenericResponse(
                       true,
-                      request.body()!!
+                      response.body()!!
                   )
              } else {
                   // TODO: catch error

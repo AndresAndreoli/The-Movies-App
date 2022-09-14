@@ -54,12 +54,24 @@ class FavoriteMoviesRepository @Inject constructor(
         moviesCache.favoriteMovies.forEach {
             if (!IDsFromDB.contains(it.key)) {
                 var result: MovieEntity
-                if (moviesCache.movie.containsKey(it.key)) {
-                    // Recover favorite movie from CACHE
-                    result = moviesCache.movie.get(it.key)!!.toDataBase()
-                } else {
-                    // Recover favorite movie from API
-                    result = moviesDetailsService.getMovieDetailsResponse(it.key).data.toDataBase()
+
+                when {
+                    moviesCache.popularMovie.containsKey(it.key) ->{
+                        // Recover favorite movie from CACHE - popularMovie
+                        result = moviesCache.popularMovie.get(it.key)!!.toDataBase()
+                    }
+                    moviesCache.upcomingMovie.containsKey(it.key) ->{
+                        // Recover favorite movie from CACHE - upcomingMovie
+                        result = moviesCache.upcomingMovie.get(it.key)!!.toDataBase()
+                    }
+                    moviesCache.topRatedMovie.containsKey(it.key) ->{
+                        // Recover favorite movie from CACHE - topRatedMovie
+                        result = moviesCache.topRatedMovie.get(it.key)!!.toDataBase()
+                    }
+                    else -> {
+                        // Recover favorite movie from API
+                        result = moviesDetailsService.getMovieDetailsResponse(it.key).data.toDataBase()
+                    }
                 }
                 moviesDao.insertMovie(result)
             }

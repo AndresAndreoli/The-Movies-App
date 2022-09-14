@@ -5,8 +5,8 @@ import com.example.themoviesapp.model.GenericResponse
 import com.example.themoviesapp.data.repositories.MoviesRepository
 import javax.inject.Inject
 
-class GetMoviesUseCase @Inject constructor(
+class GetPopularMoviesUseCase @Inject constructor(
     private val moviesRepository: MoviesRepository
 ) {
-    suspend operator fun invoke(apiKey: String, page: Int): GenericResponse<List<MovieItem>> = moviesRepository.getAllMovies(apiKey, page)
+    suspend operator fun invoke(apiKey: String, page: Int) = moviesRepository.getAllPopularMovies(apiKey, page) // GenericResponse<List<MovieItem>>
 }
