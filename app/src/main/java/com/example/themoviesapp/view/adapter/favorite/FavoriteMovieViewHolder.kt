@@ -1,4 +1,4 @@
-package com.example.themoviesapp.view.adapter
+package com.example.themoviesapp.view.adapter.favorite
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
@@ -7,7 +7,7 @@ import com.example.themoviesapp.data.services.APIService
 import com.example.themoviesapp.databinding.ItemMovieBinding
 import com.example.themoviesapp.domain.model.MovieItem
 
-class MovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+class FavoriteMovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val binding = ItemMovieBinding.bind(itemView)
 
     fun render(

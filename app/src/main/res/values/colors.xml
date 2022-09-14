@@ -9,7 +9,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="colorPrimary">#151c25</color>
-    <color name="colorPrimaryDark">#151c25</color>
+    <color name="colorPrimaryDark">#141414</color>
     <color name="colorAccent">#f1b814</color>
     <color name="text_light_blue">#566f9a</color>
     <color name="text_bg_blue">#1a242f</color>
@@ -19,6 +19,9 @@
     <color name="light_red">#FFCCCB</color>
     <color name="warn_red">#D0342C</color>
     <color name="gray">#808080</color>
+    <color name="brown_light">#A99784</color>
+
+
 
     <color name="water_green">#48BF91</color>
 

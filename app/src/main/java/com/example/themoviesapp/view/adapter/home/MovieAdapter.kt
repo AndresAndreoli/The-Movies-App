@@ -1,4 +1,4 @@
-package com.example.themoviesapp.view.adapter
+package com.example.themoviesapp.view.adapter.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -15,17 +15,14 @@ class MovieAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
         return MovieViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.item_movie, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.item_popular_movie, parent, false)
         )
     }
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         val item = movieModels[position]
-        // Animation slides from left
-        val animation : Animation = AnimationUtils.loadAnimation(holder.itemView.context, android.R.anim.slide_in_left)
-        holder.itemView.startAnimation(animation)
         holder.render(item, onClickListener)
     }
 
-    override fun getItemCount() = movieModels.size
+    override fun getItemCount() = if (movieModels.size>10) 10 else movieModels.size
 }

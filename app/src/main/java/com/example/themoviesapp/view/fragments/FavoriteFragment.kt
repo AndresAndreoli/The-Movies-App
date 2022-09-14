@@ -13,7 +13,7 @@ import com.example.themoviesapp.databinding.FragmentFavoriteBinding
 import com.example.themoviesapp.domain.model.MovieItem
 import com.example.themoviesapp.utils.KindOfFragment
 import com.example.themoviesapp.utils.ValuesProvider
-import com.example.themoviesapp.view.adapter.MovieAdapter
+import com.example.themoviesapp.view.adapter.favorite.FavoriteMovieAdapter
 import com.example.themoviesapp.viewmodel.ViewModelFavoriteMovies
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,7 +31,7 @@ class FavoriteFragment : Fragment() {
     // RecyclerView
     private var moviesList: MutableList<MovieItem> = mutableListOf()
     private lateinit var linearLayout: LinearLayoutManager
-    private lateinit var adapter: MovieAdapter
+    private lateinit var adapterFavorite: FavoriteMovieAdapter
 
     private lateinit var navBar: BottomNavigationView
 
@@ -65,7 +65,7 @@ class FavoriteFragment : Fragment() {
 
         // Initializing variables
         linearLayout = LinearLayoutManager(requireContext())
-        adapter = MovieAdapter(moviesList){
+        adapterFavorite = FavoriteMovieAdapter(moviesList){
             onMovieSelected(it)
         }
 
@@ -73,7 +73,7 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun initRecyclerViewFavoriteMovies() {
-        binding.rvFavoriteMovies.adapter = adapter
+        binding.rvFavoriteMovies.adapter = adapterFavorite
         binding.rvFavoriteMovies.layoutManager = linearLayout
     }
 
@@ -89,7 +89,7 @@ class FavoriteFragment : Fragment() {
         viewModel.favoriteMovies.observe(viewLifecycleOwner){
                 moviesList.clear()
                 moviesList.addAll(it)
-                adapter.notifyDataSetChanged()
+                adapterFavorite.notifyDataSetChanged()
         }
 
         viewModel.moviesStatus.observe(viewLifecycleOwner){

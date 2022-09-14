@@ -12,13 +12,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.themoviesapp.R
 import com.example.themoviesapp.databinding.FragmentHomeBinding
 import com.example.themoviesapp.domain.model.MovieItem
 import com.example.themoviesapp.utils.KindOfFragment
 import com.example.themoviesapp.utils.ValuesProvider
-import com.example.themoviesapp.view.adapter.MovieAdapter
+import com.example.themoviesapp.view.adapter.favorite.FavoriteMovieAdapter
+import com.example.themoviesapp.view.adapter.home.MovieAdapter
 import com.example.themoviesapp.viewmodel.ViewModelMovies
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -68,13 +68,14 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
         navBar.visibility = View.VISIBLE
 
         // Initializing variables
-        linearLayout = LinearLayoutManager(requireContext())
+
+        linearLayout = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         adapter = MovieAdapter(moviesList) {
             onMovieSelected(it)
         }
 
-        binding.svMovie.setOnQueryTextListener(this)
-        binding.svMovie.clearFocus()
+        //binding.svMovie.setOnQueryTextListener(this)
+        //binding.svMovie.clearFocus()
 
         initRecyclerViewPopulateMovies()
         setUpListeners()
@@ -83,20 +84,23 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private fun initRecyclerViewPopulateMovies() {
         viewModel.onCreateMovies(pageNum)
-        binding.rvMovies.adapter = adapter
-        binding.rvMovies.layoutManager = linearLayout
+        binding.rvLastestMovies.adapter = adapter
+
+        binding.rvPopularMovies.adapter = adapter
+
+        binding.rvUpcomingMovies.adapter = adapter
     }
 
     private fun setUpListeners() {
-        binding.ivLoadContent.setOnClickListener {
+        /*binding.ivLoadContent.setOnClickListener {
             resetContent()
-        }
+        }*/
 
-        binding.svMovie.setOnClickListener {
+        /*binding.svMovie.setOnClickListener {
             binding.svMovie.onActionViewExpanded()
-        }
+        }*/
 
-        binding.rvMovies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        /*binding.rvMovies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val visibleItemCount = linearLayout.childCount
@@ -108,11 +112,11 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
                         binding.pbLoadItems.visibility = View.VISIBLE // show SPINNER
                         pageNum++
                         viewModel.loadMoreMovies(pageNum)
-                        binding.ivLoadContent.visibility = View.GONE
+                        //binding.ivLoadContent.visibility = View.GONE
                     }
                 }
             }
-        })
+        })*/
 
         binding.btnRetryMoviesCall.setOnClickListener {
             resetContent()
@@ -130,7 +134,7 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
                 resources.getColor(R.color.green)
             )
             viewModel.onCreateMovies(pageNum)
-            binding.svMovie.clearFocus()
+            //binding.svMovie.clearFocus()
         } else {
             showSnackBar(
                 resources.getString(R.string.errorClearingMovies),
@@ -157,19 +161,19 @@ class HomeFragment : Fragment(), SearchView.OnQueryTextListener {
         viewModel.moviesStatus.observe(viewLifecycleOwner, Observer {
             when (it) {
                 ValuesProvider.Status.LOADING -> {
-                    binding.ivLoadContent.visibility = View.GONE
-                    binding.rvMovies.visibility = View.GONE
+                    //binding.ivLoadContent.visibility = View.GONE
+                    binding.rvLastestMovies.visibility = View.GONE
                     binding.pbLoadItems.visibility = View.VISIBLE
                     binding.llErrorMovieCall.visibility = View.GONE
                 }
                 ValuesProvider.Status.SUCCESS -> {
-                    binding.ivLoadContent.visibility = View.VISIBLE // reset button
-                    binding.rvMovies.visibility = View.VISIBLE // recyclerView
+                    //binding.ivLoadContent.visibility = View.VISIBLE // reset button
+                    binding.rvLastestMovies.visibility = View.VISIBLE // recyclerView
                     binding.pbLoadItems.visibility = View.GONE // progress bar
                 }
                 ValuesProvider.Status.ERROR -> {
-                    binding.ivLoadContent.visibility = View.GONE
-                    binding.rvMovies.visibility = View.GONE
+                    //binding.ivLoadContent.visibility = View.GONE
+                    binding.rvLastestMovies.visibility = View.GONE
                     binding.pbLoadItems.visibility = View.GONE
                     binding.llErrorMovieCall.visibility = View.VISIBLE
                 }

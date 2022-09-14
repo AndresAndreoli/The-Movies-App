@@ -30,4 +30,16 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!-- Home Fragment -->
+    <string name="hello">Hello,</string>
+    <string name="nameUser">Andres A.</string>
+    <string name="comingSoon">Coming Soon</string>
+    <string name="releaseDate">11 october 2022</string>
+    <string name="lastestMovies">Lastest</string>
+    <string name="popularMovies">Popular</string>
+    <string name="upcomingMovies">Upcoming</string>
+
+    <!-- Item Popular Movie -->
+    <string name="titleMovieHome">Fall</string>
+    <string name="descriptionMovieHome">11.11.2022</string>
 </resources>
